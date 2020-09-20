@@ -5,6 +5,7 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
+    "api": "cd api && docker-compose up",
     "eject": "expo eject"
   },
   "dependencies": {
