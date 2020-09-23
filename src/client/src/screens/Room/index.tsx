@@ -1,10 +1,16 @@
+import { StackScreenProps } from '@react-navigation/stack';
 import * as React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
-export default function RoomScreen(): JSX.Element {
+export default function Room({
+  navigation,
+}: StackScreenProps<RootStackParamList, 'Room'>): JSX.Element {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{'Room'}</Text>
+      <TouchableOpacity onPress={() => navigation.push('Playground')} style={styles.link}>
+        <Text style={styles.linkText}>Go to Playground!</Text>
+      </TouchableOpacity>
     </View>
   );
 }
