@@ -1,0 +1,22 @@
+{
+  "files": {
+    "app.js": "/42-red-tetris/static/js/app.2f6e4584.chunk.js",
+    "app.js.map": "/42-red-tetris/static/js/app.2f6e4584.chunk.js.map",
+    "runtime~app.js": "/42-red-tetris/static/js/runtime~app.ccf769df.js",
+    "runtime~app.js.map": "/42-red-tetris/static/js/runtime~app.ccf769df.js.map",
+    "static/js/2.e214342a.chunk.js": "/42-red-tetris/static/js/2.e214342a.chunk.js",
+    "static/js/2.e214342a.chunk.js.map": "/42-red-tetris/static/js/2.e214342a.chunk.js.map",
+    "favicon-16.png": "/42-red-tetris/favicon-16.png",
+    "favicon-32.png": "/42-red-tetris/favicon-32.png",
+    "favicon.ico": "/42-red-tetris/favicon.ico",
+    "index.html": "/42-red-tetris/index.html",
+    "manifest.json": "/42-red-tetris/manifest.json",
+    "serve.json": "/42-red-tetris/serve.json",
+    "static/js/2.e214342a.chunk.js.LICENSE.txt": "/42-red-tetris/static/js/2.e214342a.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime~app.ccf769df.js",
+    "static/js/2.e214342a.chunk.js",
+    "static/js/app.2f6e4584.chunk.js"
+  ]
+}
