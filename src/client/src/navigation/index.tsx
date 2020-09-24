@@ -6,6 +6,7 @@ import { ColorSchemeName } from 'react-native';
 import NotFoundScreen from '/screens/NotFoundScreen';
 import Login from '/screens/Login';
 import Room from '/screens/Room';
+import Playground from '/screens/Playground';
 import LinkingConfiguration from '/navigation/LinkingConfiguration';
 
 // If you are not familiar with React Navigation, we recommend going through the
@@ -29,6 +30,7 @@ function RootNavigator() {
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Root" component={Login} />
       <Stack.Screen name="Room" component={Room} />
+      <Stack.Screen name="Playground" component={Playground} />
       <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
     </Stack.Navigator>
   );
