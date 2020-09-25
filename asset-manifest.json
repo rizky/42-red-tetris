@@ -1,22 +1,22 @@
 {
   "files": {
-    "app.js": "/42-red-tetris/static/js/app.2f6e4584.chunk.js",
-    "app.js.map": "/42-red-tetris/static/js/app.2f6e4584.chunk.js.map",
-    "runtime~app.js": "/42-red-tetris/static/js/runtime~app.ccf769df.js",
-    "runtime~app.js.map": "/42-red-tetris/static/js/runtime~app.ccf769df.js.map",
-    "static/js/2.e214342a.chunk.js": "/42-red-tetris/static/js/2.e214342a.chunk.js",
-    "static/js/2.e214342a.chunk.js.map": "/42-red-tetris/static/js/2.e214342a.chunk.js.map",
-    "favicon-16.png": "/42-red-tetris/favicon-16.png",
-    "favicon-32.png": "/42-red-tetris/favicon-32.png",
-    "favicon.ico": "/42-red-tetris/favicon.ico",
-    "index.html": "/42-red-tetris/index.html",
-    "manifest.json": "/42-red-tetris/manifest.json",
-    "serve.json": "/42-red-tetris/serve.json",
-    "static/js/2.e214342a.chunk.js.LICENSE.txt": "/42-red-tetris/static/js/2.e214342a.chunk.js.LICENSE.txt"
+    "app.js": "redtetris.tk/static/js/app.7ef78aeb.chunk.js",
+    "app.js.map": "redtetris.tk/static/js/app.7ef78aeb.chunk.js.map",
+    "runtime~app.js": "redtetris.tk/static/js/runtime~app.e7e16877.js",
+    "runtime~app.js.map": "redtetris.tk/static/js/runtime~app.e7e16877.js.map",
+    "static/js/2.e214342a.chunk.js": "redtetris.tk/static/js/2.e214342a.chunk.js",
+    "static/js/2.e214342a.chunk.js.map": "redtetris.tk/static/js/2.e214342a.chunk.js.map",
+    "favicon-16.png": "redtetris.tk/favicon-16.png",
+    "favicon-32.png": "redtetris.tk/favicon-32.png",
+    "favicon.ico": "redtetris.tk/favicon.ico",
+    "index.html": "redtetris.tk/index.html",
+    "manifest.json": "redtetris.tk/manifest.json",
+    "serve.json": "redtetris.tk/serve.json",
+    "static/js/2.e214342a.chunk.js.LICENSE.txt": "redtetris.tk/static/js/2.e214342a.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
-    "static/js/runtime~app.ccf769df.js",
+    "static/js/runtime~app.e7e16877.js",
     "static/js/2.e214342a.chunk.js",
-    "static/js/app.2f6e4584.chunk.js"
+    "static/js/app.7ef78aeb.chunk.js"
   ]
 }
