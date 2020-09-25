@@ -1,5 +1,6 @@
 {
   "main": "node_modules/expo/AppEntry.js",
+  "homepage": "https://redtetris.tk",
   "scripts": {
     "start": "expo start",
     "android": "expo start --android",
@@ -8,7 +9,10 @@
     "api": "cd api && docker-compose up",
     "eject": "expo eject",
     "lint": "eslint ./src",
-    "tsc": "tsc"
+    "tsc": "tsc",
+    "predeploy": "expo build:web",
+    "add-domain": "echo \"redtetris.tk\" > web-build/CNAME",
+    "deploy": "yarn add-domain && gh-pages -d web-build"
   },
   "dependencies": {
     "@react-navigation/native": "^5.7.3",
@@ -41,6 +45,7 @@
     "eslint-plugin-import": "^2.22.0",
     "eslint-plugin-jsx-a11y": "^6.3.1",
     "eslint-plugin-react": "^7.20.3",
+    "gh-pages": "^3.1.0",
     "typescript": "~3.9.5"
   },
   "private": true
