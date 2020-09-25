@@ -1,17 +1,19 @@
-# base image
-FROM node
+# Base image. Alpine 6 times smaller than just node
+FROM node:alpine
 
-# static server 
+# Static server
 RUN npm install -g serve
 
-# set working directory
-RUN mkdir /usr/src/app/
-RUN mkdir /usr/src/app/api
-WORKDIR /usr/src/app/api
+# Create and set working directory
+WORKDIR /app/server
 
-# add `/usr/src/app/node_modules/.bin` to $PATH
-ENV PATH /usr/src/app/api/node_modules/.bin:$PATH
+# Add `/usr/src/app/server/node_modules/.bin` to $PATH
+# To tell our container's shell where to look for executables (nodemon in our case)
+ENV PATH /app/server/node_modules/.bin:$PATH
 
-# install and cache app dependencies
-COPY package.json /usr/src/app/api/package.json
-RUN npm install --silent
+# Install and cache app dependencies
+COPY package.json package-lock.json /app/server/
+
+RUN npm install
+
+COPY ./ /app/server/
