@@ -1,4 +1,3 @@
-import _ from 'lodash';
 
 import { blockShape, origin } from '/constants/tetriminos.ts';
 
