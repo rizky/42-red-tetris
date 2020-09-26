@@ -1,34 +1,42 @@
 self.__precacheManifest = [
   {
-    "revision": "e802d2644326fd9fa701f1d969a8a94a",
-    "url": "/register-service-worker.js"
+    "revision": "2002987acac9deb6803ab4ba381226ba",
+    "url": "/expo-service-worker.js"
   },
   {
-    "revision": "9dc752de0399c5468cb0",
-    "url": "/static/js/app.21b07093.chunk.js"
+    "revision": "dd620e1ba273ace9963f",
+    "url": "/static/js/app.c6e8d2de.chunk.js"
   },
   {
     "revision": "66090dc4495d4ce3dfb9",
     "url": "/static/js/runtime~app.2e9f1821.js"
   },
   {
-    "revision": "b78970b9b3c54321a5f98893b8d94cf3",
-    "url": "/static/js/2.fa49ac64.chunk.js.LICENSE.txt"
+    "revision": "6daf304356cc010c1d23585c44041143",
+    "url": "/static/media/sprite.81de6409.png"
   },
   {
-    "revision": "9742165f1fa3740f15be",
-    "url": "/static/js/2.fa49ac64.chunk.js"
+    "revision": "b78970b9b3c54321a5f98893b8d94cf3",
+    "url": "/static/js/2.0199c4b3.chunk.js.LICENSE.txt"
+  },
+  {
+    "revision": "caca0d91abc3b7457734",
+    "url": "/static/js/2.0199c4b3.chunk.js"
   },
   {
     "revision": "ec543248d7b23864564429fc03837190",
     "url": "/serve.json"
   },
   {
+    "revision": "e802d2644326fd9fa701f1d969a8a94a",
+    "url": "/register-service-worker.js"
+  },
+  {
     "revision": "ce56c32bb21549dbf8631786ea8a3fca",
     "url": "/manifest.json"
   },
   {
-    "revision": "dac7e88ff68f88740feda6ad12c1629d",
+    "revision": "b78f67863a9b5f1a15dcc25a62463335",
     "url": "/index.html"
   },
   {
@@ -42,9 +50,5 @@ self.__precacheManifest = [
   {
     "revision": "521f8c844d3af13c3d20ba01b2fc5274",
     "url": "/favicon-16.png"
-  },
-  {
-    "revision": "2002987acac9deb6803ab4ba381226ba",
-    "url": "/expo-service-worker.js"
   }
 ];
