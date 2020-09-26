@@ -55,7 +55,7 @@ export default function Playground(): JSX.Element {
           <Digits style={{ marginVertical: 10, alignSelf: 'flex-end' }} />
           <Text style={{ fontSize: 20 }}>Next</Text>
           <Matrix
-            matrix={_.merge(blockMatrix(), new Block({ type: nextBlockType }).shape)}
+            matrix={_.take(_.merge(blockMatrix(), new Block({ type: nextBlockType }).shape), 2)}
             style={{ borderWidth: 0, marginVertical: 10, alignSelf: 'flex-end' }}
           />
         </View>
