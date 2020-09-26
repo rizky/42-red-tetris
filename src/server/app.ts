@@ -45,12 +45,6 @@ app.use(pause(1000));
 app.use(cors());
 app.use('/', routes);
 
-app.use((req, res, next) => {
-  const err = new Error('Not Found');
-  err.status = 404;
-  next(err);
-});
-
 server.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`);
 });
