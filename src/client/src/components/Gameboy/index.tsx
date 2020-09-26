@@ -2,10 +2,23 @@ import { StyleSheet, Text, View } from 'react-native';
 import * as React from 'react';
 import Keypad from '/components/Keypad';
 
+import { useWindowDimensions } from '/hooks/useWindowDimensions';
+
 export default function Gameboy({ children }: { children: JSX.Element[] | JSX.Element }): JSX.Element {
+  const window = useWindowDimensions();
+  const w = window.width;
+  const h = window.height;
+  const ratio = h / w;
+  let scale;
+  if (ratio < 1.5) {
+    scale = h / 960;
+  } else {
+    scale = w / 560;
+  }
+  console.log({ scale });
   return (
     <View style={styles.container}>
-      <View style={styles.gameboy}>
+      <View style={[styles.gameboy, { transform: [{ scale }] }]}>
         <Text style={styles.title}>R E D ■ T E T R I S</Text>
         <View style={styles.display}>
           {children}
@@ -23,6 +36,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     padding: 20,
+    height: '100%',
   },
   display: {
     alignItems: 'center',
