@@ -24,7 +24,11 @@ self.__precacheManifest = [
     "url": "/serve.json"
   },
   {
-    "revision": "b175bd9b5e7991383c912040b014ae47",
+    "revision": "ce56c32bb21549dbf8631786ea8a3fca",
+    "url": "/manifest.json"
+  },
+  {
+    "revision": "dac7e88ff68f88740feda6ad12c1629d",
     "url": "/index.html"
   },
   {
@@ -40,7 +44,7 @@ self.__precacheManifest = [
     "url": "/favicon-16.png"
   },
   {
-    "revision": "f3f68bf5b7dce8acae55c25f724625dd",
+    "revision": "2002987acac9deb6803ab4ba381226ba",
     "url": "/expo-service-worker.js"
   }
 ];

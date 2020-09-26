@@ -10,6 +10,7 @@
     "favicon-32.png": "/favicon-32.png",
     "favicon.ico": "/favicon.ico",
     "index.html": "/index.html",
+    "manifest.json": "/manifest.json",
     "serve.json": "/serve.json",
     "static/js/2.fa49ac64.chunk.js.LICENSE.txt": "/static/js/2.fa49ac64.chunk.js.LICENSE.txt"
   },
