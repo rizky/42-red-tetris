@@ -51,3 +51,5 @@ export const fillLine = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
 export const blankLine = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
 export const blankMatrix = (): Matrix => _.map(Array(20), () => _.map(Array(10), 0));
+
+export const blockMatrix = (): Matrix => _.map(Array(2), () => _.map(Array(4), 0));
