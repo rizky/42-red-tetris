@@ -8,7 +8,8 @@ export default function Digits({ style }: { style?: ViewStyle }): JSX.Element {
   const imageURI = Asset.fromModule(require('../../../assets/sprite.png')).uri;
   return (
     <View style={[{ flexDirection: 'row' }, style]} >
-      {_.map(Array(6), () => <ImageBackground
+      {_.map(Array(6), (val, index: number) => <ImageBackground
+        key={index}
         source={{ uri: imageURI }}
         style={{ width: 14, height: 24, overflow: 'hidden' }}
         imageStyle={{

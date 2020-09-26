@@ -15,7 +15,6 @@ export default function Gameboy({ children }: { children: JSX.Element[] | JSX.El
   } else {
     scale = w / 560;
   }
-  console.log({ scale });
   return (
     <View style={styles.container}>
       <View style={[styles.gameboy, { transform: [{ scale }] }]}>

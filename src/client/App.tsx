@@ -9,10 +9,10 @@ import io from 'socket.io-client';
 const socket = io(`${process.env.EXPO_SOCKET_URL}`);
 
 export default function App(): JSX.Element | null {
-    return (
-      <SafeAreaProvider>
-        <Navigation />
-        <StatusBar />
-      </SafeAreaProvider>
-    );
+  return (
+    <SafeAreaProvider>
+      <Navigation />
+      <StatusBar />
+    </SafeAreaProvider>
+  );
 }

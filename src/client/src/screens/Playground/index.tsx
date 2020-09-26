@@ -5,7 +5,7 @@ import useInterval from '@use-it/interval';
 import useKey from 'use-key-hook';
 
 import { blankMatrix, blockMatrix } from '/constants/tetriminos';
-import { blockType } from '/constants/tetriminos';
+import { blockTypes } from '/constants/tetriminos';
 import { keyboard } from '/constants/keyboard';
 import Block from '/models/block';
 import Matrix from '/components/Matrix';
@@ -13,11 +13,11 @@ import Gameboy from '/components/Gameboy';
 import Digits from '/components/Digits';
 
 const printBlock = (matrix: Matrix, block: Block) => { 
-  const { shape, xy } = block;
-  shape.forEach((m, i) => (
-    m.forEach((n, j) => {
-      if (xy[0] + i >= 0 && xy[0] + i < 20 && xy[1] + j < 10) {
-        matrix[xy[0] + i][xy[1] + j] = shape[i][j];
+  const { shape, pos } = block;
+  shape.forEach((row, rowIndex) => (
+    row.forEach((col, colIndex) => {
+      if (pos[0] + rowIndex >= 0 && pos[0] + rowIndex < 20 && pos[1] + colIndex < 10) {
+        matrix[pos[0] + rowIndex][pos[1] + colIndex] = shape[rowIndex][colIndex];
       }
     })
   ));
@@ -26,12 +26,12 @@ const printBlock = (matrix: Matrix, block: Block) => {
 
 export default function Playground(): JSX.Element {
   const [block, setBlock] = React.useState<Block>(new Block({
-    type: _.sample<TetriminosType>(blockType) ?? 'T',
+    type: _.sample<TetriminosType>(blockTypes) ?? 'T',
   }));
-  const nextBlockType = blockType[(_.indexOf(blockType, block.type) + 1) % _.size(blockType)];
+  const nextBlockType = blockTypes[(_.indexOf(blockTypes, block.type) + 1) % _.size(blockTypes)];
   useInterval(() => {
     setBlock((currentBlock) =>
-      (currentBlock.xy[0] + currentBlock.shape.length < 20)
+      (currentBlock.pos[0] + currentBlock.shape.length < 20)
         ? currentBlock.fall()
         : new Block({ type: nextBlockType }));
   }, 500);
