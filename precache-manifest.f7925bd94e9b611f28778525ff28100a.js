@@ -1,11 +1,11 @@
 self.__precacheManifest = [
   {
-    "revision": "ec543248d7b23864564429fc03837190",
-    "url": "/serve.json"
+    "revision": "e802d2644326fd9fa701f1d969a8a94a",
+    "url": "/register-service-worker.js"
   },
   {
-    "revision": "c0c107445e6417dcddf5",
-    "url": "/static/js/app.06cfb9fb.chunk.js"
+    "revision": "9dc752de0399c5468cb0",
+    "url": "/static/js/app.21b07093.chunk.js"
   },
   {
     "revision": "66090dc4495d4ce3dfb9",
@@ -20,15 +20,11 @@ self.__precacheManifest = [
     "url": "/static/js/2.fa49ac64.chunk.js"
   },
   {
-    "revision": "e802d2644326fd9fa701f1d969a8a94a",
-    "url": "/register-service-worker.js"
+    "revision": "ec543248d7b23864564429fc03837190",
+    "url": "/serve.json"
   },
   {
-    "revision": "ce56c32bb21549dbf8631786ea8a3fca",
-    "url": "/manifest.json"
-  },
-  {
-    "revision": "7b978b76fc7349639b2430166de6e502",
+    "revision": "b175bd9b5e7991383c912040b014ae47",
     "url": "/index.html"
   },
   {
