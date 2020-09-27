@@ -4,8 +4,8 @@ self.__precacheManifest = [
     "url": "/expo-service-worker.js"
   },
   {
-    "revision": "57dd0d63105ab8581e77",
-    "url": "/static/js/app.21f92715.chunk.js"
+    "revision": "f381158bf15fa976a01a",
+    "url": "/static/js/app.4f0eda02.chunk.js"
   },
   {
     "revision": "66090dc4495d4ce3dfb9",
@@ -16,12 +16,12 @@ self.__precacheManifest = [
     "url": "/static/media/sprite.81de6409.png"
   },
   {
-    "revision": "b78970b9b3c54321a5f98893b8d94cf3",
-    "url": "/static/js/2.3f4ce666.chunk.js.LICENSE.txt"
+    "revision": "0737336ee78ad0a2cc3e02b6eeb6fcb9",
+    "url": "/static/js/2.6eee6b2c.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "d8a047fb6f9378f1deb0",
-    "url": "/static/js/2.3f4ce666.chunk.js"
+    "revision": "d4eba9e34e78ab56c810",
+    "url": "/static/js/2.6eee6b2c.chunk.js"
   },
   {
     "revision": "ec543248d7b23864564429fc03837190",
@@ -36,7 +36,7 @@ self.__precacheManifest = [
     "url": "/manifest.json"
   },
   {
-    "revision": "ff377afead0ffa70c60b0b022bf128f3",
+    "revision": "823af38681030e463ce741a8dac31fd1",
     "url": "/index.html"
   },
   {
