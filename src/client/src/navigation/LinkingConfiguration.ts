@@ -5,7 +5,6 @@ export default {
   config: {
     screens: {
       Root: '/',
-      Room: '/room',
       Playground: '/play',
       NotFound: '*',
     },
