@@ -1,8 +1,11 @@
 import _ from 'lodash';
+import 'react-chat-widget/lib/styles.css';
 import { View, Text } from 'react-native';
+import { Widget } from 'react-chat-widget';
 import * as React from 'react';
 import useInterval from '@use-it/interval';
 import useKey from 'use-key-hook';
+import { useRoute, RouteProp } from '@react-navigation/native';
 
 import { blankMatrix, blockMatrix } from '/constants/tetriminos';
 import { blockTypes } from '/constants/tetriminos';
@@ -25,6 +28,9 @@ const printBlock = (matrix: Matrix, block: Block) => {
 };
 
 export default function Playground(): JSX.Element {
+  const route = useRoute<RouteProp<RootStackParamList, 'Playground'>>();
+  const { params } = route;
+  const { room, username } = params;
   const [block, setBlock] = React.useState<Block>(new Block({
     type: _.sample<TetriminosType>(blockTypes) ?? 'T',
   }));
@@ -43,23 +49,29 @@ export default function Playground(): JSX.Element {
   });
   const newMatrix = printBlock(blankMatrix(), block);
   return (
-    <Gameboy>
-      <View style={{ flexDirection: 'row', alignSelf:'flex-start', width: '100%' }}>
-        <Matrix matrix={newMatrix} />
-        <View style={{ marginLeft: 20, flex: 1 }} >
-          <Text style={{ fontSize: 20 }}>Score</Text>
-          <Digits style={{ marginVertical: 10, alignSelf: 'flex-end' }} />
-          <Text style={{ fontSize: 20 }}>Start Line</Text>
-          <Digits style={{ marginVertical: 10, alignSelf: 'flex-end' }} />
-          <Text style={{ fontSize: 20 }}>Level</Text>
-          <Digits style={{ marginVertical: 10, alignSelf: 'flex-end' }} />
-          <Text style={{ fontSize: 20 }}>Next</Text>
-          <Matrix
-            matrix={_.take(_.merge(blockMatrix(), new Block({ type: nextBlockType }).shape), 2)}
-            style={{ borderWidth: 0, marginVertical: 10, alignSelf: 'flex-end' }}
-          />
+    <>
+      <Gameboy>
+        <View style={{ flexDirection: 'row', alignSelf:'flex-start', width: '100%' }}>
+          <Matrix matrix={newMatrix} />
+          <View style={{ marginLeft: 20, flex: 1 }} >
+            <Text style={{ fontSize: 20 }}>Score</Text>
+            <Digits style={{ marginVertical: 10, alignSelf: 'flex-end' }} />
+            <Text style={{ fontSize: 20 }}>Start Line</Text>
+            <Digits style={{ marginVertical: 10, alignSelf: 'flex-end' }} />
+            <Text style={{ fontSize: 20 }}>Level</Text>
+            <Digits style={{ marginVertical: 10, alignSelf: 'flex-end' }} />
+            <Text style={{ fontSize: 20 }}>Next</Text>
+            <Matrix
+              matrix={_.take(_.merge(blockMatrix(), new Block({ type: nextBlockType }).shape), 2)}
+              style={{ borderWidth: 0, marginVertical: 10, alignSelf: 'flex-end' }}
+            />
+          </View>
         </View>
-      </View>
-    </Gameboy>
+      </Gameboy>
+      {room && username && <Widget
+        title="RedTetris"
+        subtitle={`Hi ${username}! Welcome to ${room}`}
+      />}
+    </>
   );
 }

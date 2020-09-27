@@ -1,15 +1,17 @@
 import { TouchableOpacity, View, Text, ViewStyle } from 'react-native';
 import * as React from 'react';
 
+import { keyboard } from '/constants/keyboard';
 
 const RoundButton = ({
-  size, color, label, style,
+  size, color, label, style, onPress,
 }: {
-  size: number, color: string, label?: string, style?: ViewStyle,
+  size: number, color: string, label?: string, style?: ViewStyle, onPress?: () =>  void,
 }): JSX.Element => {
   return (
     <View style={[{ alignItems: 'center', margin: 10 }, style]}>
       <TouchableOpacity
+        onPress={onPress}
         style={{
           backgroundColor: color,
           borderRadius: size / 2,
@@ -40,12 +42,28 @@ const Keypad = (): JSX.Element => {
           </View>
         </View>
         <View style={{ alignItems: 'center', flex: 1, justifyContent: 'center' }}>
-          <RoundButton color="#5a65f1" size={70} style={{ margin: 0 }} />
+          <RoundButton
+            color="#5a65f1" size={70} style={{ margin: 0 }}
+            // @ts-ignore https://github.com/microsoft/TSJS-lib-generator/pull/892
+            onPress={() => document.dispatchEvent(new KeyboardEvent('keydown', { keyCode: keyboard.rotate, which: keyboard.rotate }))}
+          />
           <View style={{ flexDirection: 'row' }}>
-            <RoundButton color="#5a65f1" size={70} style={{ margin: 0, marginRight: 60}} />
-            <RoundButton color="#5a65f1" size={70} style={{ margin: 0 }} />
+            <RoundButton
+              color="#5a65f1" size={70} style={{ margin: 0, marginRight: 60 }}
+              // @ts-ignore https://github.com/microsoft/TSJS-lib-generator/pull/892
+              onPress={() => document.dispatchEvent(new KeyboardEvent('keydown', { keyCode: keyboard.left, which: keyboard.left }))}
+            />
+            <RoundButton
+              color="#5a65f1" size={70} style={{ margin: 0 }}
+              // @ts-ignore https://github.com/microsoft/TSJS-lib-generator/pull/892
+              onPress={() => document.dispatchEvent(new KeyboardEvent('keydown', { keyCode: keyboard.right, which: keyboard.right }))}
+            />
           </View>
-          <RoundButton color="#5a65f1" size={70} style={{ margin: 0 }} />
+          <RoundButton
+            color="#5a65f1" size={70} style={{ margin: 0 }}
+            // @ts-ignore https://github.com/microsoft/TSJS-lib-generator/pull/892
+            onPress={() => document.dispatchEvent(new KeyboardEvent('keydown', { keyCode: keyboard.down, which: keyboard.down }))}
+          />
         </View>
       </View>
     </View>
