@@ -1,11 +1,12 @@
 import _ from 'lodash';
 import 'react-chat-widget/lib/styles.css';
 import { View, Text } from 'react-native';
-import { Widget } from 'react-chat-widget';
+import { Widget as ChatWidget, addResponseMessage } from 'react-chat-widget';
 import * as React from 'react';
 import useInterval from '@use-it/interval';
 import useKey from 'use-key-hook';
 import { useRoute, RouteProp } from '@react-navigation/native';
+import io from 'socket.io-client';
 
 import { blankMatrix, blockMatrix } from '/constants/tetriminos';
 import { blockTypes } from '/constants/tetriminos';
@@ -14,6 +15,9 @@ import Block from '/models/block';
 import Matrix from '/components/Matrix';
 import Gameboy from '/components/Gameboy';
 import Digits from '/components/Digits';
+
+// Check socket connection
+const socket = io(`${process.env.EXPO_SOCKET_URL}`);
 
 const printBlock = (matrix: Matrix, block: Block) => { 
   const { shape, pos } = block;
@@ -30,7 +34,18 @@ const printBlock = (matrix: Matrix, block: Block) => {
 export default function Playground(): JSX.Element {
   const route = useRoute<RouteProp<RootStackParamList, 'Playground'>>();
   const { params } = route;
-  const { room, username } = params;
+  const { room, username } = params ?? {};
+  React.useEffect(() => {
+    socket.emit('joinRoom', { username, room });
+    // Message from server
+    socket.on('message', (message: { username: string, text: string }) => {
+      if (message.username !== username)
+        addResponseMessage(message.username + ': ' + message.text, message.username);
+    });
+  }, []);
+  const handleNewUserMessage = (message: string) => {
+    socket.emit('chatMessage', message);
+  };
   const [block, setBlock] = React.useState<Block>(new Block({
     type: _.sample<TetriminosType>(blockTypes) ?? 'T',
   }));
@@ -68,10 +83,7 @@ export default function Playground(): JSX.Element {
           </View>
         </View>
       </Gameboy>
-      {room && username && <Widget
-        title="RedTetris"
-        subtitle={`Hi ${username}! Welcome to ${room}`}
-      />}
+      {room && username && <ChatWidget title="RedTetris" handleNewUserMessage={handleNewUserMessage}/>}
     </>
   );
 }
