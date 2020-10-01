@@ -30,7 +30,7 @@ const printBlock = (matrix: Matrix, block: Block) => {
 export default function Playground(): JSX.Element {
   const route = useRoute<RouteProp<RootStackParamList, 'Playground'>>();
   const { params } = route;
-  const { room, username } = params;
+  // const { room, username } = params; // TODO: Uncomment when fixed
   const [block, setBlock] = React.useState<Block>(new Block({
     type: _.sample<TetriminosType>(blockTypes) ?? 'T',
   }));
@@ -68,10 +68,10 @@ export default function Playground(): JSX.Element {
           </View>
         </View>
       </Gameboy>
-      {room && username && <Widget
+      {/* {room && username && <Widget  // TODO: Uncomment when fixed
         title="RedTetris"
         subtitle={`Hi ${username}! Welcome to ${room}`}
-      />}
+      />} */}
     </>
   );
 }

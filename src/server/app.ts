@@ -17,23 +17,25 @@ const io = socketio(server, {
 
 app.set('io', io); // anywhere in routes we should be able to get socket with `let io = app.get("io");`
 
-// From socket io docs, will delete later
 io.on('connection', (socket) => {
-  console.log('A user connected');
+  console.log(`Connected: ${socket.id}`);
 
   socket.on('disconnect', () => {
-    console.log('user disconnected');
+    console.log(`Disconnected: ${socket.id}`);
   });
 
-  socket.on('join', (room) => {
+  socket.on('join room', (room) => {
     console.log(`Socket ${socket.id} joining ${room}`);
     socket.join(room);
   });
 
-  socket.on('chat', (data) => {
+  socket.on('new message', (data) => {
     const { message, room } = data;
     console.log(`msg: ${message}, room: ${room}`);
-    io.to(room).emit('chat', message);
+  
+    // `broadcast.to` sends to everyone in room except sender
+    // `io.to` sends to everyone in room
+    socket.broadcast.to(room).emit('receive message', message);
   });
 });
 
