@@ -1,10 +1,11 @@
 import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
-import pause from 'connect-pause';
-import routes from './routes/index';
 import http from 'http';
 import socketio from 'socket.io';
+import moment from 'moment';
+
+import { userJoin, getRoomUsers, getCurrentUser, userLeave } from './controllers/users';
 
 const PORT = process.env.PORT_SERVER;
 
@@ -17,33 +18,71 @@ const io = socketio(server, {
 
 app.set('io', io); // anywhere in routes we should be able to get socket with `let io = app.get("io");`
 
-// From socket io docs, will delete later
+const botName = 'Red Tetris';
+
+function formatMessage(username: string, text: string) {
+  return {
+    username,
+    text,
+    time: moment().format('h:mm a')
+  };
+}
+
+// Run when client connects
 io.on('connection', (socket) => {
-  console.log('A user connected');
+  socket.on('joinRoom', ({ username, room }) => {
+    const user = userJoin({ id: socket.id, username, room});
 
+    socket.join(user.room);
+
+    // Welcome current user
+    socket.emit('message', formatMessage(botName, `Hi ${username}! Welcome to Room ${room}!`));
+
+    // Broadcast when a user connects
+    socket.broadcast
+      .to(user.room)
+      .emit(
+        'message',
+        formatMessage(botName, `${user.username} has joined the chat`)
+      );
+
+    // Send users and room info
+    io.to(user.room).emit('roomUsers', {
+      room: user.room,
+      users: getRoomUsers(user.room)
+    });
+  });
+
+  // Listen for chatMessage
+  socket.on('chatMessage', (message) => {
+    const user = getCurrentUser(socket.id);
+    if (!user) throw Error('User not found');
+    io.to(user.room).emit('message', formatMessage(user.username, message));
+  });
+
+  // Runs when client disconnects
   socket.on('disconnect', () => {
-    console.log('user disconnected');
-  });
+    const user = userLeave(socket.id);
 
-  socket.on('join', (room) => {
-    console.log(`Socket ${socket.id} joining ${room}`);
-    socket.join(room);
-  });
+    if (user) {
+      io.to(user.room).emit(
+        'message',
+        formatMessage(botName, `${user.username} has left the chat`)
+      );
 
-  socket.on('chat', (data) => {
-    const { message, room } = data;
-    console.log(`msg: ${message}, room: ${room}`);
-    io.to(room).emit('chat', message);
+      // Send users and room info
+      io.to(user.room).emit('roomUsers', {
+        room: user.room,
+        users: getRoomUsers(user.room)
+      });
+    }
   });
 });
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-// Simulate delay
-app.use(pause(1000));
 app.use(cors());
-app.use('/', routes);
 
 server.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`);

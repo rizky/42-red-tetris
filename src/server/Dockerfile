@@ -1,8 +1,7 @@
 # Base image. Alpine 6 times smaller than just node
 FROM node:alpine
 
-# Static server
-RUN npm install -g serve
+RUN npm install -g ts-node
 
 # Create and set working directory
 WORKDIR /app/server
@@ -11,9 +10,7 @@ WORKDIR /app/server
 # To tell our container's shell where to look for executables (nodemon in our case)
 ENV PATH /app/server/node_modules/.bin:$PATH
 
-# Install and cache app dependencies
-COPY package.json package-lock.json /app/server/
-
-RUN npm install
-
 COPY ./ /app/server/
+
+RUN yarn install
+
