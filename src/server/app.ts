@@ -32,8 +32,8 @@ function formatMessage(username: string, text: string) {
 io.on('connection', (socket) => {
   socket.on('joinRoom', ({ username, room }) => {
     const user = userJoin({ id: socket.id, username, room});
-
     socket.join(user.room);
+    console.log(`Socket ${socket.id} joined ${room}`);
 
     // Welcome current user
     socket.emit('message', formatMessage(botName, `Hi ${username}! Welcome to Room ${room}!`));
@@ -46,8 +46,8 @@ io.on('connection', (socket) => {
         formatMessage(botName, `${user.username} has joined the chat`)
       );
 
-    // Send users and room info
-    io.to(user.room).emit('roomUsers', {
+    // Send users and room info when new user joins
+    io.to(user.room).emit('update room users', {
       room: user.room,
       users: getRoomUsers(user.room)
     });
@@ -70,8 +70,8 @@ io.on('connection', (socket) => {
         formatMessage(botName, `${user.username} has left the chat`)
       );
 
-      // Send users and room info
-      io.to(user.room).emit('roomUsers', {
+      // Send users and room info when user exits
+      io.to(user.room).emit('update room users', {
         room: user.room,
         users: getRoomUsers(user.room)
       });
