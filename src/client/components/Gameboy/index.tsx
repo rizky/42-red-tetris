@@ -1,8 +1,8 @@
 import { StyleSheet, Text, View } from 'react-native';
 import * as React from 'react';
-import Keypad from '/components/Keypad';
+import Keypad from '/client/components/Keypad';
 
-import { useWindowDimensions } from '/hooks/useWindowDimensions';
+import { useWindowDimensions } from '/client/hooks/useWindowDimensions';
 
 export default function Gameboy({ children }: { children: JSX.Element[] | JSX.Element }): JSX.Element {
   const window = useWindowDimensions();

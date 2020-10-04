@@ -2,7 +2,7 @@ import _ from 'lodash';
 import { View, ViewStyle, StyleSheet } from 'react-native';
 import * as React from 'react';
 
-import Block from '/components/Block';
+import Block from '/client/components/Block';
 
 const Matrix = ({ matrix, style }: { matrix: Matrix, style?: ViewStyle }): JSX.Element => {
   return (

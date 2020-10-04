@@ -8,14 +8,14 @@ import useKey from 'use-key-hook';
 import { useRoute, RouteProp } from '@react-navigation/native';
 import io from 'socket.io-client';
 
-import { blankMatrix, blockMatrix } from '/constants/tetriminos';
-import { blockTypes } from '/constants/tetriminos';
-import { keyboard } from '/constants/keyboard';
-import Block from '/models/block';
-import Matrix from '/components/Matrix';
-import Gameboy from '/components/Gameboy';
-import Digits from '/components/Digits';
-import formatChatSubtitle from '/screens/Playground/utils';
+import { blankMatrix, blockMatrix } from '/client/constants/tetriminos';
+import { blockTypes } from '/client/constants/tetriminos';
+import { keyboard } from '/client/constants/keyboard';
+import Block from '/client/models/block';
+import Digits from '/client/components/Digits';
+import formatChatSubtitle from '/client/screens/Playground/utils';
+import Gameboy from '/client/components/Gameboy';
+import Matrix from '/client/components/Matrix';
 
 // Initialize new socket
 const socket = io(`${process.env.EXPO_SOCKET_URL}`);
@@ -41,7 +41,7 @@ export default function Playground(): JSX.Element {
   useEffect(() => {
     socket.emit('joinRoom', { username, room });
     // Message from server
-    socket.on('message', (message: { username: string, text: string }) => {
+    socket.on('message', (message: Message) => {
       if (message.username !== username)
         addResponseMessage(message.username + ': ' + message.text, message.username);
     });

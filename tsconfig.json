@@ -1,4 +1,7 @@
 {
+  "ts-node": {
+    "files": true
+  },
   "compilerOptions": {
     "allowSyntheticDefaultImports": true,
     "jsx": "react-native",
@@ -9,6 +12,8 @@
     "resolveJsonModule": true,
     "strict": true,
     "baseUrl": "./",
+    "esModuleInterop": true,
+    "typeRoots": [ "./node_modules/@types", "./src/types" ],
     "paths": {
       "/*": [
         "./src/*"

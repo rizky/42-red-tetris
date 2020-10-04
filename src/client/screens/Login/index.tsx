@@ -3,7 +3,7 @@ import { StyleSheet, Text, TouchableOpacity, TextInput, View } from 'react-nativ
 import { useNavigation } from '@react-navigation/native';
 import * as React from 'react';
 
-import Gameboy from '/components/Gameboy';
+import Gameboy from '/client/components/Gameboy';
 
 export default function Login(): JSX.Element {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'Root'>>();
