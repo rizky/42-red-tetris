@@ -5,7 +5,7 @@ services:
     build:
       context: ./src/server
       dockerfile: Dockerfile
-    command: npm start # If we use npm in container we need to use it in host machine server folder - not yarn
+    command: yarn start
     volumes:
       - './src/server:/app/server'
       - '/app/server/node_modules'

@@ -1,7 +1,7 @@
 # Base image. Alpine 6 times smaller than just node
 FROM node:alpine
 
-RUN npm install -g ts-node
+RUN yarn global add ts-node
 
 # Create and set working directory
 WORKDIR /app/server
@@ -10,7 +10,8 @@ WORKDIR /app/server
 # To tell our container's shell where to look for executables (nodemon in our case)
 ENV PATH /app/server/node_modules/.bin:$PATH
 
+COPY package.json yarn.lock /app/server/
+
+RUN yarn
+
 COPY ./ /app/server/
-
-RUN yarn install
-
