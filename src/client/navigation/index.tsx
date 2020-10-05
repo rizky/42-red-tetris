@@ -3,10 +3,10 @@ import { createStackNavigator } from '@react-navigation/stack';
 import * as React from 'react';
 import { ColorSchemeName } from 'react-native';
 
-import NotFoundScreen from '/screens/NotFoundScreen';
-import Login from '/screens/Login';
-import Playground from '/screens/Playground';
-import LinkingConfiguration from '/navigation/LinkingConfiguration';
+import NotFoundScreen from '/client/screens/NotFoundScreen';
+import Login from '/client/screens/Login';
+import Playground from '/client/screens/Playground';
+import LinkingConfiguration from '/client/navigation/LinkingConfiguration';
 
 // If you are not familiar with React Navigation, we recommend going through the
 // "Fundamentals" guide: https://reactnavigation.org/docs/getting-started

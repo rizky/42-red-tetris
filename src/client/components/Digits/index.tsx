@@ -5,7 +5,7 @@ import * as React from 'react';
 
 export default function Digits({ style }: { style?: ViewStyle }): JSX.Element {
   // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const imageURI = Asset.fromModule(require('../../../assets/sprite.png')).uri;
+  const imageURI = Asset.fromModule(require('../../../../assets/sprite.png')).uri;
   return (
     <View style={[{ flexDirection: 'row' }, style]} >
       {_.map(Array(6), (val, index: number) => <ImageBackground

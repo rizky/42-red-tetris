@@ -1,18 +1,18 @@
 version: '3.1'
 
 services:
-  server:
+  redtetris:
     build:
-      context: ./src/server
+      context: ./
       dockerfile: Dockerfile
-    command: yarn start
+    command: yarn api
     volumes:
-      - './src/server:/app/server'
-      - '/app/server/node_modules'
+      - './:/app/red-tetris'
+      - '/app/red-tetris/node_modules'
     ports:
       - '3001:3001'
     env_file:
-      - '.env' # So that we don't need to install and initialize dotenv module in server
+      - '.env'
 
-# docker-compose up (to start backend server)
+# docker-compose up
 # docker-compose up --build (if any changes made to docker files)

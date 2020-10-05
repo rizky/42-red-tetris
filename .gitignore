@@ -1,17 +1,15 @@
-src/client/.expo/*
-src/server/.expo/*
+.expo/*
 *.jks
 *.key
 *.mobileprovision
 *.orig.*
 *.p12
 *.p8
-src/server/node_modules/**/*
-src/client/node_modules/**/*
+node_modules/**/*
 npm-debug.*
 web-build/
 
 # macOS
 .DS_Store
-src/client/yarn-error.log
-src/server/build/
+yarn-error.log
+build/

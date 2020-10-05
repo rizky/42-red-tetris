@@ -1,5 +1,5 @@
 
-import { blockShape, initialPos } from '/constants/tetriminos.ts';
+import { blockShape, initialPos } from '/client/constants/tetriminos.ts';
 
 class Block {
   pos: number[];

@@ -1,7 +1,7 @@
 import { TouchableOpacity, View, Text, ViewStyle } from 'react-native';
 import * as React from 'react';
 
-import { keyboard } from '/constants/keyboard';
+import { keyboard } from '/client/constants/keyboard';
 
 const RoundButton = ({
   size, color, label, style, onPress,

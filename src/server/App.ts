@@ -5,7 +5,7 @@ import http from 'http';
 import socketio from 'socket.io';
 import moment from 'moment';
 
-import { userJoin, getRoomUsers, getCurrentUser, userLeave } from './controllers/users';
+import { userJoin, getRoomUsers, getCurrentUser, userLeave } from './controllers/Users';
 
 const PORT = process.env.PORT_SERVER;
 
@@ -20,17 +20,17 @@ app.set('io', io); // anywhere in routes we should be able to get socket with `l
 
 const botName = 'Red Tetris';
 
-function formatMessage(username: string, text: string) {
+const formatMessage = (username: string, text: string): Message => {
   return {
     username,
     text,
     time: moment().format('h:mm a')
   };
-}
+};
 
 // Run when client connects
 io.on('connection', (socket) => {
-  socket.on('joinRoom', ({ username, room }) => {
+  socket.on('joinRoom', ({ username, room }: { username: string, room: string }) => {
     const user = userJoin({ id: socket.id, username, room});
     socket.join(user.room);
     console.log(`Socket ${socket.id} joined ${room}`);
@@ -54,7 +54,7 @@ io.on('connection', (socket) => {
   });
 
   // Listen for chatMessage
-  socket.on('chatMessage', (message) => {
+  socket.on('chatMessage', (message: string) => {
     const user = getCurrentUser(socket.id);
     if (!user) throw Error('User not found');
     io.to(user.room).emit('message', formatMessage(user.username, message));
