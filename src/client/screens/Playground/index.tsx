@@ -45,12 +45,12 @@ export default function Playground(): JSX.Element {
       if (message.username !== username)
         addResponseMessage(message.username + ': ' + message.text, message.username);
     });
-    socket.on('update room users', (data: { room: string, users: User[] }) => {
+    socket.on('update room users', (data: { room: string, users: UserType[] }) => {
       setRoomUsers(data.users.map((user) => user.username));
     });
   }, []);
   const handleNewUserMessage = (message: string) => {
-    socket.emit('chatMessage', message);
+    socket.emit('chatMessage', { username, message, room });
   };
   const [block, setBlock] = useState<Block>(new Block({
     type: _.sample<TetriminosType>(blockTypes) ?? 'T',
