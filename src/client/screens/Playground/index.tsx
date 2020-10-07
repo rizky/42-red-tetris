@@ -15,9 +15,6 @@ import Gameboy from '/client/components/Gameboy';
 import Matrix from '/client/components/Matrix';
 import { useKeyEvent } from '/client/hooks/useKeyEvent';
 
-// Initialize new socket
-const socket = io(`${process.env.EXPO_SOCKET_URL}`);
-
 export default function Playground(): JSX.Element {
   const route = useRoute<RouteProp<RootStackParamList, 'Playground'>>();
   const { params } = route;
@@ -27,19 +24,23 @@ export default function Playground(): JSX.Element {
   const [matrix, setMatrix] = useState<Matrix>(blankMatrix);
   const [isPause, setIsPause] = useState<boolean>(true);
   useKeyEvent({ setBlock, setMatrix, setIsPause });
+
+  // Initialize new socket
+  const socket = io(`${process.env.EXPO_SOCKET_URL}`);
+
   useEffect(() => {
-    socket.emit('joinRoom', { username, room });
+    socket.emit('joinRoom', { username, roomName: room });
     // Message from server
     socket.on('message', (message: Message) => {
       if (message.username !== username)
         addResponseMessage(message.username + ': ' + message.text, message.username);
     });
-    socket.on('update room users', (data: { room: string, users: User[] }) => {
+    socket.on('update room users', (data: { room: string, users: UserType[] }) => {
       setRoomUsers(data.users.map((user) => user.username));
     });
   }, []);
   const handleNewUserMessage = (message: string) => {
-    socket.emit('chatMessage', message);
+    socket.emit('chatMessage', { username, message, room });
   };
   const nextBlockType = blockTypes[(_.indexOf(blockTypes, block.type) + 1) % _.size(blockTypes)];
   useInterval(() => {
@@ -58,7 +59,7 @@ export default function Playground(): JSX.Element {
       });
     }
   }, 500);
-  
+
   return (
     <>
       <Gameboy isPause={isPause}>

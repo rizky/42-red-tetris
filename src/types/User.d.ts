@@ -1,2 +1,2 @@
 
-type User = { id: string, username: string, room: string };
+type UserType = { id: string, username: string, room: string, score?: number };
