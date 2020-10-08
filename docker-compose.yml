@@ -1,18 +1,27 @@
 version: '3.1'
 
 services:
-  redtetris:
+  server:
     build:
       context: ./
       dockerfile: Dockerfile
     command: yarn api
     volumes:
       - './:/app/red-tetris'
-      - '/app/red-tetris/node_modules'
     ports:
       - '3001:3001'
     env_file:
       - '.env'
-
+  client:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    command: yarn web
+    volumes:
+      - './:/app/red-tetris'
+    ports:
+      - '80:19006'
+    env_file:
+      - '.env'
 # docker-compose up
 # docker-compose up --build (if any changes made to docker files)

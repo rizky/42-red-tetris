@@ -6,7 +6,7 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "api": "nodemon --watch ./src/server/**/*.ts --watch ./src/server/App.ts --exec \"ts-node\" --project tsconfig.json ./src/server/App.ts",
+    "api": "nodemon --watch ./src/server/ --exec \"ts-node\" --project tsconfig.json ./src/server/App.ts",
     "eject": "expo eject",
     "lint": "eslint ./src",
     "tsc": "tsc",
