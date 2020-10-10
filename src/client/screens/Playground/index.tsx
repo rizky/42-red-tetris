@@ -51,7 +51,7 @@ export default function Playground(): JSX.Element {
     } else {
       setBlock((currentBlock) => {
         if (!block.fall().isValid(matrix)) {
-          setMatrix(block.printBlock(matrix));
+          setMatrix(block.destroyBlock(block.printBlock(matrix)));
           return new Block({ type: nextBlockType });
         } else {
           return currentBlock.fall();

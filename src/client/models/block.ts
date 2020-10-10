@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { blockShape, initialPos } from '/client/constants/tetriminos.ts';
+import { blockShape, initialPos, blankMatrix, blankLine } from '/client/constants/tetriminos';
 
 class Block {
   pos: number[];
@@ -103,6 +103,18 @@ class Block {
       }
     });
     return newMatrix;
+  }
+  destroyBlock(matrix: Matrix): Matrix { 
+    let bottomMatrix: Matrix = [];
+    let topMatrix: Matrix = [];
+    _.map(matrix, (row) => {
+      if ((_.sum(row) ?? 0) < 10) {
+        bottomMatrix = _.cloneDeep([...bottomMatrix, row]);
+      } else { 
+        topMatrix = _.cloneDeep([...topMatrix, blankLine]);
+      }
+    });
+    return _.cloneDeep([...topMatrix, ...bottomMatrix]);
   }
 }
 
