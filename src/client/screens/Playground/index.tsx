@@ -20,47 +20,14 @@ import Matrix from '/client/components/Matrix';
 // Initialize new socket
 const socket = io(`${process.env.EXPO_SOCKET_URL}`);
 
-const printBlock = (matrix: Matrix, block: Block) => { 
-  const { shape, pos } = block;
-  const newMatrix = _.cloneDeep(matrix);
-  shape.forEach((row, rowIndex) => (
-    row.forEach((col, colIndex) => {
-      if (
-        shape[rowIndex][colIndex] &&
-        pos[0] + rowIndex >= 0 && pos[0] + rowIndex < 20 && pos[1] + colIndex < 10
-      ) {
-        newMatrix[pos[0] + rowIndex][pos[1] + colIndex] = shape[rowIndex][colIndex];
-      }
-    })
-  ));
-  return newMatrix;
-};
-
-const isBlockHit = (matrix: Matrix, block: Block) => { 
-  const { shape, pos } = block;
-  let hit = false;
-  shape.forEach((row, rowIndex) => (
-    row.forEach((col, colIndex) => {
-      if (
-        shape[rowIndex][colIndex] &&
-        (((pos[0] + rowIndex) > 18) || matrix?.[pos[0] + rowIndex + 1]?.[pos[1] + colIndex])
-      ) {
-        hit = true;
-      }
-    })
-  ));
-  return hit;
-};
-
 export default function Playground(): JSX.Element {
   const route = useRoute<RouteProp<RootStackParamList, 'Playground'>>();
   const { params } = route;
   const { room, username } = params ?? {};
   const [roomUsers, setRoomUsers] = useState<string[]>([]);
-  const [block, setBlock] = useState<Block>(new Block({
-    type: _.sample<TetriminosType>(blockTypes) ?? 'T',
-  }));
-  const [matrix, setMatrix] = useState<Matrix>(blankMatrix());
+  const [block, setBlock] = useState<Block>(new Block({ type: _.sample(blockTypes) ?? 'T' }));
+  const [matrix, setMatrix] = useState<Matrix>(blankMatrix);
+  const [isPause, setIsPause] = useState<boolean>(true);
   useEffect(() => {
     socket.emit('joinRoom', { username, room });
     // Message from server
@@ -77,24 +44,55 @@ export default function Playground(): JSX.Element {
   };
   const nextBlockType = blockTypes[(_.indexOf(blockTypes, block.type) + 1) % _.size(blockTypes)];
   useInterval(() => {
-    setBlock((currentBlock) => {
-      if (isBlockHit(matrix, currentBlock)) {
-        setMatrix(printBlock(matrix, currentBlock));
-        return new Block({ type: nextBlockType });
-      } else {
-        return currentBlock.fall();
-      }
-    });
+    if (isPause) return;
+    if (_.includes(matrix[0], 1)) {
+      setMatrix(blankMatrix);
+      setIsPause(true);
+    } else {
+      setBlock((currentBlock) => {
+        if (!block.fall().isValid(matrix)) {
+          setMatrix(block.printBlock(matrix));
+          return new Block({ type: nextBlockType });
+        } else {
+          return currentBlock.fall();
+        }
+      });
+    }
   }, 500);
-  useKey((key: number) => {
-    if (key === keyboard.rotate) setBlock((currentBlock) => currentBlock.rotate());
-    if (key === keyboard.left) setBlock((currentBlock) => currentBlock.left());
-    if (key === keyboard.right) setBlock((currentBlock) => currentBlock.right());
-    if (key === keyboard.down) setBlock((currentBlock) => currentBlock.fall());
+  useKey((_key: number, { keyCode }: { keyCode: number }) => {
+    if (keyCode === keyboard.pause) setIsPause((prevState) => !prevState);
+    if (keyCode === keyboard.reset) {
+      setBlock(new Block({ type: _.sample(blockTypes) ?? 'T' }));
+      setMatrix(blankMatrix);
+      setIsPause(true);
+    }
+    setIsPause((prevIsPause) => {
+      setMatrix((prevMatrix) => {
+        if (!prevIsPause) {
+          if (keyCode === keyboard.rotate) {
+            setBlock((currentBlock) => currentBlock.rotate().isValid(prevMatrix) ? currentBlock.rotate() : currentBlock);
+          }
+          if (keyCode === keyboard.left) {
+            setBlock((currentBlock) => currentBlock.left().isValid(prevMatrix) ? currentBlock.left() : currentBlock);
+          }
+          if (keyCode === keyboard.right) {
+            setBlock((currentBlock) => currentBlock.right().isValid(prevMatrix) ? currentBlock.right() : currentBlock);
+          }
+          if (keyCode === keyboard.down) {
+            setBlock((currentBlock) => currentBlock.fall().isValid(prevMatrix) ? currentBlock.fall() : currentBlock);
+          }
+          if (keyCode === keyboard.space) {
+            setBlock((currentBlock) => currentBlock.drop(prevMatrix));
+          }
+        }
+        return prevMatrix;
+      });
+      return prevIsPause;
+    });
   });
   return (
     <>
-      <Gameboy>
+      <Gameboy isPause={isPause}>
         <View style={{ flexDirection: 'row', alignSelf:'flex-start', width: '100%' }}>
           <Matrix matrix={matrix} block={block}/>
           <View style={{ marginLeft: 20, flex: 1 }} >
@@ -106,7 +104,7 @@ export default function Playground(): JSX.Element {
             <Digits style={{ marginVertical: 10, alignSelf: 'flex-end' }} />
             <Text style={{ fontSize: 20 }}>Next</Text>
             <Matrix
-              matrix={blockMatrix()}
+              matrix={blockMatrix}
               block={new Block({ type: nextBlockType, pos: [0, 0] })}
               style={{ borderWidth: 0, marginVertical: 10, alignSelf: 'flex-end' }}
             />

@@ -4,13 +4,15 @@ import * as React from 'react';
 import { keyboard } from '/client/constants/keyboard';
 
 const RoundButton = ({
-  size, color, label, style, onPress,
+  size, color, label, style, onPress, disabled,
 }: {
-  size: number, color: string, label?: string, style?: ViewStyle, onPress?: () =>  void,
+  size: number, color: string, label?: string,
+  style?: ViewStyle, onPress?: () => void, disabled?: boolean,
 }): JSX.Element => {
   return (
     <View style={[{ alignItems: 'center', margin: 10 }, style]}>
       <TouchableOpacity
+        disabled={disabled}
         onPress={onPress}
         style={{
           backgroundColor: color,
@@ -27,42 +29,59 @@ const RoundButton = ({
   );
 };
 
-const Keypad = (): JSX.Element => {
+const Keypad = ({ isPause }: { isPause?: boolean }): JSX.Element => {
+  const keyDown = (key: number) => {
+    // @ts-ignore https://github.com/microsoft/TSJS-lib-generator/pull/892
+    document.dispatchEvent(new KeyboardEvent('keydown', { keyCode: key, which: key }));
+  };
   return (
     <View>
       <View style={{ flexDirection: 'row' }}>
         <View style={{ flex: 1 }}>
           <View style={{ flexDirection: 'row', marginTop: 20 }}>
-            <RoundButton color="#2dc421" size={50} label="Pause(P)"/>
-            <RoundButton color="#2dc421" size={50} label="Sound(S)"/>
-            <RoundButton color="#efcc19" size={50} label="Reset(R)"/>
+            <RoundButton
+              color="#2dc421" size={50} label="Pause/Play(P)"
+              onPress={() => keyDown(keyboard.pause)}
+            />
+            <RoundButton
+              color="#2dc421" size={50} label="Sound(S)"
+              onPress={() => keyDown(keyboard.sound)}
+            />
+            <RoundButton
+              color="#efcc19" size={50} label="Reset(R)"
+              onPress={() => keyDown(keyboard.reset)}
+            />
           </View>
           <View style={{ alignItems: 'center' }}>
-            <RoundButton color="#5a65f1" size={160} label="Drop(Space)" style={{ marginTop: 20 }}/>
+            <RoundButton
+              color="#5a65f1" size={160} label="Drop(Space)" style={{ marginTop: 20 }}
+              disabled={isPause}
+              onPress={() => keyDown(keyboard.space)}
+            />
           </View>
         </View>
         <View style={{ alignItems: 'center', flex: 1, justifyContent: 'center' }}>
           <RoundButton
             color="#5a65f1" size={70} style={{ margin: 0 }}
-            // @ts-ignore https://github.com/microsoft/TSJS-lib-generator/pull/892
-            onPress={() => document.dispatchEvent(new KeyboardEvent('keydown', { keyCode: keyboard.rotate, which: keyboard.rotate }))}
+            disabled={isPause}
+            onPress={() => keyDown(keyboard.rotate)}
           />
           <View style={{ flexDirection: 'row' }}>
             <RoundButton
               color="#5a65f1" size={70} style={{ margin: 0, marginRight: 60 }}
-              // @ts-ignore https://github.com/microsoft/TSJS-lib-generator/pull/892
-              onPress={() => document.dispatchEvent(new KeyboardEvent('keydown', { keyCode: keyboard.left, which: keyboard.left }))}
+              disabled={isPause}
+              onPress={() => keyDown(keyboard.left)}
             />
             <RoundButton
               color="#5a65f1" size={70} style={{ margin: 0 }}
-              // @ts-ignore https://github.com/microsoft/TSJS-lib-generator/pull/892
-              onPress={() => document.dispatchEvent(new KeyboardEvent('keydown', { keyCode: keyboard.right, which: keyboard.right }))}
+              disabled={isPause}
+              onPress={() => keyDown(keyboard.right)}
             />
           </View>
           <RoundButton
             color="#5a65f1" size={70} style={{ margin: 0 }}
-            // @ts-ignore https://github.com/microsoft/TSJS-lib-generator/pull/892
-            onPress={() => document.dispatchEvent(new KeyboardEvent('keydown', { keyCode: keyboard.down, which: keyboard.down }))}
+            disabled={isPause}
+            onPress={() => keyDown(keyboard.down)}
           />
         </View>
       </View>
