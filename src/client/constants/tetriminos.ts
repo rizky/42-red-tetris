@@ -39,13 +39,13 @@ export const blockShape = {
 };
 
 export const initialPos = {
-  I: [0, 3],
-  L: [-1, 4],
-  J: [-1, 4],
-  Z: [-1, 4],
-  S: [-1, 4],
-  O: [-1, 4],
-  T: [-1, 4],
+  I: [-2, 3],
+  L: [-2, 4],
+  J: [-2, 4],
+  Z: [-2, 4],
+  S: [-2, 4],
+  O: [-2, 4],
+  T: [-2, 4],
 };
 
 export const blockTypes: TetriminosType[] = ['I','L','J','Z','S','O', 'T'];
@@ -58,6 +58,6 @@ export const fillLine = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
 
 export const blankLine = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
-export const blankMatrix = (): Matrix => _.map(Array(20), () => _.map(Array(10), 0));
+export const blankMatrix: Matrix = _.map(Array(20), () => _.map(Array(10), 0));
 
-export const blockMatrix = (): Matrix => _.map(Array(2), () => _.map(Array(4), 0));
+export const blockMatrix: Matrix = _.map(Array(2), () => _.map(Array(4), 0));

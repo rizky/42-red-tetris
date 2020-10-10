@@ -5,19 +5,14 @@ import * as React from 'react';
 import BlockComponent from '/client/components/Block';
 import Block from '/client/models/block';
 
+const blockWidth = 22;
+
 const Matrix = ({ block, matrix, style }: { block: Block, matrix: Matrix, style?: ViewStyle }): JSX.Element => {
   return (
-    <View style={[styles.container, { height: _.size(matrix) * 22 }, style]}>
+    <View style={[styles.container, { height: _.size(matrix) * blockWidth }, style]}>
       {_.map(matrix, (row, rowIndex) =>
-        <View key={rowIndex} style={{ flexDirection: 'row', width: _.size(row) * 22, justifyContent: 'space-between' }}>
-          {_.map(row, (value, colIndex) =>
-            (
-              (block.pos[0] <= rowIndex) && (block.pos[0] + _.size(block.shape) > rowIndex) &&
-              (block.pos[1] <= colIndex) && (block.pos[1] + _.size(block.shape[0])) > colIndex
-            ) ?
-              <BlockComponent key={colIndex} value={block.shape[rowIndex - block.pos[0]][colIndex - block.pos[1]] || value} />
-              : <BlockComponent key={colIndex} value={value} />
-          )}
+        <View key={rowIndex} style={{ flexDirection: 'row', width: _.size(row) * blockWidth, justifyContent: 'space-between' }}>
+          {_.map(row, (value, colIndex) => <BlockComponent key={colIndex} value={block.isBlock([rowIndex, colIndex]) ? 1 : value} />)}
         </View>)}
     </View>
   );
