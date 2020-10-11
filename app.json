@@ -1,5 +1,6 @@
 {
   "expo": {
+    "scheme": "red-tetris",
     "name": "red-tetris",
     "slug": "red-tetris",
     "version": "1.0.0",

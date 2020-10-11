@@ -11,18 +11,18 @@ export default function Login(): JSX.Element {
   const [room, setRoom] = React.useState<string | null>();
   return (
     <Gameboy>
-      <View style={{ alignItems: 'center' }}>
+      <View style={{ alignItems: 'center', width: '60%' }}>
         <Text style={styles.title}>{'Username'}</Text>
         <TextInput
           value={username ?? ''}
           onChangeText={setUsername}
-          style={{ borderWidth: 1, marginBottom: 20, height: 30 }}
+          style={{ borderWidth: 1, marginBottom: 20, height: 30, width: '100%' }}
         />
         <Text style={styles.title}>{'Room'}</Text>
         <TextInput
           value={room ?? ''}
           onChangeText={setRoom}
-          style={{ borderWidth: 1, marginBottom: 20, height: 30 }}
+          style={{ borderWidth: 1, marginBottom: 20, height: 30, width: '100%' }}
         />
         <TouchableOpacity
           style={{ marginBottom: 20 }}
@@ -44,9 +44,9 @@ const styles = StyleSheet.create({
   title: {
     marginBottom: 10,
     alignSelf: 'flex-start',
+    textAlign: 'center',
   },
   linkText: {
     fontSize: 14,
-    color: '#004580',
   },
 });

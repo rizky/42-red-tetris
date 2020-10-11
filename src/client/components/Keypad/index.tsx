@@ -10,7 +10,7 @@ const RoundButton = ({
   style?: ViewStyle, onPress?: () => void, disabled?: boolean,
 }): JSX.Element => {
   return (
-    <View style={[{ alignItems: 'center', margin: 10 }, style]}>
+    <View style={[{ alignItems: 'center' }, style]}>
       <TouchableOpacity
         disabled={disabled}
         onPress={onPress}
@@ -24,7 +24,7 @@ const RoundButton = ({
           shadowOpacity: 20,
           shadowRadius: 5,
         }} />
-      <Text style={{ marginTop: 10 }}>{label}</Text>
+      {label && <Text style={{ marginTop: 10 }}>{label}</Text>}
     </View>
   );
 };
@@ -35,12 +35,12 @@ const Keypad = ({ isPause }: { isPause?: boolean }): JSX.Element => {
     document.dispatchEvent(new KeyboardEvent('keydown', { keyCode: key, which: key }));
   };
   return (
-    <View>
-      <View style={{ flexDirection: 'row' }}>
+    <View style={{ width: 400 }}>
+      <View style={{ flexDirection: 'row', width: '100%' }}>
         <View style={{ flex: 1 }}>
-          <View style={{ flexDirection: 'row', marginTop: 20 }}>
+          <View style={{ flexDirection: 'row', marginTop: 20, justifyContent: 'space-between'}}>
             <RoundButton
-              color="#2dc421" size={50} label="Pause/Play(P)"
+              color="#2dc421" size={50} label={isPause ? 'Play(P)' : 'Pause(P)'}
               onPress={() => keyDown(keyboard.pause)}
             />
             <RoundButton

@@ -1,21 +1,19 @@
 import  React, { useState, useEffect } from 'react';
 import _ from 'lodash';
-import 'react-chat-widget/lib/styles.css';
 import { View, Text } from 'react-native';
-import { Widget as ChatWidget, addResponseMessage } from 'react-chat-widget';
 import useInterval from '@use-it/interval';
-import useKey from 'use-key-hook';
 import { useRoute, RouteProp } from '@react-navigation/native';
 import io from 'socket.io-client';
 
 import { blankMatrix, blockMatrix } from '/client/constants/tetriminos';
 import { blockTypes } from '/client/constants/tetriminos';
-import { keyboard } from '/client/constants/keyboard';
+import { ChatWidget, addResponseMessage } from '/client/components/Chat';
 import Block from '/client/models/block';
 import Digits from '/client/components/Digits';
 import formatChatSubtitle from '/client/screens/Playground/utils';
 import Gameboy from '/client/components/Gameboy';
 import Matrix from '/client/components/Matrix';
+import { useKeyEvent } from '/client/hooks/useKeyEvent';
 
 // Initialize new socket
 const socket = io(`${process.env.EXPO_SOCKET_URL}`);
@@ -28,6 +26,7 @@ export default function Playground(): JSX.Element {
   const [block, setBlock] = useState<Block>(new Block({ type: _.sample(blockTypes) ?? 'T' }));
   const [matrix, setMatrix] = useState<Matrix>(blankMatrix);
   const [isPause, setIsPause] = useState<boolean>(true);
+  useKeyEvent({ setBlock, setMatrix, setIsPause });
   useEffect(() => {
     socket.emit('joinRoom', { username, room });
     // Message from server
@@ -59,37 +58,7 @@ export default function Playground(): JSX.Element {
       });
     }
   }, 500);
-  useKey((_key: number, { keyCode }: { keyCode: number }) => {
-    if (keyCode === keyboard.pause) setIsPause((prevState) => !prevState);
-    if (keyCode === keyboard.reset) {
-      setBlock(new Block({ type: _.sample(blockTypes) ?? 'T' }));
-      setMatrix(blankMatrix);
-      setIsPause(true);
-    }
-    setIsPause((prevIsPause) => {
-      setMatrix((prevMatrix) => {
-        if (!prevIsPause) {
-          if (keyCode === keyboard.rotate) {
-            setBlock((currentBlock) => currentBlock.rotate().isValid(prevMatrix) ? currentBlock.rotate() : currentBlock);
-          }
-          if (keyCode === keyboard.left) {
-            setBlock((currentBlock) => currentBlock.left().isValid(prevMatrix) ? currentBlock.left() : currentBlock);
-          }
-          if (keyCode === keyboard.right) {
-            setBlock((currentBlock) => currentBlock.right().isValid(prevMatrix) ? currentBlock.right() : currentBlock);
-          }
-          if (keyCode === keyboard.down) {
-            setBlock((currentBlock) => currentBlock.fall().isValid(prevMatrix) ? currentBlock.fall() : currentBlock);
-          }
-          if (keyCode === keyboard.space) {
-            setBlock((currentBlock) => currentBlock.drop(prevMatrix));
-          }
-        }
-        return prevMatrix;
-      });
-      return prevIsPause;
-    });
-  });
+  
   return (
     <>
       <Gameboy isPause={isPause}>
