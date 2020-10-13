@@ -1,12 +1,12 @@
-import { Game } from './Game';
+import { Room } from './Room';
 
-export const users: UserType[] = [];
+export const users: User[] = [];
 
 export class User {
   id: string;
   username: string;
   room: string;
-  isLeader: boolean;
+  // isLeader: boolean; - computed property, see below
   score?: number;
   
   constructor(user: UserType) {
@@ -14,22 +14,35 @@ export class User {
     this.id = id;
     this.username = username;
     this.room = room;
-    this.isLeader = this.getRoomUsers(room).length === 0 ? true : false;
     users.push(this);
   }
 
-  // Get room users
-  getRoomUsers(room: string): UserType[] {
-    return users.filter(user => user.room === room);
+  // Get user by id
+  static getById(userId: string): User | undefined {
+    return users.find(user => user.id === userId);
+  }
+
+  // Get user by username
+  static getByUsername(username: string): User | undefined {
+    return users.find(user => user.id === username);
+  }
+
+  // Computed property
+  get isLeader(): boolean {
+    const room = Room.getByName(this.room);
+    if (!room) return true;
+    return room.users.length === 0 ? true : false;
   }
 
   // User leaves game playground
-  userLeave(id: string): Maybe<UserType> {
-    const index = users.findIndex(user => user.id === id);
+  leave(): boolean {
+    const index = users.findIndex(user => user.id === this.id);
 
     if (index !== -1) {
-      return users.splice(index, 1)[0];
+      users.splice(index, 1)[0];
+      return true;
     }
+    return false;
   }
 
 }

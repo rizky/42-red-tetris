@@ -1,6 +1,6 @@
 // import { users } from 'src/server/models/User';
 // import { users } from '/server/models/User';
-import { users } from '../models/User';
+// import { User, users } from '../models/User';
 
 // const users: UserType[] = [];
 
@@ -24,21 +24,12 @@ import { users } from '../models/User';
 
 // }
 
-// Get current user
-export const getCurrentUserBySocketId = (id: string): Maybe<UserType> => {
-  return users.find(user => user.id === id);
-};
-
-// User leaves chat
-export const userLeave = (id: string): Maybe<UserType> => {
-  const index = users.findIndex(user => user.id === id);
-
-  if (index !== -1) {
-    return users.splice(index, 1)[0];
-  }
-};
+// // Get current user
+// export const getCurrentUserBySocketId = (id: string): Maybe<User> => {
+//   return users.find(user => user.id === id);
+// };
 
 // Get room users
-export const getRoomUsers = (room: string): UserType[] => {
-  return users.filter(user => user.room === room);
-};
+// export const getRoomUsers = (room: string): UserType[] => {
+//   return users.filter(user => user.room === room);
+// };

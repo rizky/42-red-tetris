@@ -17,9 +17,6 @@ import formatChatSubtitle from '/client/screens/Playground/utils';
 import Gameboy from '/client/components/Gameboy';
 import Matrix from '/client/components/Matrix';
 
-// Initialize new socket
-const socket = io(`${process.env.EXPO_SOCKET_URL}`);
-
 const printBlock = (matrix: Matrix, block: Block) => { 
   const { shape, pos } = block;
   shape.forEach((row, rowIndex) => (
@@ -37,9 +34,12 @@ export default function Playground(): JSX.Element {
   const { params } = route;
   const { room, username } = params ?? {};
   const [roomUsers, setRoomUsers] = useState<string[]>([]);
+
+  // Initialize new socket
+  const socket = io(`${process.env.EXPO_SOCKET_URL}`);
   
   useEffect(() => {
-    socket.emit('joinRoom', { username, room });
+    socket.emit('joinRoom', { username, roomName: room });
     // Message from server
     socket.on('message', (message: Message) => {
       if (message.username !== username)
