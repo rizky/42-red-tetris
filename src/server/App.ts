@@ -74,9 +74,9 @@ io.on('connection', (socket) => {
   // Runs when client disconnects
   socket.on('disconnect', () => {
     const user = User.getById(socket.id);
-    if (!user) throw Error('User not found'); // TODO: handle error
+    if (!user) throw Error('User not found');
     const room = Room.getByName(user.room);
-    if (!room) throw Error('Room not found');  // TODO: handle error
+    if (!room) throw Error('Room not found');
 
     user.leave();
     room.removeUser(user.id);

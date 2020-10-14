@@ -25,8 +25,13 @@ export default function Playground(): JSX.Element {
   const [isPause, setIsPause] = useState<boolean>(true);
   useKeyEvent({ setBlock, setMatrix, setIsPause });
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let socket: any = null;
+
   // Initialize new socket
-  const socket = io(`${process.env.EXPO_SOCKET_URL}`);
+  useEffect(() => {
+    socket = io(`${process.env.EXPO_SOCKET_URL}`);
+  }, []);
 
   useEffect(() => {
     socket.emit('joinRoom', { username, roomName: room });
