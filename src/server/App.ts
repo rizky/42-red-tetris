@@ -4,8 +4,12 @@ import bodyParser from 'body-parser';
 import http from 'http';
 import socketio from 'socket.io';
 import moment from 'moment';
+import dotenv from 'dotenv';
 
-import { userJoin, getRoomUsers, getCurrentUser, userLeave } from './controllers/Users';
+import { User } from './models/User';
+import { Room } from './models/Room';
+
+dotenv.config();
 
 const PORT = process.env.PORT_SERVER;
 
@@ -30,52 +34,61 @@ const formatMessage = (username: string, text: string): Message => {
 
 // Run when client connects
 io.on('connection', (socket) => {
-  socket.on('joinRoom', ({ username, room }: { username: string, room: string }) => {
-    const user = userJoin({ id: socket.id, username, room});
-    socket.join(user.room);
-    console.log(`Socket ${socket.id} joined ${room}`);
+  socket.on('joinRoom', ({ username, roomName }: { username: string, roomName: string }) => {
+    const user = new User({ id: socket.id, username, room: roomName });
+
+    // Initialize room instance if room exists or create if it doesn't exist
+    let room = Room.getByName(roomName);
+    if (!room)
+      room = new Room(roomName);
+
+    // Add user to current room
+    room.addUser(user);
+
+    socket.join(room.name);
+    console.log(`Socket ${socket.id} joined ${room.name}`);
 
     // Welcome current user
-    socket.emit('message', formatMessage(botName, `Hi ${username}! Welcome to Room ${room}!`));
+    socket.emit('message', formatMessage(botName, `Hi ${user.username}! Welcome to Room ${room.name}!`));
 
     // Broadcast when a user connects
     socket.broadcast
-      .to(user.room)
+      .to(room.name)
       .emit(
         'message',
         formatMessage(botName, `${user.username} has joined the chat`)
       );
 
     // Send users and room info when new user joins
-    io.to(user.room).emit('update room users', {
-      room: user.room,
-      users: getRoomUsers(user.room)
+    io.to(room.name).emit('update room users', {
+      room: room.name,
+      users: room.users,
     });
   });
 
   // Listen for chatMessage
-  socket.on('chatMessage', (message: string) => {
-    const user = getCurrentUser(socket.id);
-    if (!user) throw Error('User not found');
-    io.to(user.room).emit('message', formatMessage(user.username, message));
+  socket.on('chatMessage', ({ username, message, room }: { username: string, message: string, room: string }) => {
+    io.to(room).emit('message', formatMessage(username, message));
   });
 
   // Runs when client disconnects
   socket.on('disconnect', () => {
-    const user = userLeave(socket.id);
+    const user = User.getById(socket.id);
+    if (!user) throw Error('User not found'); // TODO: handle error
+    const room = Room.getByName(user.room);
+    if (!room) throw Error('Room not found');  // TODO: handle error
 
-    if (user) {
-      io.to(user.room).emit(
-        'message',
-        formatMessage(botName, `${user.username} has left the chat`)
-      );
-
-      // Send users and room info when user exits
-      io.to(user.room).emit('update room users', {
-        room: user.room,
-        users: getRoomUsers(user.room)
-      });
-    }
+    user.leave();
+    room.removeUser(user.id);
+    io.to(room.name).emit(
+      'message',
+      formatMessage(botName, `${user.username} has left the game`),
+    );
+    // Send users and room info when user leaves
+    io.to(room.name).emit('update room users', {
+      room: room.name,
+      users: room.users,
+    });
   });
 });
 
