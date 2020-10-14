@@ -23,12 +23,15 @@ export default function Playground(): JSX.Element {
   const [block, setBlock] = useState<Block>(new Block({ type: _.sample(blockTypes) ?? 'T' }));
   const [matrix, setMatrix] = useState<Matrix>(blankMatrix);
   const [isPause, setIsPause] = useState<boolean>(true);
+  const [isLeader, setIsLeader] = useState<boolean>();
+  // TODO: Use isLeader to display Play button only to leader
+
   useKeyEvent({ setBlock, setMatrix, setIsPause });
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let socket: any = null;
 
-  // Initialize new socket
+  // Initialize new socket only on component mount
   useEffect(() => {
     socket = io(`${process.env.EXPO_SOCKET_URL}`);
   }, []);
@@ -40,8 +43,9 @@ export default function Playground(): JSX.Element {
       if (message.username !== username)
         addResponseMessage(message.username + ': ' + message.text, message.username);
     });
-    socket.on('update room users', (data: { room: string, users: UserType[] }) => {
+    socket.on('update room users', (data: { room: string, users: UserType[], isLeader: boolean }) => {
       setRoomUsers(data.users.map((user) => user.username));
+      setIsLeader(data.isLeader);
     });
   }, []);
   const handleNewUserMessage = (message: string) => {

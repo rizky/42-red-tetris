@@ -6,14 +6,14 @@ export class User {
   id: string;
   username: string;
   room: string;
-  // isLeader: boolean; - computed property, see below
+  isLeader: boolean;
   score?: number;
   
-  constructor(user: UserType) {
-    const { id, username, room } = user;
+  constructor({ id, username, roomName }: {id: string, username: string, roomName: string }) {
     this.id = id;
     this.username = username;
-    this.room = room;
+    this.room = roomName;
+    this.isLeader = Room.getByName(roomName) ? false : true;
     users.push(this);
   }
 
@@ -27,12 +27,13 @@ export class User {
     return users.find(user => user.id === username);
   }
 
-  // Computed property
-  get isLeader(): boolean {
-    const room = Room.getByName(this.room);
-    if (!room) return true;
-    return room.users.length === 0 ? true : false;
-  }
+  // Computed property - no need to recompute room leader for the moment
+  // get isLeader(): boolean {
+  //   const room = Room.getByName(this.room); // we already create room and add user to it by this time so it's always false
+  //   console.log(room);
+  //   if (!room) return true;
+  //   return room.users.length === 0 ? true : false;
+  // }
 
   // User leaves game playground
   leave(): boolean {
