@@ -8,6 +8,7 @@ import dotenv from 'dotenv';
 
 import { User, users } from './models/User';
 import { Room } from './models/Room';
+import { Game } from './models/Game';
 
 dotenv.config();
 
@@ -32,6 +33,8 @@ const formatMessage = (username: string, text: string): Message => {
   };
 };
 
+// const game = new Game('RedTetris'); // unused
+
 // Run when client connects
 io.on('connection', (socket) => {
   socket.on('joinRoom', ({ username, roomName }: { username: string, roomName: string }) => {
@@ -46,7 +49,7 @@ io.on('connection', (socket) => {
     room.addUser(user);
 
     // TODO: rm later
-    console.log('USERS: ', users);
+    console.log('On join room: ', users);
 
     socket.join(room.name);
     console.log(`Socket ${socket.id} joined ${room.name}`);
@@ -84,8 +87,12 @@ io.on('connection', (socket) => {
     const room = Room.getByName(user.room);
     if (!room) throw Error('Room not found');
 
-    user.leave();
     room.removeUser(user.id);
+
+    console.log('On leave room: ', users, room.users); // TODO: rm later
+
+    if (room.users.length === 0) Game.removeRoom(room.name);
+
     io.to(room.name).emit(
       'message',
       formatMessage(botName, `${user.username} has left the game`),

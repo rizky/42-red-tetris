@@ -1,10 +1,12 @@
-import { User } from './User';
+import { User, users } from './User';
 
 export const rooms: Room[] = [];
 
 export class Room {
   name: string;
   users: User[];
+  // isClosed: boolean; // Room is closed when game has started, default false
+  // isValid: boolean; // Room is valid when there are 2 or more players. If number of players < 2 - game stops
   
   constructor(name: string) {
     this.users = [];
@@ -23,10 +25,12 @@ export class Room {
   }
 
   removeUser(userId: string): boolean {
-    const index = this.users.findIndex(user => user.id === userId);
+    const index = this.users.findIndex(user => user.id === userId); // remove from room.users[]
+    const index2 = users.findIndex(user => user.id === userId); // remove from const users[]
 
-    if (index !== -1) {
+    if (index !== -1 && index2 !== -1) {
       this.users.splice(index, 1)[0];
+      users.splice(index2, 1)[0];
       return true;
     }
     return false;
