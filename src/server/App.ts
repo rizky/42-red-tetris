@@ -54,6 +54,9 @@ io.on('connection', (socket) => {
     // Welcome current user
     socket.emit('message', formatMessage(botName, `Hi ${user.username}! Welcome to Room ${room.name}!`));
 
+    // Send current user info
+    socket.emit('fetch current user', user);
+
     // Broadcast when a user connects
     socket.broadcast
       .to(room.name)
@@ -66,7 +69,6 @@ io.on('connection', (socket) => {
     io.to(room.name).emit('update room users', {
       room: room.name,
       users: room.users,
-      isLeader: user.isLeader,
     });
   });
 
