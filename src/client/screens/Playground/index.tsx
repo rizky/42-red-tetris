@@ -23,28 +23,40 @@ export default function Playground(): JSX.Element {
   const [block, setBlock] = useState<Block>(new Block({ type: _.sample(blockTypes) ?? 'T' }));
   const [matrix, setMatrix] = useState<Matrix>(blankMatrix);
   const [isPause, setIsPause] = useState<boolean>(true);
+  const [user, setCurrentUser] = useState<UserType>();
+
   useKeyEvent({ setBlock, setMatrix, setIsPause });
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  let socket: any = null;
+  console.log(user); // use user.isLeader to show/hide tetris buttons
 
-  // Initialize new socket
+  let socket: SocketIOClient.Socket | null = null;
+
+  // Initialize new socket only on component mount
   useEffect(() => {
     socket = io(`${process.env.EXPO_SOCKET_URL}`);
   }, []);
 
   useEffect(() => {
+    if (!socket) throw Error('No socket');
     socket.emit('joinRoom', { username, roomName: room });
+
     // Message from server
     socket.on('message', (message: Message) => {
       if (message.username !== username)
         addResponseMessage(message.username + ': ' + message.text, message.username);
     });
+
+    // Current user sent from server
+    socket.on('fetch current user', (user: UserType) => {
+      setCurrentUser(user);
+    });
+
     socket.on('update room users', (data: { room: string, users: UserType[] }) => {
       setRoomUsers(data.users.map((user) => user.username));
     });
   }, []);
   const handleNewUserMessage = (message: string) => {
+    if (!socket) throw Error('No socket');
     socket.emit('chatMessage', { username, message, room });
   };
   const nextBlockType = blockTypes[(_.indexOf(blockTypes, block.type) + 1) % _.size(blockTypes)];
