@@ -6,7 +6,7 @@ import socketio from 'socket.io';
 import moment from 'moment';
 import dotenv from 'dotenv';
 
-import { User, users } from './models/User';
+import { Player, players } from './models/Player';
 import { Room } from './models/Room';
 import { Game } from './models/Game';
 
@@ -38,40 +38,40 @@ const formatMessage = (username: string, text: string): Message => {
 // Run when client connects
 io.on('connection', (socket) => {
   socket.on('joinRoom', ({ username, roomName }: { username: string, roomName: string }) => {
-    const user = new User({ id: socket.id, username, roomName });
+    const player = new Player({ id: socket.id, username, roomName });
 
     // Initialize room instance if room exists or create if it doesn't exist
     let room = Room.getByName(roomName);
     if (!room)
       room = new Room(roomName);
 
-    // Add user to current room
-    room.addUser(user);
+    // Add player to current room
+    room.addPlayer(player);
 
     // TODO: rm later
-    console.log('On join room: ', users);
+    console.log('On join room: ', players);
 
     socket.join(room.name);
     console.log(`Socket ${socket.id} joined ${room.name}`);
 
-    // Welcome current user
-    socket.emit('message', formatMessage(botName, `Hi ${user.username}! Welcome to Room ${room.name}!`));
+    // Welcome current player
+    socket.emit('message', formatMessage(botName, `Hi ${player.username}! Welcome to Room ${room.name}!`));
 
-    // Send current user info
-    socket.emit('fetch current user', user);
+    // Send current player info
+    socket.emit('fetch current player', player);
 
-    // Broadcast when a user connects
+    // Broadcast when a player connects
     socket.broadcast
       .to(room.name)
       .emit(
         'message',
-        formatMessage(botName, `${user.username} has joined the chat`)
+        formatMessage(botName, `${player.username} has joined the chat`)
       );
 
-    // Send users and room info when new user joins
-    io.to(room.name).emit('update room users', {
+    // Send players and room info when new player joins
+    io.to(room.name).emit('update room players', {
       room: room.name,
-      users: room.users,
+      players: room.players,
     });
   });
 
@@ -82,25 +82,25 @@ io.on('connection', (socket) => {
 
   // Runs when client disconnects
   socket.on('disconnect', () => {
-    const user = User.getById(socket.id);
-    if (!user) throw Error('User not found');
-    const room = Room.getByName(user.room);
+    const player = Player.getById(socket.id);
+    if (!player) throw Error('Player not found');
+    const room = Room.getByName(player.room);
     if (!room) throw Error('Room not found');
 
-    room.removeUser(user.id);
+    room.removePlayer(player.id);
 
-    console.log('On leave room: ', users, room.users); // TODO: rm later
+    console.log('On leave room: ', players, room.players); // TODO: rm later
 
-    if (room.users.length === 0) Game.removeRoom(room.name);
+    if (room.players.length === 0) Game.removeRoom(room.name);
 
     io.to(room.name).emit(
       'message',
-      formatMessage(botName, `${user.username} has left the game`),
+      formatMessage(botName, `${player.username} has left the game`),
     );
-    // Send users and room info when user leaves
-    io.to(room.name).emit('update room users', {
+    // Send players and room info when player leaves
+    io.to(room.name).emit('update room players', {
       room: room.name,
-      users: room.users,
+      players: room.players,
     });
   });
 });

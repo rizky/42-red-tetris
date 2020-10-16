@@ -19,15 +19,15 @@ export default function Playground(): JSX.Element {
   const route = useRoute<RouteProp<RootStackParamList, 'Playground'>>();
   const { params } = route;
   const { room, username } = params ?? {};
-  const [roomUsers, setRoomUsers] = useState<string[]>([]);
+  const [roomPlayers, setRoomPlayers] = useState<string[]>([]);
   const [block, setBlock] = useState<Block>(new Block({ type: _.sample(blockTypes) ?? 'T' }));
   const [matrix, setMatrix] = useState<Matrix>(blankMatrix);
   const [isPause, setIsPause] = useState<boolean>(true);
-  const [user, setCurrentUser] = useState<UserType>();
+  const [player, setCurrentPlayer] = useState<PlayerType>();
 
   useKeyEvent({ setBlock, setMatrix, setIsPause });
 
-  console.log(user); // use user.isLeader to show/hide tetris buttons
+  console.log(player); // use player.isLeader to show/hide tetris buttons
 
   let socket: SocketIOClient.Socket | null = null;
 
@@ -46,13 +46,13 @@ export default function Playground(): JSX.Element {
         addResponseMessage(message.username + ': ' + message.text, message.username);
     });
 
-    // Current user sent from server
-    socket.on('fetch current user', (user: UserType) => {
-      setCurrentUser(user);
+    // Current player sent from server
+    socket.on('fetch current player', (player: PlayerType) => {
+      setCurrentPlayer(player);
     });
 
-    socket.on('update room users', (data: { room: string, users: UserType[] }) => {
-      setRoomUsers(data.users.map((user) => user.username));
+    socket.on('update room players', (data: { room: string, players: PlayerType[] }) => {
+      setRoomPlayers(data.players.map((player) => player.username));
     });
   }, []);
   const handleNewUserMessage = (message: string) => {
@@ -99,7 +99,7 @@ export default function Playground(): JSX.Element {
         </View>
       </Gameboy>
       {room && username &&
-        <ChatWidget title="RedTetris" subtitle={formatChatSubtitle(roomUsers)} handleNewUserMessage={handleNewUserMessage}/>
+        <ChatWidget title="RedTetris" subtitle={formatChatSubtitle(roomPlayers)} handleNewUserMessage={handleNewUserMessage}/>
       }
     </>
   );
