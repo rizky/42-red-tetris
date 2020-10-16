@@ -34,16 +34,4 @@ export class User {
   //   if (!room) return true;
   //   return room.users.length === 0 ? true : false;
   // }
-
-  // User leaves game playground
-  leave(): boolean {
-    const index = users.findIndex(user => user.id === this.id);
-
-    if (index !== -1) {
-      users.splice(index, 1)[0];
-      return true;
-    }
-    return false;
-  }
-
 }
