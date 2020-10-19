@@ -1,15 +1,15 @@
-import { User, users } from './User';
+import { Player, players } from './Player';
 
 export const rooms: Room[] = [];
 
 export class Room {
   name: string;
-  users: User[];
-  // isClosed: boolean; // Room is closed when game has started, default false
+  players: Player[];
+  // gameStarted: boolean; // Room is closed when game has started, default false
   // isValid: boolean; // Room is valid when there are 2 or more players. If number of players < 2 - game stops
   
   constructor(name: string) {
-    this.users = [];
+    this.players = [];
     this.name = name;
     rooms.push(this);
   }
@@ -18,25 +18,25 @@ export class Room {
     return rooms.find(room => room.name === name);
   }
 
-  // Add new user after room is created
-  addUser(user: User): boolean {
-    this.users.push(user);
+  // Add new player after room is created
+  addPlayer(player: Player): boolean {
+    this.players.push(player);
     return true;
   }
 
-  removeUser(userId: string): boolean {
-    const index = this.users.findIndex(user => user.id === userId); // remove from room.users[]
-    const index2 = users.findIndex(user => user.id === userId); // remove from const users[]
+  removePlayer(playerId: string): boolean {
+    const index = this.players.findIndex(player => player.id === playerId); // remove from room.players[]
+    const index2 = players.findIndex(player => player.id === playerId); // remove from const players[]
 
     if (index !== -1 && index2 !== -1) {
-      this.users.splice(index, 1)[0];
-      users.splice(index2, 1)[0];
+      this.players.splice(index, 1)[0];
+      players.splice(index2, 1)[0];
       return true;
     }
     return false;
   }
 
-  getUsers(): User[] {
-    return this.users;
+  getPlayers(): Player[] {
+    return this.players;
   }
 }
