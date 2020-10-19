@@ -4,7 +4,7 @@ import Keypad from '/client/components/Keypad';
 
 import { useWindowDimensions } from '/client/hooks/useWindowDimensions';
 
-export default function Gameboy({ children, isPause }: { children: React.ReactChild, isPause?: boolean }): JSX.Element {
+export default function Gameboy({ children, isPause, player }: { children: React.ReactChild, isPause?: boolean, player?: PlayerType }): JSX.Element {
   const window = useWindowDimensions();
   const w = window.width;
   const h = window.height;
@@ -23,11 +23,14 @@ export default function Gameboy({ children, isPause }: { children: React.ReactCh
           {children}
           {isPause ?
             <View style={[styles.display, { position: 'absolute', opacity: 0.8 }]} >
-              <Text>Press Play(P) to start</Text>
+              {player?.isLeader
+                ? <Text>Press Play(P) to start</Text>
+                : <Text>Wait for leader to start the game</Text>
+              }
             </View>
             : null}
         </View>
-        <Keypad isPause={isPause}/>
+        <Keypad isPause={isPause} player={player}/>
       </View>
     </View>
   );
