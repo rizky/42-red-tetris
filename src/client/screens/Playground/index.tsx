@@ -27,13 +27,13 @@ export default function Playground(): JSX.Element {
 
   useKeyEvent({ setBlock, setMatrix, setIsPause });
 
-  console.log(player); // use player.isLeader to show/hide tetris buttons
+  console.log(player); // TODO: use player.isLeader to show/hide tetris buttons
 
   let socket: SocketIOClient.Socket | null = null;
 
   // Initialize new socket only on component mount
   useEffect(() => {
-    socket = io(`${process.env.EXPO_SOCKET_URL}`);
+    socket = io(`${process.env.SERVER_URL}`);
   }, []);
 
   useEffect(() => {

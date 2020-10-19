@@ -5,12 +5,13 @@ export const rooms: Room[] = [];
 export class Room {
   name: string;
   players: Player[];
-  // gameStarted: boolean; // Room is closed when game has started, default false
+  gameStarted: boolean; // Room is closed when game has started, default false
   // isValid: boolean; // Room is valid when there are 2 or more players. If number of players < 2 - game stops
   
   constructor(name: string) {
     this.players = [];
     this.name = name;
+    this.gameStarted = false;
     rooms.push(this);
   }
 
