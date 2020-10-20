@@ -29,7 +29,7 @@ const RoundButton = ({
   );
 };
 
-const Keypad = ({ isPause }: { isPause?: boolean }): JSX.Element => {
+const Keypad = ({ isPause, player }: { isPause?: boolean, player?: PlayerType }): JSX.Element => {
   const keyDown = (key: number) => {
     // @ts-ignore https://github.com/microsoft/TSJS-lib-generator/pull/892
     document.dispatchEvent(new KeyboardEvent('keydown', { keyCode: key, which: key }));
@@ -39,10 +39,12 @@ const Keypad = ({ isPause }: { isPause?: boolean }): JSX.Element => {
       <View style={{ flexDirection: 'row', width: '100%' }}>
         <View style={{ flex: 1 }}>
           <View style={{ flexDirection: 'row', marginTop: 20, justifyContent: 'space-between'}}>
-            <RoundButton
-              color="#2dc421" size={50} label={isPause ? 'Play(P)' : 'Pause(P)'}
-              onPress={() => keyDown(keyboard.pause)}
-            />
+            {player?.isLeader ?
+              <RoundButton
+                color="#2dc421" size={50} label={isPause ? 'Play(P)' : 'Pause(P)'}
+                onPress={() => keyDown(keyboard.pause)}
+              />
+              : null}
             <RoundButton
               color="#2dc421" size={50} label="Sound(S)"
               onPress={() => keyDown(keyboard.sound)}

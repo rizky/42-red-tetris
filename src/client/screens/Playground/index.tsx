@@ -25,7 +25,7 @@ export default function Playground(): JSX.Element {
   const [isPause, setIsPause] = useState<boolean>(true);
   const [player, setCurrentPlayer] = useState<PlayerType>();
 
-  useKeyEvent({ setBlock, setMatrix, setIsPause });
+  useKeyEvent({ setBlock, setMatrix, setIsPause, isLeader: player?.isLeader });
 
   console.log(player); // use player.isLeader to show/hide tetris buttons
 
@@ -34,6 +34,9 @@ export default function Playground(): JSX.Element {
   // Initialize new socket only on component mount
   useEffect(() => {
     socket = io(`${process.env.EXPO_SOCKET_URL}`);
+    return () => {
+      if(socket) socket.disconnect();
+    };
   }, []);
 
   useEffect(() => {
@@ -54,9 +57,13 @@ export default function Playground(): JSX.Element {
     socket.on('update room players', (data: { room: string, players: PlayerType[] }) => {
       setRoomPlayers(data.players.map((player) => player.username));
     });
+
+    return () => {
+      if(socket) socket.disconnect();
+    };
   }, []);
   const handleNewUserMessage = (message: string) => {
-    if (!socket) throw Error('No socket');
+    if (!socket) throw Error('No socket'); // TODO: socket never reaches here - fix
     socket.emit('chatMessage', { username, message, room });
   };
   const nextBlockType = blockTypes[(_.indexOf(blockTypes, block.type) + 1) % _.size(blockTypes)];
@@ -79,7 +86,7 @@ export default function Playground(): JSX.Element {
 
   return (
     <>
-      <Gameboy isPause={isPause}>
+      <Gameboy isPause={isPause} player={player}>
         <View style={{ flexDirection: 'row', alignSelf:'flex-start', width: '100%' }}>
           <Matrix matrix={matrix} block={block}/>
           <View style={{ marginLeft: 20, flex: 1 }} >

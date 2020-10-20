@@ -7,13 +7,16 @@ import { blockTypes } from '/client/constants/tetriminos';
 import { keyboard } from '/client/constants/keyboard';
 import Block from '/client/models/block';
 
-export const useKeyEvent = ({ setIsPause, setMatrix, setBlock }
+export const useKeyEvent = ({ setIsPause, setMatrix, setBlock, isLeader }
   : {
     setIsPause: Dispatch<SetStateAction<boolean>>,
     setMatrix: Dispatch<SetStateAction<Matrix>>,
     setBlock: Dispatch<SetStateAction<Block>>,
+    isLeader?: boolean,
   }): void => {
+  console.log('Leader 1:', isLeader); // ok
   useKey((_key: number, { keyCode }: { keyCode: number }) => {
+    console.log('Leader 2:', isLeader); // TODO: prop is not visible here, how to pass it?
     if (keyCode === keyboard.pause) setIsPause((prevState) => !prevState);
     if (keyCode === keyboard.reset) {
       setBlock(new Block({ type: _.sample(blockTypes) ?? 'T' }));
@@ -37,6 +40,7 @@ export const useKeyEvent = ({ setIsPause, setMatrix, setBlock }
               if (currentBlock.fall().isValid(prevMatrix)) return currentBlock.fall();
               else {
                 setMatrix(currentBlock.printBlock(prevMatrix));
+
                 return currentBlock;
               }
             });
