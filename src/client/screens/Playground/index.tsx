@@ -23,9 +23,9 @@ export default function Playground(): JSX.Element {
   const [block, setBlock] = useState<Block>(new Block({ type: _.sample(blockTypes) ?? 'T' }));
   const [matrix, setMatrix] = useState<Matrix>(blankMatrix);
   const [isPause, setIsPause] = useState<boolean>(true);
-  const [player, setCurrentPlayer] = useState<PlayerType>();
+  const [player, setCurrentPlayer] = useState<PlayerType | null>(null);
 
-  useKeyEvent({ setBlock, setMatrix, setIsPause, isLeader: player?.isLeader });
+  useKeyEvent({ setBlock, setMatrix, setIsPause, setCurrentPlayer });
 
   console.log(player); // use player.isLeader to show/hide tetris buttons
 

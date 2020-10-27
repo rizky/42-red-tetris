@@ -7,22 +7,24 @@ import { blockTypes } from '/client/constants/tetriminos';
 import { keyboard } from '/client/constants/keyboard';
 import Block from '/client/models/block';
 
-export const useKeyEvent = ({ setIsPause, setMatrix, setBlock, isLeader }
+export const useKeyEvent = ({ setIsPause, setMatrix, setBlock, setCurrentPlayer }
   : {
     setIsPause: Dispatch<SetStateAction<boolean>>,
     setMatrix: Dispatch<SetStateAction<Matrix>>,
     setBlock: Dispatch<SetStateAction<Block>>,
-    isLeader?: boolean,
+    setCurrentPlayer: Dispatch<SetStateAction<PlayerType | null>>,
   }): void => {
-  console.log('Leader 1:', isLeader); // ok
   useKey((_key: number, { keyCode }: { keyCode: number }) => {
-    console.log('Leader 2:', isLeader); // TODO: prop is not visible here, how to pass it?
-    if (keyCode === keyboard.pause) setIsPause((prevState) => !prevState);
-    if (keyCode === keyboard.reset) {
-      setBlock(new Block({ type: _.sample(blockTypes) ?? 'T' }));
-      setMatrix(blankMatrix);
-      setIsPause(true);
-    }
+    setCurrentPlayer((currentPlayer?) => { 
+      console.log('Leader 2:', currentPlayer?.isLeader); // TODO: prop is not visible here, how to pass it?
+      if (keyCode === keyboard.pause && currentPlayer?.isLeader) setIsPause((prevState) => !prevState);
+      if (keyCode === keyboard.reset && currentPlayer?.isLeader) {
+        setBlock(new Block({ type: _.sample(blockTypes) ?? 'T' }));
+        setMatrix(blankMatrix);
+        setIsPause(true);
+      }
+      return currentPlayer;
+    });
     setIsPause((prevIsPause) => {
       setMatrix((prevMatrix) => {
         if (!prevIsPause) {
