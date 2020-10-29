@@ -13,6 +13,10 @@ export class Game {
   
   // remove room when leader leaves and push others out of room
 
+  static getWaitingRooms(): Maybe<Room[]> {
+    return rooms.filter(room => room.gameStarted === false);
+  }
+
   static removeRoom(roomName: string): boolean {
     const index = rooms.findIndex(room => room.name === roomName);
 

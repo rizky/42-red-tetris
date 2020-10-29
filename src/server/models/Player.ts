@@ -25,7 +25,7 @@ export class Player {
 
   // Get player by username
   static getByUsername(username: string): Player | undefined {
-    return players.find(player => player.id === username);
+    return players.find(player => player.username === username);
   }
 
   // Computed property - no need to recompute room leader for the moment

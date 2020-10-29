@@ -110,6 +110,19 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(cors());
 
+app.get('/player/:username', function (req, res) {
+  const player = Player.getByUsername(req.params.username);
+  console.log('---- Request player by username ----', player);
+  res.status(200).json(player);
+});
+
+app.get('/rooms/waiting', function (req, res) {
+  const rooms = Game.getWaitingRooms();
+  const roomNames = rooms?.map(room => room.name);
+  console.log('---- Request waiting rooms ----', );
+  res.status(200).json(roomNames);
+});
+
 server.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`);
 });
