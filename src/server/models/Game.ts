@@ -17,6 +17,11 @@ export class Game {
     return rooms.filter(room => room.gameStarted === false);
   }
 
+  static getWaitingRoomNames(): Maybe<string[]> {
+    const roomObjects = rooms.filter(room => room.gameStarted === false);
+    return roomObjects?.map(room => room.name);
+  }
+
   static removeRoom(roomName: string): boolean {
     const index = rooms.findIndex(room => room.name === roomName);
 
