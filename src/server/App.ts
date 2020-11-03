@@ -42,8 +42,11 @@ io.on('connection', (socket) => {
 
     // Initialize room instance if room exists or create if it doesn't exist
     let room = Room.getByName(roomName);
-    if (!room)
+    if (!room) {
       room = new Room(roomName);
+      const roomNames = Game.getWaitingRoomNames();
+      socket.broadcast.emit('update waiting rooms', roomNames);
+    }
 
     // Add player to current room
     room.addPlayer(player);
@@ -80,10 +83,16 @@ io.on('connection', (socket) => {
     io.to(room).emit('message', formatMessage(username, message));
   });
 
+  // // Fetch all waiting rooms to Login screen
+  socket.on('fetch waiting rooms', () => {
+    const roomNames = Game.getWaitingRoomNames();
+    socket.emit('all waiting rooms', roomNames);
+  });
+
   // Runs when client disconnects
   socket.on('disconnect', () => {
     const player = Player.getById(socket.id);
-    if (!player) throw Error('Player not found');
+    if (player) {
     const room = Room.getByName(player.room);
     if (!room) throw Error('Room not found');
 
@@ -102,6 +111,7 @@ io.on('connection', (socket) => {
       room: room.name,
       players: room.players,
     });
+  }
   });
 });
 

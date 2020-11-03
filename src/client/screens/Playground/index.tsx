@@ -1,9 +1,8 @@
-import  React, { useState, useEffect } from 'react';
+import  React, { useState, useEffect, useContext } from 'react';
 import _ from 'lodash';
 import { View, Text } from 'react-native';
 import useInterval from '@use-it/interval';
 import { useRoute, RouteProp } from '@react-navigation/native';
-import io from 'socket.io-client';
 
 import { blankMatrix, blockMatrix } from '/client/constants/tetriminos';
 import { blockTypes } from '/client/constants/tetriminos';
@@ -14,8 +13,10 @@ import formatChatSubtitle from '/client/screens/Playground/utils';
 import Gameboy from '/client/components/Gameboy';
 import Matrix from '/client/components/Matrix';
 import { useKeyEvent } from '/client/hooks/useKeyEvent';
+import SocketContext from '/client/context/SocketContext';
 
-export default function Playground(): JSX.Element {
+export default function Playground(): JSX.Element {  
+  const socket = useContext(SocketContext);
   const route = useRoute<RouteProp<RootStackParamList, 'Playground'>>();
   const { params } = route;
   const { room, username } = params ?? {};
@@ -28,13 +29,6 @@ export default function Playground(): JSX.Element {
   useKeyEvent({ setBlock, setMatrix, setIsPause });
 
   console.log(player); // TODO: use player.isLeader to show/hide tetris buttons
-
-  let socket: SocketIOClient.Socket | null = null;
-
-  // Initialize new socket only on component mount
-  useEffect(() => {
-    socket = io(`${process.env.SERVER_URL}`);
-  }, []);
 
   useEffect(() => {
     if (!socket) throw Error('No socket');

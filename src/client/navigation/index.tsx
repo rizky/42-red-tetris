@@ -7,6 +7,8 @@ import NotFoundScreen from '/client/screens/NotFoundScreen';
 import Login from '/client/screens/Login';
 import Playground from '/client/screens/Playground';
 import LinkingConfiguration from '/client/navigation/LinkingConfiguration';
+import io from 'socket.io-client';
+import SocketContext from '/client/context/SocketContext';
 
 // If you are not familiar with React Navigation, we recommend going through the
 // "Fundamentals" guide: https://reactnavigation.org/docs/getting-started
@@ -25,11 +27,15 @@ export default function Navigation({ colorScheme }: { colorScheme?: ColorSchemeN
 const Stack = createStackNavigator<RootStackParamList>();
 
 function RootNavigator() {
+  const socket: SocketIOClient.Socket = io(`${process.env.SERVER_URL}`);
+
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="Root" component={Login} />
-      <Stack.Screen name="Playground" component={Playground} />
-      <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
-    </Stack.Navigator>
+    <SocketContext.Provider value={socket} >
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="Root" component={Login} />
+        <Stack.Screen name="Playground" component={Playground} />
+        <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
+      </Stack.Navigator>
+    </SocketContext.Provider>
   );
 }
