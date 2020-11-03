@@ -32,7 +32,7 @@ export default function Playground(): JSX.Element {
 
   useEffect(() => {
     if (!socket) throw Error('No socket');
-    socket.emit('joinRoom', { username, roomName: room });
+    socket.emit('join room', { username, roomName: room });
 
     // Message from server
     socket.on('message', (message: Message) => {
