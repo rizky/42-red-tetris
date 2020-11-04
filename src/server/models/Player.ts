@@ -10,11 +10,11 @@ export class Player {
   score?: number;
   // blockedRows: number;
   
-  constructor({ id, username, roomName }: {id: string, username: string, roomName: string }) {
+  constructor({ id, username }: {id: string, username: string }) {
     this.id = id;
     this.username = username;
-    this.room = roomName;
-    this.isLeader = Room.getByName(roomName) ? false : true;
+    this.room = '';
+    this.isLeader = false;
     players.push(this);
   }
 
@@ -26,6 +26,24 @@ export class Player {
   // Get player by username
   static getByUsername(username: string): Player | undefined {
     return players.find(player => player.username === username);
+  }
+
+  addRoomInfo(roomName: string): Player {
+    this.room = roomName;
+    const room = Room.getByName(roomName);
+    if (room)
+      this.isLeader = room.getPlayers().length > 0 ? false : true;
+    return this;
+  }
+
+  deletePlayer(playerId: string): boolean {
+    const index = players.findIndex(player => player.id === playerId);
+
+    if (index !== -1) {
+      players.splice(index, 1)[0];
+      return true;
+    }
+    return false;
   }
 
   // Computed property - no need to recompute room leader for the moment

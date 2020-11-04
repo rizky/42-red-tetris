@@ -33,14 +33,14 @@ const formatMessage = (username: string, text: string): Message => {
   };
 };
 
-// const game = new Game('RedTetris'); // unused
-
-// Run when client connects
 io.on('connection', (socket) => {
-  socket.on('joinRoom', ({ username, roomName }: { username: string, roomName: string }) => {
-    const player = new Player({ id: socket.id, username, roomName });
+  socket.on('create user', (username: string) => {
+    new Player({ id: socket.id, username });
+  });
+  socket.on('join room', ({ username, roomName }: { username: string, roomName: string }) => {
+    const player = Player.getByUsername(username);
 
-    // Initialize room instance if room exists or create if it doesn't exist
+    // Fetch room if it exists or create if it doesn't exist
     let room = Room.getByName(roomName);
     if (!room) {
       room = new Room(roomName);
@@ -49,9 +49,9 @@ io.on('connection', (socket) => {
     }
 
     // Add player to current room
+    if (!player) throw Error('Player missing');
     room.addPlayer(player);
 
-    // TODO: rm later
     console.log('On join room: ', players);
 
     socket.join(room.name);
@@ -83,7 +83,7 @@ io.on('connection', (socket) => {
     io.to(room).emit('message', formatMessage(username, message));
   });
 
-  // // Fetch all waiting rooms to Login screen
+  // Fetch all waiting rooms to Login screen
   socket.on('fetch waiting rooms', () => {
     const roomNames = Game.getWaitingRoomNames();
     socket.emit('all waiting rooms', roomNames);
@@ -93,25 +93,32 @@ io.on('connection', (socket) => {
   socket.on('disconnect', () => {
     const player = Player.getById(socket.id);
     if (player) {
-    const room = Room.getByName(player.room);
-    if (!room) throw Error('Room not found');
+      const room = Room.getByName(player.room);
+      if (!room) {
+        player.deletePlayer(player.id);
+      } else {
+      room.removePlayer(player.id);
+      console.log('On leave room: ', players, room.players);
 
-    room.removePlayer(player.id);
+      if (room.players.length === 0) {
+        // TODO: only makes sence if game has not been started and room was deleted.
+        // If started game was finished we don't care about waiting rooms - 
+        // room with started game should be deleted from waiting room before, somewhere else
+        Game.removeRoom(room.name);
+        const roomNames = Game.getWaitingRoomNames();
+        socket.broadcast.emit('update waiting rooms', roomNames);
+      }
 
-    console.log('On leave room: ', players, room.players); // TODO: rm later
-
-    if (room.players.length === 0) Game.removeRoom(room.name);
-
-    io.to(room.name).emit(
-      'message',
-      formatMessage(botName, `${player.username} has left the game`),
-    );
-    // Send players and room info when player leaves
-    io.to(room.name).emit('update room players', {
-      room: room.name,
-      players: room.players,
-    });
-  }
+      io.to(room.name).emit(
+        'message',
+        formatMessage(botName, `${player.username} has left the game`),
+      );
+      // Send players and room info when player leaves
+      io.to(room.name).emit('update room players', {
+        room: room.name,
+        players: room.players,
+      });
+    }}
   });
 });
 

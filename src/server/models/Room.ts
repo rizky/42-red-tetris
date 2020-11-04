@@ -21,6 +21,7 @@ export class Room {
 
   // Add new player after room is created
   addPlayer(player: Player): boolean {
+    player.addRoomInfo(this.name);
     this.players.push(player);
     return true;
   }
