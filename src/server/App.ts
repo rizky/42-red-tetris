@@ -29,7 +29,7 @@ const formatMessage = (username: string, text: string): Message => {
   return {
     username,
     text,
-    time: moment().format('h:mm a')
+    time: moment().format('h:mm a'),
   };
 };
 
@@ -68,7 +68,7 @@ io.on('connection', (socket) => {
       .to(room.name)
       .emit(
         'message',
-        formatMessage(botName, `${player.username} has joined the chat`)
+        formatMessage(botName, `${player.username} has joined the chat`),
       );
 
     // Send players and room info when new player joins
@@ -97,28 +97,28 @@ io.on('connection', (socket) => {
       if (!room) {
         player.deletePlayer(player.id);
       } else {
-      room.removePlayer(player.id);
-      console.log('On leave room: ', players, room.players);
+        room.removePlayer(player.id);
+        console.log('On leave room: ', players, room.players);
 
-      if (room.players.length === 0) {
-        // TODO: only makes sence if game has not been started and room was deleted.
-        // If started game was finished we don't care about waiting rooms - 
-        // room with started game should be deleted from waiting room before, somewhere else
-        Game.removeRoom(room.name);
-        const roomNames = Game.getWaitingRoomNames();
-        socket.broadcast.emit('update waiting rooms', roomNames);
-      }
+        if (room.players.length === 0) {
+          // TODO: only makes sence if game has not been started and room was deleted.
+          // If started game was finished we don't care about waiting rooms - 
+          // room with started game should be deleted from waiting room before, somewhere else
+          Game.removeRoom(room.name);
+          const roomNames = Game.getWaitingRoomNames();
+          socket.broadcast.emit('update waiting rooms', roomNames);
+        }
 
-      io.to(room.name).emit(
-        'message',
-        formatMessage(botName, `${player.username} has left the game`),
-      );
-      // Send players and room info when player leaves
-      io.to(room.name).emit('update room players', {
-        room: room.name,
-        players: room.players,
-      });
-    }}
+        io.to(room.name).emit(
+          'message',
+          formatMessage(botName, `${player.username} has left the game`),
+        );
+        // Send players and room info when player leaves
+        io.to(room.name).emit('update room players', {
+          room: room.name,
+          players: room.players,
+        });
+      }}
   });
 });
 
@@ -136,11 +136,10 @@ app.get('/player/:username', function (req, res) {
 app.get('/rooms/waiting', function (req, res) {
   const rooms = Game.getWaitingRooms();
   const roomNames = rooms?.map(room => room.name);
-  console.log('---- Request waiting rooms ----', );
+  console.log('---- Request waiting rooms ----' );
   res.status(200).json(roomNames);
 });
 
 server.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`);
 });
-

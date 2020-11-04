@@ -1,33 +1,37 @@
 /* eslint-disable no-undef */
 module.exports = {
-  'settings': {
-    'react': {
-      'version': 'detect'
-    }
+  settings: {
+    react: {
+      version: 'detect',
+    },
   },
-  'env': {
-    'browser': true,
-    'es2020': true,
-    'jest': true,
+  env: {
+    browser: true,
+    es2020: true,
+    jest: true,
   },
-  'extends': [
+  extends: [
     'eslint:recommended',
     'plugin:react/recommended',
-    'plugin:@typescript-eslint/recommended'
+    'plugin:@typescript-eslint/recommended',
   ],
-  'parser': '@typescript-eslint/parser',
-  'parserOptions': {
-    'ecmaFeatures': {
-      'jsx': true
+  parser: '@typescript-eslint/parser',
+  parserOptions: {
+    ecmaFeatures: {
+      jsx: true,
     },
-    'ecmaVersion': 11,
-    'sourceType': 'module'
+    ecmaVersion: 11,
+    sourceType: 'module',
   },
-  'plugins': [
+  plugins: [
     'react',
-    '@typescript-eslint'
+    '@typescript-eslint',
   ],
-  'rules': {
+  rules: {
+    'comma-dangle': [
+      'error',
+      'always-multiline',
+    ],
     '@typescript-eslint/ban-ts-comment': [
       'error',
       {
@@ -38,24 +42,24 @@ module.exports = {
         minimumDescriptionLength: 5,
       },
     ],
-    'indent': [
+    indent: [
       2,
       2,
       {
-        'SwitchCase': 1
-      }
+        SwitchCase: 1,
+      },
     ],
     'linebreak-style': [
       'error',
-      'unix'
+      'unix',
     ],
-    'quotes': [
+    quotes: [
       'error',
-      'single'
+      'single',
     ],
-    'semi': [
+    semi: [
       'error',
-      'always'
-    ]
-  }
+      'always',
+    ],
+  },
 };

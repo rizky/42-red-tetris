@@ -13,7 +13,7 @@ type Props = {
 };
 
 export default function ChooseRoom(props: Props): JSX.Element {
-	const {username, roomName, setRoomName} = props;
+  const {username, roomName, setRoomName} = props;
 
   const socket = useContext(SocketContext);
   const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'Root'>>();
@@ -41,8 +41,8 @@ export default function ChooseRoom(props: Props): JSX.Element {
 
   const onJoinRoomPress = () => {
     if(!checkTextLength(roomName)) setRoomNameError('Name must be 1-15 symbols');
-		else
-			username && roomName && navigation.push('Playground', { username, room: roomName });
+    else
+      username && roomName && navigation.push('Playground', { username, room: roomName });
   };
 
   return (
@@ -57,20 +57,20 @@ export default function ChooseRoom(props: Props): JSX.Element {
         }}
         style={{ borderWidth: 1, marginBottom: 20, height: 30, width: '100%' }}
       />
-			<TouchableOpacity
+      <TouchableOpacity
         style={styles.button}
         onPress={onJoinRoomPress}
       >
         <Text style={styles.linkText}>Play</Text>
       </TouchableOpacity>
-			<View style={{ width: '80%', marginTop: 20 }}>
+      <View style={{ width: '80%', marginTop: 20 }}>
         {waitingRooms.length > 0 && <Text style={styles.title}>Join room</Text>}
         {waitingRooms.map((waitingRoom) =>
           <View key={waitingRoom}>
             <TouchableOpacity
               style={styles.roomsList}
               onPress={() => waitingRoom && username && navigation.push('Playground', { username, room: waitingRoom })}
-						>
+            >
               <Text>{waitingRoom}</Text>
             </TouchableOpacity>
           </View>)}
@@ -93,21 +93,21 @@ const styles = StyleSheet.create({
   },
   linkText: {
     fontSize: 14,
-	},
-	roomsList: {
-		borderWidth: 1,
-		borderRadius: 5,
-		margin: 3,
-		padding: 2,
-		alignItems:
+  },
+  roomsList: {
+    borderWidth: 1,
+    borderRadius: 5,
+    margin: 3,
+    padding: 2,
+    alignItems:
 		'center',
-	},
-	button: {
-		width: '70%',
-		borderWidth: 1,
-		borderRadius: 10,
-		alignItems: 'center',
-		padding: 3,
-		marginBottom: 10,
-	},
+  },
+  button: {
+    width: '70%',
+    borderWidth: 1,
+    borderRadius: 10,
+    alignItems: 'center',
+    padding: 3,
+    marginBottom: 10,
+  },
 });
