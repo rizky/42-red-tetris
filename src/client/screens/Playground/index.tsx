@@ -14,12 +14,19 @@ import Gameboy from '/client/components/Gameboy';
 import Matrix from '/client/components/Matrix';
 import { useKeyEvent } from '/client/hooks/useKeyEvent';
 import SocketContext from '/client/context/SocketContext';
+import UserContext from '/client/context/UserContext';
 
 export default function Playground(): JSX.Element {  
   const socket = useContext(SocketContext);
+  const { contextUser } = useContext(UserContext);
+  console.log('Playground, User context:', contextUser);
+
+
+  // TODO: delete Playground routes everywhere
   const route = useRoute<RouteProp<RootStackParamList, 'Playground'>>();
   const { params } = route;
-  const { room, username } = params ?? {};
+  const { room, username } = contextUser;
+  // const { room, username } = params ?? {};
   const [roomPlayers, setRoomPlayers] = useState<string[]>([]);
   const [block, setBlock] = useState<Block>(new Block({ type: _.sample(blockTypes) ?? 'T' }));
   const [matrix, setMatrix] = useState<Matrix>(blankMatrix);

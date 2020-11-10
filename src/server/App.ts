@@ -49,33 +49,34 @@ io.on('connection', (socket) => {
     }
 
     // Add player to current room
-    if (!player) throw Error('Player missing');
-    room.addPlayer(player);
+    if (player) {
+      room.addPlayer(player);
 
-    console.log('On join room: ', players);
+      console.log('On join room: ', players);
 
-    socket.join(room.name);
-    console.log(`Socket ${socket.id} joined ${room.name}`);
+      socket.join(room.name);
+      console.log(`Socket ${socket.id} joined ${room.name}`);
 
-    // Welcome current player
-    socket.emit('message', formatMessage(botName, `Hi ${player.username}! Welcome to Room ${room.name}!`));
+      // Welcome current player
+      socket.emit('message', formatMessage(botName, `Hi ${player.username}! Welcome to Room ${room.name}!`));
 
-    // Send current player info
-    socket.emit('fetch current player', player);
+      // Send current player info
+      socket.emit('fetch current player', player);
 
-    // Broadcast when a player connects
-    socket.broadcast
-      .to(room.name)
-      .emit(
-        'message',
-        formatMessage(botName, `${player.username} has joined the chat`),
-      );
+      // Broadcast when a player connects
+      socket.broadcast
+        .to(room.name)
+        .emit(
+          'message',
+          formatMessage(botName, `${player.username} has joined the chat`),
+        );
 
-    // Send players and room info when new player joins
-    io.to(room.name).emit('update room players', {
-      room: room.name,
-      players: room.players,
-    });
+      // Send players and room info when new player joins
+      io.to(room.name).emit('update room players', {
+        room: room.name,
+        players: room.players,
+      });
+    }
   });
 
   // Listen for chatMessage
