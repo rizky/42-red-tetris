@@ -9,6 +9,7 @@ import Playground from '/client/screens/Playground';
 import LinkingConfiguration from '/client/navigation/LinkingConfiguration';
 import io from 'socket.io-client';
 import SocketContext from '/client/context/SocketContext';
+import UserContext from '/client/context/UserContext';
 
 // If you are not familiar with React Navigation, we recommend going through the
 // "Fundamentals" guide: https://reactnavigation.org/docs/getting-started
@@ -29,13 +30,21 @@ const Stack = createStackNavigator<RootStackParamList>();
 function RootNavigator() {
   const socket: SocketIOClient.Socket = io(`${process.env.SERVER_URL}`);
 
+  const [contextUser, setContextUser] = React.useState<{username: undefined | string, room: undefined | string}>({username: undefined, room: undefined});
+
+  const updateContextUser = ({username, room}: {username: string, room: string}) => {
+    setContextUser({username, room});
+  };
+
   return (
     <SocketContext.Provider value={socket} >
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="Root" component={Login} />
-        <Stack.Screen name="Playground" component={Playground} />
-        <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
-      </Stack.Navigator>
+      <UserContext.Provider value={{contextUser, updateContextUser}} >
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="Root" component={Login} />
+          <Stack.Screen name="Playground" component={Playground} />
+          <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
+        </Stack.Navigator>
+      </UserContext.Provider>
     </SocketContext.Provider>
   );
 }

@@ -5,6 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 
 import SocketContext from '/client/context/SocketContext';
 import { checkTextLength } from '/client/screens/Login/utils';
+import UserContext from '/client/context/UserContext';
 
 type Props = {
 	username: string | null | undefined,
@@ -19,6 +20,7 @@ export default function ChooseRoom(props: Props): JSX.Element {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'Root'>>();
   const [roomNameError, setRoomNameError] = useState<string>('');
   const [waitingRooms, setWaitingRooms] = useState<string[]>([]);
+  const {updateContextUser} = useContext(UserContext);
 
   console.log('Updates for waitingRooms:', waitingRooms);
   useEffect(() => {
@@ -39,10 +41,12 @@ export default function ChooseRoom(props: Props): JSX.Element {
     });
   });
 
-  const onJoinRoomPress = () => {
+  const onJoinRoomPress = (roomName: string | null | undefined) => {
     if(!checkTextLength(roomName)) setRoomNameError('Name must be 1-15 symbols');
-    else
+    else {
+      updateContextUser({ username, room: roomName });
       username && roomName && navigation.push('Playground', { username, room: roomName });
+    }
   };
 
   return (
@@ -59,17 +63,17 @@ export default function ChooseRoom(props: Props): JSX.Element {
       />
       <TouchableOpacity
         style={styles.button}
-        onPress={onJoinRoomPress}
+        onPress={() => onJoinRoomPress(roomName)}
       >
         <Text style={styles.linkText}>Play</Text>
       </TouchableOpacity>
       <View style={{ width: '80%', marginTop: 20 }}>
         {waitingRooms.length > 0 && <Text style={styles.title}>Join room</Text>}
-        {waitingRooms.map((waitingRoom) =>
+        {waitingRooms.length > 0 && waitingRooms.map((waitingRoom) =>
           <View key={waitingRoom}>
             <TouchableOpacity
               style={styles.roomsList}
-              onPress={() => waitingRoom && username && navigation.push('Playground', { username, room: waitingRoom })}
+              onPress={() => onJoinRoomPress(waitingRoom)}
             >
               <Text>{waitingRoom}</Text>
             </TouchableOpacity>
