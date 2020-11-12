@@ -4,6 +4,7 @@ import { View, Text } from 'react-native';
 import useInterval from '@use-it/interval';
 import { useRoute, RouteProp } from '@react-navigation/native';
 
+import { SOCKETS } from '/config/constants';
 import { blankMatrix, blockMatrix } from '/client/constants/tetriminos';
 import { blockTypes } from '/client/constants/tetriminos';
 import { ChatWidget, addResponseMessage } from '/client/components/Chat';
@@ -39,26 +40,26 @@ export default function Playground(): JSX.Element {
 
   useEffect(() => {
     if (!socket) throw Error('No socket');
-    socket.emit('join room', { username, roomName: room });
+    socket.emit(SOCKETS.USER_JOINS_ROOM, { username, roomName: room });
 
     // Message from server
-    socket.on('message', (message: Message) => {
+    socket.on(SOCKETS.CHAT_MESSAGE, (message: Message) => {
       if (message.username !== username)
         addResponseMessage(message.username + ': ' + message.text, message.username);
     });
 
     // Current player sent from server
-    socket.on('fetch current player', (player: PlayerType) => {
+    socket.on(SOCKETS.FETCH_CURRENT_PLAYER, (player: PlayerType) => {
       setCurrentPlayer(player);
     });
 
-    socket.on('update room players', (data: { room: string, players: PlayerType[] }) => {
+    socket.on(SOCKETS.UPDATE_ROOM_PLAYERS, (data: { room: string, players: PlayerType[] }) => {
       setRoomPlayers(data.players.map((player) => player.username));
     });
   }, []);
   const handleNewUserMessage = (message: string) => {
     if (!socket) throw Error('No socket');
-    socket.emit('chatMessage', { username, message, room });
+    socket.emit(SOCKETS.CHAT_MESSAGE, { username, message, room });
   };
   const nextBlockType = blockTypes[(_.indexOf(blockTypes, block.type) + 1) % _.size(blockTypes)];
   useInterval(() => {

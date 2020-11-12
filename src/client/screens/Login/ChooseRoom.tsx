@@ -3,6 +3,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { StyleSheet, Text, TouchableOpacity, TextInput, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
+import { SOCKETS } from '/config/constants';
 import SocketContext from '/client/context/SocketContext';
 import { checkTextLength } from '/client/screens/Login/utils';
 import UserContext from '/client/context/UserContext';
@@ -27,8 +28,8 @@ export default function ChooseRoom(props: Props): JSX.Element {
     if (!socket) throw Error('No socket');
     // If I remove [] from useEffect there is a flood of sockets, for some reason component rerenders several times a second.
     // Later we need to listen to a socket event when game in room has started.
-    socket.emit('fetch waiting rooms');
-    socket.on('all waiting rooms', (roomNames: string[]) => {
+    socket.emit(SOCKETS.FETCH_WAITING_ROOMS);
+    socket.on(SOCKETS.FETCH_WAITING_ROOMS, (roomNames: string[]) => {
       setWaitingRooms(roomNames);
     });
   }, []);
@@ -36,7 +37,7 @@ export default function ChooseRoom(props: Props): JSX.Element {
   useEffect(() => {
     if (!socket) throw Error('No socket');
     // new room is created + room is deleted
-    socket.on('update waiting rooms', (roomNames: string[]) => {
+    socket.on(SOCKETS.UPDATE_WAITING_ROOMS, (roomNames: string[]) => {
       setWaitingRooms(roomNames);
     });
   });

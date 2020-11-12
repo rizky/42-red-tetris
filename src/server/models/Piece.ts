@@ -1,4 +1,4 @@
-import { blockTypes } from '/client/constants/tetriminos.ts';
+import { blockTypes } from '../../client/constants/tetriminos';
 
 export class Piece {
   type: TetriminosType;
@@ -6,6 +6,8 @@ export class Piece {
   constructor() {
     this.type = this.selectRandomPiece();
   }
+
+  // Initialize like this: const tetrimino = new Piece().type
 
   selectRandomPiece(): TetriminosType {
     return blockTypes[Math.floor(Math.random() * blockTypes.length)];
