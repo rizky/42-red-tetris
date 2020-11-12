@@ -36,7 +36,7 @@ export default function Gameboy({ children, isPause }: { children: React.ReactCh
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#009688',
+    backgroundColor: '#1f393e',
     alignItems: 'center',
     justifyContent: 'center',
     padding: 20,
@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
   gameboy: {
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#af0000',
+    backgroundColor: '#990011ff',
     borderRadius: 20,
     paddingBottom: 50,
     paddingHorizontal: 50,
