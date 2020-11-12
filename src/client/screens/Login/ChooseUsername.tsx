@@ -3,6 +3,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { StyleSheet, Text, TouchableOpacity, TextInput, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
+import { SOCKETS } from '/config/constants';
 import SocketContext from '/client/context/SocketContext';
 import { checkUsername } from '/client/screens/Login/utils';
 
@@ -24,7 +25,7 @@ export default function ChooseUsername(props: Props): JSX.Element {
       .then(data => {
         if (data === true) {
           if(!socket) throw Error('No socket');
-          socket.emit('create user', username);
+          socket.emit(SOCKETS.CREATE_USER, username);
           setScreenNumber(2);
         }
       })

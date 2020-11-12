@@ -11,7 +11,8 @@ export class Game {
     return rooms;
   }
 
-  // remove room when leader leaves and push others out of room
+  // when leader leaves - assign another player as leader
+  // when only 1 player left - he is a winner
 
   static getWaitingRooms(): Maybe<Room[]> {
     return rooms.filter((room) => room.gameStarted === false);
