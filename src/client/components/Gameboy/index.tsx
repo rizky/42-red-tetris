@@ -5,8 +5,41 @@ import Keypad from '/client/components/Keypad';
 import { useWindowDimensions } from '/client/hooks/useWindowDimensions';
 import UserContext from '/client/context/UserContext';
 
-export default function Gameboy({ children, isPause }: { children: React.ReactChild, isPause?: boolean }): JSX.Element {
+export const previewText = (isMultiplayerMode: boolean, otherPlayersNumber: number, isLeader?: boolean):React.ReactChild  => {
+  const secondLineText = (otherPlayersNumber: number, isLeader?: boolean) => {
+    if (otherPlayersNumber <= 0) return 'Wait for other players';
+    if (otherPlayersNumber > 0 && isLeader) return 'Press Play(P) to start';
+    if (otherPlayersNumber > 0 && !isLeader) return 'Wait for leader to start the game';
+  };
+  if (isMultiplayerMode) {
+    return (
+      <View style={{ alignItems: 'center' }}>
+        <Text style={styles.gameMode}>You are in mulriplayer mode</Text>
+        <Text style={styles.gameMode}>{otherPlayersNumber} ohter players in your room</Text>
+        <Text>{secondLineText(otherPlayersNumber, isLeader)}</Text>
+      </View>
+    );
+  } else {
+    return (
+      <View style={{ alignItems: 'center' }}>
+        <Text style={styles.gameMode}>You are in solo mode</Text>
+        <Text>Press Play(P) to start</Text>
+      </View>
+    );
+  }
+};
+
+type Props = {
+  children: React.ReactChild,
+  isPause?: boolean,
+  roomPlayers: string[],
+  isLeader?: boolean,
+}
+
+export default function Gameboy(props: Props): JSX.Element {
+  const {children, isPause, roomPlayers, isLeader} = props;
   const {userContext} = useContext(UserContext);
+  const isMultiplayerMode = userContext.username && userContext.room ? true : false;
   const window = useWindowDimensions();
   const w = window.width;
   const h = window.height;
@@ -17,6 +50,7 @@ export default function Gameboy({ children, isPause }: { children: React.ReactCh
   } else {
     scale = w / 560;
   }
+
   return (
     <View style={styles.container}>
       <View style={[styles.gameboy, { transform: [{ scale }] }]}>
@@ -25,13 +59,7 @@ export default function Gameboy({ children, isPause }: { children: React.ReactCh
           {children}
           {isPause ?
             <View style={[styles.display, { position: 'absolute', opacity: 0.8 }]} >
-              <View>
-                {userContext.username && userContext.room
-                  ? <Text style={styles.gameMode}>You are in mulriplayer mode</Text>
-                  : <Text style={styles.gameMode}>You are in solo mode</Text>
-                }
-              </View>
-              <Text>Press Play(P) to start</Text>
+              {previewText(isMultiplayerMode, roomPlayers.length - 1, isLeader)}
             </View>
             : null}
         </View>
@@ -58,7 +86,7 @@ const styles = StyleSheet.create({
     borderRightColor: '#fa6b6b',
     borderTopColor: '#980f0f',
     borderWidth: 5,
-    height: 470,
+    height: 500,
     justifyContent: 'center',
     padding: 10,
     width: 400,
@@ -73,7 +101,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 30,
-    marginVertical: 20,
+    marginVertical: 15,
     textAlign: 'center',
   },
   gameMode: {

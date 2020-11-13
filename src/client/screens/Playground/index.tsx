@@ -84,24 +84,28 @@ export default function Playground(): JSX.Element {
 
   return (
     <>
-      <Gameboy isPause={isPause}>
-        <View style={{ flexDirection: 'row', alignSelf:'flex-start', width: '100%' }}>
-          <Matrix matrix={matrix} block={block}/>
-          <View style={{ marginLeft: 20, flex: 1 }} >
-            <Text style={{ fontSize: 20 }}>Score</Text>
-            <Digits style={{ marginVertical: 10, alignSelf: 'flex-end' }} />
-            <Text style={{ fontSize: 20 }}>Start Line</Text>
-            <Digits style={{ marginVertical: 10, alignSelf: 'flex-end' }} />
-            <Text style={{ fontSize: 20 }}>Level</Text>
-            <Digits style={{ marginVertical: 10, alignSelf: 'flex-end' }} />
-            <Text style={{ fontSize: 20 }}>Next</Text>
-            <Matrix
-              matrix={blockMatrix}
-              block={new Block({ type: nextBlockType, pos: [0, 0] })}
-              style={{ borderWidth: 0, marginVertical: 10, alignSelf: 'flex-end' }}
-            />
+      <Gameboy isPause={isPause} roomPlayers={roomPlayers} isLeader={player?.isLeader}>
+        <>
+          {username && room &&
+          <Text style={{ fontSize: 16, marginBottom: 10, alignSelf: 'flex-start' }}>{username} @ {room}</Text>}
+          <View style={{ flexDirection: 'row', alignSelf:'flex-start', width: '100%' }}>
+            <Matrix matrix={matrix} block={block}/>
+            <View style={{ marginLeft: 20, flex: 1 }} >
+              <Text style={{ fontSize: 20 }}>Score</Text>
+              <Digits style={{ marginVertical: 10, alignSelf: 'flex-end' }} />
+              <Text style={{ fontSize: 20 }}>Start Line</Text>
+              <Digits style={{ marginVertical: 10, alignSelf: 'flex-end' }} />
+              <Text style={{ fontSize: 20 }}>Level</Text>
+              <Digits style={{ marginVertical: 10, alignSelf: 'flex-end' }} />
+              <Text style={{ fontSize: 20 }}>Next</Text>
+              <Matrix
+                matrix={blockMatrix}
+                block={new Block({ type: nextBlockType, pos: [0, 0] })}
+                style={{ borderWidth: 0, marginVertical: 10, alignSelf: 'flex-end' }}
+              />
+            </View>
           </View>
-        </View>
+        </>
       </Gameboy>
       {room && username &&
         <ChatWidget title="RedTetris" subtitle={formatChatSubtitle(roomPlayers)} handleNewUserMessage={handleNewUserMessage}/>
