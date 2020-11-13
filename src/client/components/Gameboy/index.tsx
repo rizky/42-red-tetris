@@ -1,10 +1,12 @@
 import { StyleSheet, Text, View } from 'react-native';
-import * as React from 'react';
+import React, { useContext } from 'react';
 import Keypad from '/client/components/Keypad';
 
 import { useWindowDimensions } from '/client/hooks/useWindowDimensions';
+import UserContext from '/client/context/UserContext';
 
 export default function Gameboy({ children, isPause }: { children: React.ReactChild, isPause?: boolean }): JSX.Element {
+  const {contextUser} = useContext(UserContext);
   const window = useWindowDimensions();
   const w = window.width;
   const h = window.height;
@@ -23,6 +25,12 @@ export default function Gameboy({ children, isPause }: { children: React.ReactCh
           {children}
           {isPause ?
             <View style={[styles.display, { position: 'absolute', opacity: 0.8 }]} >
+              <View>
+                {contextUser.username && contextUser.room
+                  ? <Text style={styles.gameMode}>You are in mulriplayer mode</Text>
+                  : <Text style={styles.gameMode}>You are in solo mode</Text>
+                }
+              </View>
               <Text>Press Play(P) to start</Text>
             </View>
             : null}
@@ -67,5 +75,9 @@ const styles = StyleSheet.create({
     fontSize: 30,
     marginVertical: 20,
     textAlign: 'center',
+  },
+  gameMode: {
+    marginBottom: 20,
+    fontSize: 18,
   },
 });

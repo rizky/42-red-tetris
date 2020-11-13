@@ -52,6 +52,7 @@ export default function ChooseRoom(props: Props): JSX.Element {
 
   return (
     <View style={{ width: '100%', alignItems: 'center' }}>
+      <Text style={{ fontSize: 16, marginBottom: 50 }}>Hello, {username}</Text>
       <Text style={styles.title}>Create room</Text>
       <Text style={styles.error}>{roomNameError}</Text>
       <TextInput
