@@ -22,7 +22,7 @@ export default function Playground(): JSX.Element {
   const { userContext } = useContext(UserContext);
   console.log('Playground, User context:', userContext);
 
-  
+
   // TODO: delete Playground routes everywhere
   // const route = useRoute<RouteProp<RootStackParamList, 'Playground'>>();
   // const { params } = route;
@@ -36,11 +36,12 @@ export default function Playground(): JSX.Element {
 
   useKeyEvent({ setBlock, setMatrix, setIsPause });
 
-  console.log(player); // TODO: use player.isLeader to show/hide tetris buttons
+  console.log('FETCH_CURRENT_PLAYER', player); // TODO: use player.isLeader to show/hide tetris buttons
 
   useEffect(() => {
     if (!socket) throw Error('No socket');
-    socket.emit(SOCKETS.USER_JOINS_ROOM, { username, roomName: room });
+    if (userContext.username && userContext.room) // If not solo mode, enter room
+      socket.emit(SOCKETS.ENTER_ROOM, { username, roomName: room });
 
     // Message from server
     socket.on(SOCKETS.CHAT_MESSAGE, (message: Message) => {

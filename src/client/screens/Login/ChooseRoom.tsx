@@ -46,6 +46,8 @@ export default function ChooseRoom(props: Props): JSX.Element {
     if(!checkTextLength(roomName)) setRoomNameError('Name must be 1-15 symbols');
     else {
       updateUserContext({ username, room: roomName });
+      if (!socket) throw Error('No socket');
+      socket.emit(SOCKETS.CHOOSE_ROOM, { username, roomName });
       username && roomName && navigation.push('Playground', { username, room: roomName });
     }
   };

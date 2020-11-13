@@ -4,7 +4,8 @@ export const SOCKETS = {
   FETCH_CURRENT_PLAYER: 'fetch current player',
 
   /* ---- Room ---- */
-  USER_JOINS_ROOM: 'join room',
+  CHOOSE_ROOM: 'create or join room',
+  ENTER_ROOM: 'enter room',
   UPDATE_ROOM_PLAYERS: 'update room players',
   
   /* ---- Game ---- */
