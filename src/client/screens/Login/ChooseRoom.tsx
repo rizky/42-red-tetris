@@ -21,7 +21,7 @@ export default function ChooseRoom(props: Props): JSX.Element {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'Root'>>();
   const [roomNameError, setRoomNameError] = useState<string>('');
   const [waitingRooms, setWaitingRooms] = useState<string[]>([]);
-  const {updateContextUser} = useContext(UserContext);
+  const {updateUserContext} = useContext(UserContext);
 
   console.log('Updates for waitingRooms:', waitingRooms);
   useEffect(() => {
@@ -45,7 +45,7 @@ export default function ChooseRoom(props: Props): JSX.Element {
   const onJoinRoomPress = (roomName: string | null | undefined) => {
     if(!checkTextLength(roomName)) setRoomNameError('Name must be 1-15 symbols');
     else {
-      updateContextUser({ username, room: roomName });
+      updateUserContext({ username, room: roomName });
       username && roomName && navigation.push('Playground', { username, room: roomName });
     }
   };

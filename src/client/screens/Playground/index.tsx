@@ -19,14 +19,14 @@ import UserContext from '/client/context/UserContext';
 
 export default function Playground(): JSX.Element {  
   const socket = useContext(SocketContext);
-  const { contextUser } = useContext(UserContext);
-  console.log('Playground, User context:', contextUser);
+  const { userContext } = useContext(UserContext);
+  console.log('Playground, User context:', userContext);
 
-
+  
   // TODO: delete Playground routes everywhere
-  const route = useRoute<RouteProp<RootStackParamList, 'Playground'>>();
-  const { params } = route;
-  const { room, username } = contextUser;
+  // const route = useRoute<RouteProp<RootStackParamList, 'Playground'>>();
+  // const { params } = route;
+  const { room, username } = userContext;
   // const { room, username } = params ?? {};
   const [roomPlayers, setRoomPlayers] = useState<string[]>([]);
   const [block, setBlock] = useState<Block>(new Block({ type: _.sample(blockTypes) ?? 'T' }));
@@ -57,10 +57,12 @@ export default function Playground(): JSX.Element {
       setRoomPlayers(data.players.map((player) => player.username));
     });
   }, []);
+
   const handleNewUserMessage = (message: string) => {
     if (!socket) throw Error('No socket');
     socket.emit(SOCKETS.CHAT_MESSAGE, { username, message, room });
   };
+
   const nextBlockType = blockTypes[(_.indexOf(blockTypes, block.type) + 1) % _.size(blockTypes)];
   useInterval(() => {
     if (isPause) return;

@@ -30,15 +30,15 @@ const Stack = createStackNavigator<RootStackParamList>();
 function RootNavigator() {
   const socket: SocketIOClient.Socket = io(`${process.env.SERVER_URL}`);
 
-  const [contextUser, setContextUser] = React.useState<{username: undefined | string, room: undefined | string}>({username: undefined, room: undefined});
+  const [userContext, setUserContext] = React.useState<{username: undefined | string, room: undefined | string}>({username: undefined, room: undefined});
 
-  const updateContextUser = ({username, room}: {username: string, room: string}) => {
-    setContextUser({username, room});
+  const updateUserContext = ({username, room}: {username: string, room: string}) => {
+    setUserContext({username, room});
   };
 
   return (
     <SocketContext.Provider value={socket} >
-      <UserContext.Provider value={{contextUser, updateContextUser}} >
+      <UserContext.Provider value={{userContext, updateUserContext}} >
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen name="Root" component={Login} />
           <Stack.Screen name="Playground" component={Playground} />

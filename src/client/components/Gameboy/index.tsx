@@ -6,7 +6,7 @@ import { useWindowDimensions } from '/client/hooks/useWindowDimensions';
 import UserContext from '/client/context/UserContext';
 
 export default function Gameboy({ children, isPause }: { children: React.ReactChild, isPause?: boolean }): JSX.Element {
-  const {contextUser} = useContext(UserContext);
+  const {userContext} = useContext(UserContext);
   const window = useWindowDimensions();
   const w = window.width;
   const h = window.height;
@@ -26,7 +26,7 @@ export default function Gameboy({ children, isPause }: { children: React.ReactCh
           {isPause ?
             <View style={[styles.display, { position: 'absolute', opacity: 0.8 }]} >
               <View>
-                {contextUser.username && contextUser.room
+                {userContext.username && userContext.room
                   ? <Text style={styles.gameMode}>You are in mulriplayer mode</Text>
                   : <Text style={styles.gameMode}>You are in solo mode</Text>
                 }

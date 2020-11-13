@@ -1,2 +1,2 @@
 type UserContextType = {username: undefined | string, room: undefined | string};
-type UpdateContextUserType =  (() => void) | (({username: string, room: string}) => void);
+type UpdateUserContextType =  (() => void) | (({username: string, room: string}) => void);

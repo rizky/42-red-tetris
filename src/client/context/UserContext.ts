@@ -1,11 +1,11 @@
 import {createContext} from 'react';
 
-const contextUser = {username: undefined, room: undefined};
+const userContext = {username: undefined, room: undefined};
 
-const UserContext = createContext<{contextUser: UserContextType, updateContextUser: UpdateContextUserType}>({
-  contextUser,
+const UserContext = createContext<{userContext: UserContextType, updateUserContext: UpdateUserContextType}>({
+  userContext,
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  updateContextUser: () => {},
+  updateUserContext: () => {},
 });
 
 export default UserContext;
