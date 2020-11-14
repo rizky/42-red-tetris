@@ -4,8 +4,8 @@ self.__precacheManifest = [
     "url": "/expo-service-worker.js"
   },
   {
-    "revision": "3e95756e93c7430a259d",
-    "url": "/static/js/app.3e8bb0af.chunk.js"
+    "revision": "d757ae830469eda0c445",
+    "url": "/static/js/app.8dbda83e.chunk.js"
   },
   {
     "revision": "66090dc4495d4ce3dfb9",
@@ -17,11 +17,11 @@ self.__precacheManifest = [
   },
   {
     "revision": "0737336ee78ad0a2cc3e02b6eeb6fcb9",
-    "url": "/static/js/2.5e59a371.chunk.js.LICENSE.txt"
+    "url": "/static/js/2.5b75e16f.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "bde780ccf455c93011da",
-    "url": "/static/js/2.5e59a371.chunk.js"
+    "revision": "cad34d8c63dee4d4e2cf",
+    "url": "/static/js/2.5b75e16f.chunk.js"
   },
   {
     "revision": "ec543248d7b23864564429fc03837190",
@@ -36,19 +36,19 @@ self.__precacheManifest = [
     "url": "/manifest.json"
   },
   {
-    "revision": "7cc4d92a5109b73fd7ddc717aa677194",
+    "revision": "0880319d18d54a659939ddb8be3faf29",
     "url": "/index.html"
   },
   {
-    "revision": "fa6155203a3b9f3590820927f5a5991a",
+    "revision": "b27287954a8393ef9c70073b2fb0b988",
     "url": "/favicon.ico"
   },
   {
-    "revision": "d50b3a5941cfe755e600a75113771581",
+    "revision": "e72daee58e37c99d3553059eda418aa8",
     "url": "/favicon-32.png"
   },
   {
-    "revision": "521f8c844d3af13c3d20ba01b2fc5274",
+    "revision": "d324ddc823eca6c86688f62576c81e76",
     "url": "/favicon-16.png"
   }
 ];
