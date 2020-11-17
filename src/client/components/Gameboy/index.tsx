@@ -14,7 +14,7 @@ export const previewText = (isMultiplayerMode: boolean, otherPlayersNumber: numb
   if (isMultiplayerMode) {
     return (
       <View style={{ alignItems: 'center' }}>
-        <Text style={styles.gameMode}>You are in mulriplayer mode</Text>
+        <Text style={styles.gameMode}>You are in multiplayer mode</Text>
         <Text style={styles.gameMode}>{otherPlayersNumber} ohter players in your room</Text>
         <Text>{secondLineText(otherPlayersNumber, isLeader)}</Text>
       </View>
@@ -32,13 +32,14 @@ export const previewText = (isMultiplayerMode: boolean, otherPlayersNumber: numb
 type Props = {
   children: React.ReactChild,
   isPause?: boolean,
-  roomPlayers: string[],
+  roomPlayers?: string[],
   isLeader?: boolean,
 }
 
 export default function Gameboy(props: Props): JSX.Element {
   const {children, isPause, roomPlayers, isLeader} = props;
   const {userContext} = useContext(UserContext);
+  const opponentsNumber = !roomPlayers || roomPlayers.length === 0 ? 0 : roomPlayers.length - 1;
   const isMultiplayerMode = userContext.username && userContext.room ? true : false;
   const window = useWindowDimensions();
   const w = window.width;
@@ -59,7 +60,7 @@ export default function Gameboy(props: Props): JSX.Element {
           {children}
           {isPause ?
             <View style={[styles.display, { position: 'absolute', opacity: 0.8 }]} >
-              {previewText(isMultiplayerMode, roomPlayers.length - 1, isLeader)}
+              {previewText(isMultiplayerMode, opponentsNumber, isLeader)}
             </View>
             : null}
         </View>
