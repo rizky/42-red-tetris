@@ -1,4 +1,5 @@
 import { Player, players } from './Player';
+import { Piece } from './Piece';
 
 export const rooms: Room[] = [];
 
@@ -40,5 +41,14 @@ export class Room {
 
   getPlayers(): Player[] {
     return this.players;
+  }
+
+  startGame(): string {
+    this.gameStarted = true;
+    const startTile = new Piece().type;
+    const tilesStack = [new Piece().type, new Piece().type, new Piece().type];
+    players.map(player => player.tilesStack = tilesStack);
+    this.players.map(player => player.tilesStack = tilesStack);
+    return startTile;
   }
 }

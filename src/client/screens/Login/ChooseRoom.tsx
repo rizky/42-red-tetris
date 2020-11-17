@@ -4,24 +4,22 @@ import { StyleSheet, Text, TouchableOpacity, TextInput, View } from 'react-nativ
 import { useNavigation } from '@react-navigation/native';
 
 import { SOCKETS } from '/config/constants';
-import SocketContext from '/client/context/SocketContext';
 import { checkTextLength } from '/client/screens/Login/utils';
+import SocketContext from '/client/context/SocketContext';
 import UserContext from '/client/context/UserContext';
 
 type Props = {
-	username: string | null | undefined,
-	roomName: string | null | undefined,
-	setRoomName: Dispatch<SetStateAction<string | null | undefined>>,
+  setScreenNumber: Dispatch<SetStateAction<1 | 2>>,
 };
 
 export default function ChooseRoom(props: Props): JSX.Element {
-  const {username, roomName, setRoomName} = props;
-
+  const {setScreenNumber} = props;
+  const { userContext, setUserContext } = useContext(UserContext);
+  const { username, room: roomName } = userContext;
   const socket = useContext(SocketContext);
   const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'Root'>>();
   const [roomNameError, setRoomNameError] = useState<string>('');
   const [waitingRooms, setWaitingRooms] = useState<string[]>([]);
-  const {updateUserContext} = useContext(UserContext);
 
   console.log('Updates for waitingRooms:', waitingRooms);
   useEffect(() => {
@@ -45,10 +43,11 @@ export default function ChooseRoom(props: Props): JSX.Element {
   const onJoinRoomPress = (roomName: string | null | undefined) => {
     if(!checkTextLength(roomName)) setRoomNameError('Name must be 1-15 symbols');
     else {
-      updateUserContext({ username, room: roomName });
+      setUserContext({ username, room: roomName });
       if (!socket) throw Error('No socket');
       socket.emit(SOCKETS.CHOOSE_ROOM, { username, roomName });
       username && roomName && navigation.push('Playground', { username, room: roomName });
+      setScreenNumber(1);
     }
   };
 
@@ -61,7 +60,7 @@ export default function ChooseRoom(props: Props): JSX.Element {
         value={roomName ?? ''}
         onChangeText={text => {
           setRoomNameError('');
-          setRoomName(text);
+          setUserContext({username, room: text});
         }}
         style={{ borderWidth: 1, marginBottom: 20, height: 30, width: '100%' }}
       />

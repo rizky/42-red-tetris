@@ -8,6 +8,7 @@ export class Player {
   room: string;
   isLeader: boolean;
   score?: number;
+  tilesStack: string[];
   // blockedRows: number;
   
   constructor({ id, username }: {id: string, username: string }) {
@@ -15,6 +16,7 @@ export class Player {
     this.username = username;
     this.room = '';
     this.isLeader = false;
+    this.tilesStack = [];
     players.push(this);
   }
 

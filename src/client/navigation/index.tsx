@@ -1,6 +1,6 @@
 import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import * as React from 'react';
+import React, { useState } from 'react';
 import { ColorSchemeName } from 'react-native';
 
 import NotFoundScreen from '/client/screens/NotFoundScreen';
@@ -28,17 +28,22 @@ export default function Navigation({ colorScheme }: { colorScheme?: ColorSchemeN
 const Stack = createStackNavigator<RootStackParamList>();
 
 function RootNavigator() {
-  const socket: SocketIOClient.Socket = io(`${process.env.SERVER_URL}`);
+  const [socket, setSocket] = useState<undefined | SocketIOClient.Socket>(undefined);
 
-  const [userContext, setUserContext] = React.useState<{username: undefined | string, room: undefined | string}>({username: undefined, room: undefined});
-
-  const updateUserContext = ({username, room}: {username: string, room: string}) => {
-    setUserContext({username, room});
+  const getSocket = () => {
+    if (socket) {
+      return socket;
+    }
+    const newSocket = io(`${process.env.SERVER_URL}`);
+    setSocket(newSocket);
+    return newSocket;
   };
+  
+  const [userContext, setUserContext] = useState<UserContextType>({username: undefined, room: undefined});
 
   return (
-    <SocketContext.Provider value={socket} >
-      <UserContext.Provider value={{userContext, updateUserContext}} >
+    <SocketContext.Provider value={getSocket()} >
+      <UserContext.Provider value={{userContext, setUserContext}} >
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen name="Root" component={Login} />
           <Stack.Screen name="Playground" component={Playground} />

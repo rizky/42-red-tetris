@@ -36,8 +36,6 @@ export default function Playground(): JSX.Element {
 
   useKeyEvent({ setBlock, setMatrix, setIsPause });
 
-  console.log('FETCH_CURRENT_PLAYER', player); // TODO: use player.isLeader to show/hide tetris buttons
-
   useEffect(() => {
     if (!socket) throw Error('No socket');
     if (userContext.username && userContext.room) // If not solo mode, enter room
@@ -52,11 +50,16 @@ export default function Playground(): JSX.Element {
     // Current player sent from server
     socket.on(SOCKETS.FETCH_CURRENT_PLAYER, (player: PlayerType) => {
       setCurrentPlayer(player);
+      console.log('FETCH_CURRENT_PLAYER', player); // TODO: use player.isLeader to show/hide tetris buttons
     });
 
     socket.on(SOCKETS.UPDATE_ROOM_PLAYERS, (data: { room: string, players: PlayerType[] }) => {
       setRoomPlayers(data.players.map((player) => player.username));
     });
+
+    return () => {
+      if(socket) socket.emit(SOCKETS.PLAYER_LEFT, username);
+    };
   }, []);
 
   const handleNewUserMessage = (message: string) => {

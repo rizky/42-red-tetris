@@ -4,18 +4,18 @@ import { StyleSheet, Text, TouchableOpacity, TextInput, View } from 'react-nativ
 import { useNavigation } from '@react-navigation/native';
 
 import { SOCKETS } from '/config/constants';
-import SocketContext from '/client/context/SocketContext';
 import { checkUsername } from '/client/screens/Login/utils';
+import SocketContext from '/client/context/SocketContext';
+import UserContext from '/client/context/UserContext';
 
 type Props = {
-	username: string | null | undefined,
-	setUsername: Dispatch<SetStateAction<string | null | undefined>>,
 	setScreenNumber: Dispatch<SetStateAction<1 | 2>>,
 };
 
 export default function ChooseUsername(props: Props): JSX.Element {
-  const {username, setUsername, setScreenNumber} = props;
-  
+  const {setScreenNumber} = props;
+  const { userContext, setUserContext } = useContext(UserContext);
+  const { username } = userContext;
   const socket = useContext(SocketContext);
   const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'Root'>>();
   const [ussernameError, setUsernameError] = useState<string>('');
@@ -42,7 +42,7 @@ export default function ChooseUsername(props: Props): JSX.Element {
         value={username ?? ''}
         onChangeText={text => {
           setUsernameError('');
-          setUsername(text);
+          setUserContext({username: text, room: undefined});
         }}
         style={{ borderWidth: 1, marginBottom: 20, height: 30, width: '100%' }}
       />
