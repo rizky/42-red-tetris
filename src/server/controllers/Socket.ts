@@ -76,6 +76,20 @@ const connectSocketIO = (): void => {
       }
     });
 
+    socket.on(SOCKETS.START_GAME, ({ username, roomName }: { username: string, roomName: string }) => {
+      const player = Player.getByUsername(username);
+      const room = Room.getByName(roomName);
+
+      if (!player || !room) return;
+      if (player.isLeader) {
+        socket.join(room.name);
+        const startTile = room.startGame();
+        const roomNames = Game.getWaitingRoomNames();
+        socket.broadcast.emit(SOCKETS.UPDATE_WAITING_ROOMS, roomNames);
+        io.to(room.name).emit(SOCKETS.START_GAME, { tilesStack: player.tilesStack, startTile});
+      }
+    });
+
     // Listen to chat message and send it to the room
     socket.on(SOCKETS.CHAT_MESSAGE, ({ username, message, room }: { username: string, message: string, room: string }) => {
       io.to(room).emit(SOCKETS.CHAT_MESSAGE, formatMessage(username, message));

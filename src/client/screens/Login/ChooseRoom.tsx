@@ -4,7 +4,7 @@ import { StyleSheet, Text, TouchableOpacity, TextInput, View } from 'react-nativ
 import { useNavigation } from '@react-navigation/native';
 
 import { SOCKETS } from '/config/constants';
-import { checkTextLength } from '/client/screens/Login/utils';
+import { checkRoomName } from '/client/screens/Login/utils';
 import SocketContext from '/client/context/SocketContext';
 import UserContext from '/client/context/UserContext';
 
@@ -22,33 +22,48 @@ export default function ChooseRoom(props: Props): JSX.Element {
   const [waitingRooms, setWaitingRooms] = useState<string[]>([]);
 
   console.log('Updates for waitingRooms:', waitingRooms);
+
+  const handleFetchWaitingRooms = (roomNames: string[]) => setWaitingRooms(roomNames);
+
+  const handleUpdateWaitingRooms = (roomNames: string[]) => setWaitingRooms(roomNames);
+
   useEffect(() => {
     if (!socket) throw Error('No socket');
     // If I remove [] from useEffect there is a flood of sockets, for some reason component rerenders several times a second.
-    // Later we need to listen to a socket event when game in room has started.
     socket.emit(SOCKETS.FETCH_WAITING_ROOMS);
-    socket.on(SOCKETS.FETCH_WAITING_ROOMS, (roomNames: string[]) => {
-      setWaitingRooms(roomNames);
-    });
+
+    // Get waitingRooms when enter ChooseUsername screen
+    socket.on(SOCKETS.FETCH_WAITING_ROOMS, handleFetchWaitingRooms);
+
+    // Get waitingRooms when other users create / delete rooms and ChooseUsername screen is already open
+    socket.on(SOCKETS.UPDATE_WAITING_ROOMS, handleUpdateWaitingRooms);
+    return () => {
+      socket.removeListener(SOCKETS.FETCH_WAITING_ROOMS, handleFetchWaitingRooms);
+      socket.removeListener(SOCKETS.UPDATE_WAITING_ROOMS, handleUpdateWaitingRooms);
+    };
   }, []);
-  
-  useEffect(() => {
-    if (!socket) throw Error('No socket');
-    // new room is created + room is deleted
-    socket.on(SOCKETS.UPDATE_WAITING_ROOMS, (roomNames: string[]) => {
-      setWaitingRooms(roomNames);
-    });
-  });
+
+  const onCreateRoomPress = (roomName: string | undefined) => {
+    checkRoomName(roomName)
+      .then(data => {
+        if (data === true) {
+          if(!socket) throw Error('No socket');
+          socket.emit(SOCKETS.CHOOSE_ROOM, { username, roomName });
+          username && roomName && navigation.push('Playground', { username, room: roomName });
+          setScreenNumber(1);
+        }
+      })
+      .catch(err => {
+        setRoomNameError(err.message);
+      });
+  };
 
   const onJoinRoomPress = (roomName: string | null | undefined) => {
-    if(!checkTextLength(roomName)) setRoomNameError('Name must be 1-15 symbols');
-    else {
-      setUserContext({ username, room: roomName });
-      if (!socket) throw Error('No socket');
-      socket.emit(SOCKETS.CHOOSE_ROOM, { username, roomName });
-      username && roomName && navigation.push('Playground', { username, room: roomName });
-      setScreenNumber(1);
-    }
+    setUserContext({ username, room: roomName });
+    if (!socket) throw Error('No socket');
+    socket.emit(SOCKETS.CHOOSE_ROOM, { username, roomName });
+    username && roomName && navigation.push('Playground', { username, room: roomName });
+    setScreenNumber(1);
   };
 
   return (
@@ -66,7 +81,7 @@ export default function ChooseRoom(props: Props): JSX.Element {
       />
       <TouchableOpacity
         style={styles.button}
-        onPress={() => onJoinRoomPress(roomName)}
+        onPress={() => onCreateRoomPress(roomName)}
       >
         <Text style={styles.linkText}>Play</Text>
       </TouchableOpacity>
