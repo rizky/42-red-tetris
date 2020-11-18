@@ -7,7 +7,7 @@ import dotenv from 'dotenv';
 
 import { Player } from './models/Player';
 import { Game } from './models/Game';
-
+import { Room } from './models/Room';
 import connectSocketIO from './controllers/Socket';
 
 dotenv.config();
@@ -31,13 +31,17 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(cors());
 
-app.get('/player/:username', function (req, res) {
+app.get('/player/:username', (req, res) => {
   const player = Player.getByUsername(req.params.username);
-  console.log('---- Request player by username ----', player);
   res.status(200).json(player);
 });
 
-app.get('/rooms/waiting', function (req, res) { // TODO: Never used, rm?
+app.get('/room/:name', (req, res) => {
+  const room = Room.getByName(req.params.name);
+  res.status(200).json(room);
+});
+
+app.get('/rooms/waiting', (req, res) => { // TODO: Never used, rm?
   const rooms = Game.getWaitingRooms();
   const roomNames = rooms?.map(room => room.name);
   console.log('---- Request waiting rooms ----' );

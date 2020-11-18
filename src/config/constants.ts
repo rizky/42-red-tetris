@@ -8,6 +8,7 @@ export const SOCKETS = {
   ENTER_ROOM: 'enter room',
   UPDATE_ROOM_PLAYERS: 'update room players',
   PLAYER_LEFT: 'player left',
+  START_GAME: 'start game',
   
   /* ---- Game ---- */
   FETCH_WAITING_ROOMS: 'fetch waiting rooms',

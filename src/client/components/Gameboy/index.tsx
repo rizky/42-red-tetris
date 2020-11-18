@@ -5,18 +5,18 @@ import Keypad from '/client/components/Keypad';
 import { useWindowDimensions } from '/client/hooks/useWindowDimensions';
 import UserContext from '/client/context/UserContext';
 
-export const previewText = (isMultiplayerMode: boolean, otherPlayersNumber: number, isLeader?: boolean):React.ReactChild  => {
-  const secondLineText = (otherPlayersNumber: number, isLeader?: boolean) => {
-    if (otherPlayersNumber <= 0) return 'Wait for other players';
-    if (otherPlayersNumber > 0 && isLeader) return 'Press Play(P) to start';
-    if (otherPlayersNumber > 0 && !isLeader) return 'Wait for leader to start the game';
+export const previewText = (isMultiplayerMode: boolean, opponentsNumber: number, isLeader?: boolean):React.ReactChild  => {
+  const secondLineText = (opponentsNumber: number, isLeader?: boolean) => {
+    if (opponentsNumber <= 0) return 'Wait for other players';
+    if (opponentsNumber > 0 && isLeader) return 'Press Start to begin';
+    if (opponentsNumber > 0 && !isLeader) return 'Wait for leader to start the game';
   };
   if (isMultiplayerMode) {
     return (
       <View style={{ alignItems: 'center' }}>
         <Text style={styles.gameMode}>You are in multiplayer mode</Text>
-        <Text style={styles.gameMode}>{otherPlayersNumber} ohter players in your room</Text>
-        <Text>{secondLineText(otherPlayersNumber, isLeader)}</Text>
+        <Text style={styles.gameMode}>{opponentsNumber} ohter players in your room</Text>
+        <Text>{secondLineText(opponentsNumber, isLeader)}</Text>
       </View>
     );
   } else {
@@ -64,7 +64,7 @@ export default function Gameboy(props: Props): JSX.Element {
             </View>
             : null}
         </View>
-        <Keypad isPause={isPause}/>
+        <Keypad isPause={isPause} opponentsNumber={opponentsNumber} isLeader={isLeader} />
       </View>
     </View>
   );
