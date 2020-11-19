@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { blockShape, initialPos } from '/client/constants/tetriminos.ts';
+import { blockShape, initialPos, blankLine } from '/client/constants/tetriminos.ts';
 
 class Block {
   pos: number[];
@@ -103,6 +103,20 @@ class Block {
       }
     });
     return newMatrix;
+  }
+  destroyBlock(matrix: Matrix): { newMatrix: Matrix, deletedRows: number} {
+    let bottomMatrix: Matrix = [];
+    let topMatrix: Matrix = [];
+    _.map(matrix, (row) => {
+      if ((_.sum(row) ?? 0) < 10) {
+        bottomMatrix = _.cloneDeep([...bottomMatrix, row]);
+        // TODO: We can send SOCKETS.SPECTER_UPDATE here when bottomMatrix.length === 20
+      } else {
+        topMatrix = _.cloneDeep([...topMatrix, blankLine]);
+      }
+    });
+    console.log('Destroy', _.cloneDeep([...topMatrix, ...bottomMatrix])); // TODO: rm
+    return ({ newMatrix: _.cloneDeep([...topMatrix, ...bottomMatrix]), deletedRows: topMatrix.length });
   }
 }
 

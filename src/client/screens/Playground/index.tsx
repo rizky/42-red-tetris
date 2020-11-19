@@ -34,24 +34,34 @@ export default function Playground(): JSX.Element {
 
   useKeyEvent({ setBlock, setMatrix, setIsPause });
 
-  const handleChatMessage = (message: Message) => {
-    if (message.username !== username)
-      addResponseMessage(message.username + ': ' + message.text, message.username);
+  const socketChatMessage = (message: Message) => {
+    addResponseMessage(message.username + ': ' + message.text, message.username);
   };
   
-  const handleFetchCurrentPlayer = (player: PlayerType) => {
+  const socketFetchCurrentPlayer = (player: PlayerType) => {
     setCurrentPlayer(player);
     console.log('FETCH_CURRENT_PLAYER', player); // TODO: use player.isLeader to show/hide tetris buttons
   };
 
-  const handleUpdateRoomPlayers = (data: { room: string, players: PlayerType[] }) => {
+  const socketUpdateRoomPlayers = (data: { room: string, players: PlayerType[] }) => {
     setRoomPlayers(data.players.map((player) => player.username));
   };
 
-  const handleStartGame = ({ tilesStack, startTile }: { tilesStack: string[], startTile: string }) => {
+  const socketStartGame = ({ tilesStack, startTile }: { tilesStack: string[], startTile: string }) => {
     console.log('START_GAME', startTile, tilesStack, isPause);
     // TODO: smth to separate START_GAME from PAUSE
     setIsPause(false);
+  };
+
+  const socketEmitPenaltyRows = (rowsNumber: number) => {
+    if (!socket) throw Error('No socket');
+    console.log('PENALTY_ROWS emit, rowsNumber:', rowsNumber);
+    socket.emit(SOCKETS.PENALTY_ROWS, { username, roomName: room, rowsNumber });
+  };
+
+  const socketReceivePenaltyRows = (rowsNumber: number) => {
+    console.log('PENALTY_ROWS receive, rowsNumber:', rowsNumber);
+    // TODO: add rows to the bottom of matrix
   };
 
   useEffect(() => {
@@ -61,29 +71,33 @@ export default function Playground(): JSX.Element {
       socket.emit(SOCKETS.ENTER_ROOM, { username, roomName: room });
 
     // Message from server
-    socket.on(SOCKETS.CHAT_MESSAGE, handleChatMessage);
+    socket.on(SOCKETS.CHAT_MESSAGE, socketChatMessage);
 
     // Current player sent from server
-    socket.on(SOCKETS.FETCH_CURRENT_PLAYER, handleFetchCurrentPlayer);
+    socket.on(SOCKETS.FETCH_CURRENT_PLAYER, socketFetchCurrentPlayer);
 
     // When new players join the room
-    socket.on(SOCKETS.UPDATE_ROOM_PLAYERS, handleUpdateRoomPlayers);
+    socket.on(SOCKETS.UPDATE_ROOM_PLAYERS, socketUpdateRoomPlayers);
 
     // Receive block type and stack of 3 next blocks
-    socket.on(SOCKETS.START_GAME, handleStartGame);
+    socket.on(SOCKETS.START_GAME, socketStartGame);
+
+    // Receive penalty rows
+    socket.on(SOCKETS.PENALTY_ROWS, socketReceivePenaltyRows);
     return () => {
       socket.emit(SOCKETS.PLAYER_LEFT, username);
 
-      socket.removeListener(SOCKETS.CHAT_MESSAGE, handleChatMessage);
-      socket.removeListener(SOCKETS.FETCH_CURRENT_PLAYER, handleFetchCurrentPlayer);
-      socket.removeListener(SOCKETS.UPDATE_ROOM_PLAYERS, handleUpdateRoomPlayers);
-      socket.removeListener(SOCKETS.START_GAME, handleStartGame);
+      socket.removeListener(SOCKETS.CHAT_MESSAGE, socketChatMessage);
+      socket.removeListener(SOCKETS.FETCH_CURRENT_PLAYER, socketFetchCurrentPlayer);
+      socket.removeListener(SOCKETS.UPDATE_ROOM_PLAYERS, socketUpdateRoomPlayers);
+      socket.removeListener(SOCKETS.START_GAME, socketStartGame);
+      socket.removeListener(SOCKETS.PENALTY_ROWS, socketReceivePenaltyRows);
     };
   }, []);
 
   const handleNewUserMessage = (message: string) => {
     if (!socket) throw Error('No socket');
-    socket.emit(SOCKETS.CHAT_MESSAGE, { username, message, room });
+    socket.emit(SOCKETS.CHAT_MESSAGE, { username, message, roomName: room });
   };
 
   const nextBlockType = blockTypes[(_.indexOf(blockTypes, block.type) + 1) % _.size(blockTypes)];
@@ -92,10 +106,14 @@ export default function Playground(): JSX.Element {
     if (_.includes(matrix[0], 1)) {
       setMatrix(blankMatrix);
       setIsPause(true);
+      console.log('GAME_OVER!!!!!'); // TODO: Game Over here
     } else {
       setBlock((currentBlock) => {
         if (!block.fall().isValid(matrix)) {
-          setMatrix(block.printBlock(matrix));
+          const { newMatrix, deletedRows } = block.destroyBlock(block.printBlock(matrix));
+          setMatrix(newMatrix);
+          if (deletedRows > 1)
+            socketEmitPenaltyRows(deletedRows - 1);
           return new Block({ type: nextBlockType });
         } else {
           return currentBlock.fall();
