@@ -82,17 +82,17 @@ const connectSocketIO = (): void => {
 
       if (!player || !room) return;
       if (player.isLeader) {
-        socket.join(room.name);
         const startTile = room.startGame();
         const roomNames = Game.getWaitingRoomNames();
         socket.broadcast.emit(SOCKETS.UPDATE_WAITING_ROOMS, roomNames);
-        io.to(room.name).emit(SOCKETS.START_GAME, { tilesStack: player.tilesStack, startTile});
+        io.to(room.name).emit(SOCKETS.START_GAME, { tilesStack: player.tilesStack, startTile });
       }
     });
 
     // Listen to chat message and send it to the room
-    socket.on(SOCKETS.CHAT_MESSAGE, ({ username, message, room }: { username: string, message: string, room: string }) => {
-      io.to(room).emit(SOCKETS.CHAT_MESSAGE, formatMessage(username, message));
+    socket.on(SOCKETS.CHAT_MESSAGE, ({ username, message, roomName }: { username: string, message: string, roomName: string }) => {
+      // Send to everyone in the room except sender
+      socket.broadcast.to(roomName).emit(SOCKETS.CHAT_MESSAGE, formatMessage(username, message));
     });
 
     // Fetch all waiting rooms to Login screen
@@ -101,22 +101,32 @@ const connectSocketIO = (): void => {
       socket.emit(SOCKETS.FETCH_WAITING_ROOMS, roomNames);
     });
 
+    // Add penalty rows to opponents
+    socket.on(SOCKETS.PENALTY_ROWS, ({ roomName, rowsNumber }: { roomName: string, rowsNumber: number }) => {
+      // Send to everyone in the room except sender
+      socket.broadcast.to(roomName).emit(SOCKETS.PENALTY_ROWS, rowsNumber);
+    });
+
     const playerLeft = (player?: Player) => {
       if (!player) return;
       const room = Room.getByName(player.room);
-      if (!room) { // if player left before room was created
+      if (!room) { // if player left before room was created (from ChooseRoom screen)
         player.deletePlayer(player.id);
-      } else { // if player left after room was created
+      } else { // if player left after room was created (from Playground screen)
+        socket.leave(room.name); // TODO: maybe uncomment
         room.removePlayer(player.id);
         console.log('On leave room: ', players, room.players);
     
         if (room.players.length === 0) {
-          // TODO: only makes sence if game has not been started and room was deleted.
-          // If started game was finished we don't care about waiting rooms -
-          // room with started game should be deleted from waiting room before, somewhere else
+          const gameStarted = room.gameStarted;
           Game.removeRoom(room.name);
-          const roomNames = Game.getWaitingRoomNames();
-          socket.broadcast.emit(SOCKETS.UPDATE_WAITING_ROOMS, roomNames);
+          // We only need it if game has not been started and room was deleted.
+          // If started game was finished we don't care about waiting rooms -
+          // room with started game was deleted from waiting rooms on START_GAME
+          if (!gameStarted) {
+            const roomNames = Game.getWaitingRoomNames();
+            socket.broadcast.emit(SOCKETS.UPDATE_WAITING_ROOMS, roomNames);
+          }
         }
     
         io.to(room.name).emit(
