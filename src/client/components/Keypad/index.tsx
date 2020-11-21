@@ -14,11 +14,14 @@ const RoundButton = ({
   size: number, color: string, label?: string,
   style?: ViewStyle, onPress?: () => void, disabled?: boolean, text?: string,
 }): JSX.Element => {
+  const button = React.useRef<TouchableOpacity>(null);
+
   return (
     <View style={[{ alignItems: 'center' }, style]}>
       <TouchableOpacity
+        ref={button}
         disabled={disabled}
-        onPress={onPress}
+        onPress={() => { button?.current?.blur(); onPress?.();}}
         style={{
           backgroundColor: color,
           borderRadius: size / 2,
