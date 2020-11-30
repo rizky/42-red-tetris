@@ -5,7 +5,7 @@ import useInterval from '@use-it/interval';
 import { useRoute, RouteProp } from '@react-navigation/native';
 
 import { SOCKETS } from '/config/constants';
-import { blankMatrix, blockMatrix } from '/client/constants/tetriminos';
+import { blankMatrix, blockMatrix, blankLine, penaltyLine } from '/client/constants/tetriminos';
 import { blockTypes } from '/client/constants/tetriminos';
 import { ChatWidget, addResponseMessage } from '/client/components/Chat';
 import Block from '/client/models/block';
@@ -19,13 +19,12 @@ import UserContext from '/client/context/UserContext';
 
 export default function Playground(): JSX.Element {  
   const socket = useContext(SocketContext);
-  const { userContext } = useContext(UserContext);
+  const { userContext, setUserContext } = useContext(UserContext);
 
-  // TODO: delete Playground routes everywhere
-  // const route = useRoute<RouteProp<RootStackParamList, 'Playground'>>();
-  // const { params } = route;
-  const { room, username } = userContext;
-  // const { room, username } = params ?? {};
+  const route = useRoute<RouteProp<RootStackParamList, 'Playground'>>();
+  const { params } = route;
+  // const { room, username } = userContext;
+  const { room, username } = params ?? {};
   const [roomPlayers, setRoomPlayers] = useState<string[]>([]);
   const [block, setBlock] = useState<Block>(new Block({ type: _.sample(blockTypes) ?? 'T' }));
   const [matrix, setMatrix] = useState<Matrix>(blankMatrix);
@@ -60,15 +59,25 @@ export default function Playground(): JSX.Element {
   };
 
   const socketReceivePenaltyRows = (rowsNumber: number) => {
-    console.log('PENALTY_ROWS receive, rowsNumber:', rowsNumber);
-    // TODO: add rows to the bottom of matrix
+    setMatrix((prevMatrix) => {
+      const newMatrix = addPenaltyRows(prevMatrix, rowsNumber);
+      console.log('PENALTY_ROWS receive. rowsNumber, newMatrix:', rowsNumber, newMatrix);
+      return newMatrix;
+    });
   };
 
   useEffect(() => {
+    /*
+    ** TODO: del next line when tmp SOCKETS.ENTER_ROOM by url params is deleted
+    */
+    setUserContext({ username, room }); // for components that use UserContext
     console.log('Playground, User context:', userContext);
     if (!socket) throw Error('No socket');
-    if (userContext.username && userContext.room) // If not solo mode, enter room
-      socket.emit(SOCKETS.ENTER_ROOM, { username, roomName: room });
+    /*
+    ** TODO: uncomment when tmp SOCKETS.ENTER_ROOM by url params is deleted
+    */
+    // if (userContext.username && userContext.room) // If not solo mode, enter room
+    socket.emit(SOCKETS.ENTER_ROOM, { username, roomName: room });
 
     // Message from server
     socket.on(SOCKETS.CHAT_MESSAGE, socketChatMessage);
@@ -100,7 +109,17 @@ export default function Playground(): JSX.Element {
     socket.emit(SOCKETS.CHAT_MESSAGE, { username, message, roomName: room });
   };
 
-  const nextBlockType = blockTypes[(_.indexOf(blockTypes, block.type) + 1) % _.size(blockTypes)];
+  const addPenaltyRows = (matrix: Matrix, rowsNumber: number): Matrix => {
+    // Create array of blank lines
+    const penaltyMatrix = Array(rowsNumber).fill(blankLine);
+    // Add it to the bottom of matrix (matrix has 20 + rowsNumber lines)
+    const newMatrix = _.cloneDeep([...matrix, ...penaltyMatrix]);
+    // Return matrix without N start lines (matrix has 20 lines again)
+    return _.slice(newMatrix, rowsNumber, newMatrix.length);
+  };
+
+  // const nextBlockType = blockTypes[(_.indexOf(blockTypes, block.type) + 1) % _.size(blockTypes)];
+  const nextBlockType = blockTypes[0]; // TODO: del after debugging
   useInterval(() => {
     if (isPause) return;
     if (_.includes(matrix[0], 1)) {
@@ -112,8 +131,11 @@ export default function Playground(): JSX.Element {
         if (!block.fall().isValid(matrix)) {
           const { newMatrix, deletedRows } = block.destroyBlock(block.printBlock(matrix));
           setMatrix(newMatrix);
-          if (deletedRows > 1)
-            socketEmitPenaltyRows(deletedRows - 1);
+          // if (deletedRows > 1)
+          if (deletedRows > 0) // TODO: del after debugging
+          //   socketEmitPenaltyRows(deletedRows - 1);
+            socketEmitPenaltyRows(deletedRows); // TODO: del after debugging
+
           return new Block({ type: nextBlockType });
         } else {
           return currentBlock.fall();

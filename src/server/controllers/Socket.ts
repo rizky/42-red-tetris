@@ -46,35 +46,85 @@ const connectSocketIO = (): void => {
     // On front move socket that creates room from Playground component to ChooseRoom component (on Play button click)
     // Before, when we created room on Playground load, we created empty room when in solo mode: [ Room { players: [], name: undefined, gameStarted: false } ]
     // Now it's fixed. Delete comment if clear @rizky
+
+
+    /*
+    ** TODO: tmp SOCKETS.ENTER_ROOM by url params, del after debugging
+    */
     socket.on(SOCKETS.ENTER_ROOM, ({ username, roomName }: { username: string, roomName: string }) => {
-      const player = Player.getByUsername(username);
-      const room = Room.getByName(roomName);
-
-      if (player && room) {
-        socket.join(room.name);
-        console.log(`Socket ${socket.id} joined ${room.name}`);
-
-        // Welcome current player in chat
-        socket.emit(SOCKETS.CHAT_MESSAGE, formatMessage(botName, `Hi ${player.username}! Welcome to Room ${room.name}!`));
-
-        // Send current player info to Playground
-        socket.emit(SOCKETS.FETCH_CURRENT_PLAYER, player);
-
-        // Broadcast chat message when a player connects
-        socket.broadcast
-          .to(room.name)
-          .emit(
-            SOCKETS.CHAT_MESSAGE,
-            formatMessage(botName, `${player.username} has joined the chat`),
-          );
-
-        // Send players and room info when new player joins
-        io.to(room.name).emit(SOCKETS.UPDATE_ROOM_PLAYERS, {
-          room: room.name,
-          players: room.players,
-        });
+      // Fetch room if it exists or create if it doesn't exist
+      let room = Room.getByName(roomName);
+      if (!room) {
+        room = new Room(roomName);
+        const roomNames = Game.getWaitingRoomNames();
+        socket.broadcast.emit(SOCKETS.UPDATE_WAITING_ROOMS, roomNames);
       }
+
+      // Fetch or create player and add player to current room
+      let player = Player.getByUsername(username);
+      if (!player) {
+        player = new Player({ id: socket.id, username });
+        room.addPlayer(player);
+        console.log('On join room: ', players);
+      }
+
+      // ENTER_ROOM
+      socket.join(room.name);
+      console.log(`Socket ${socket.id} joined ${room.name}`);
+
+      // Welcome current player in chat
+      socket.emit(SOCKETS.CHAT_MESSAGE, formatMessage(botName, `Hi ${player.username}! Welcome to Room ${room.name}!`));
+
+      // Send current player info to Playground
+      socket.emit(SOCKETS.FETCH_CURRENT_PLAYER, player);
+
+      // Broadcast chat message when a player connects
+      socket.broadcast
+        .to(room.name)
+        .emit(
+          SOCKETS.CHAT_MESSAGE,
+          formatMessage(botName, `${player.username} has joined the chat`),
+        );
+
+      // Send players and room info when new player joins
+      io.to(room.name).emit(SOCKETS.UPDATE_ROOM_PLAYERS, {
+        room: room.name,
+        players: room.players,
+      });
     });
+
+    /*
+    ** TODO: uncomment when tmp SOCKETS.ENTER_ROOM by url params is deleted
+    */
+    // socket.on(SOCKETS.ENTER_ROOM, ({ username, roomName }: { username: string, roomName: string }) => {
+    //   const player = Player.getByUsername(username);
+    //   const room = Room.getByName(roomName);
+
+    //   if (player && room) {
+    //     socket.join(room.name);
+    //     console.log(`Socket ${socket.id} joined ${room.name}`);
+
+    //     // Welcome current player in chat
+    //     socket.emit(SOCKETS.CHAT_MESSAGE, formatMessage(botName, `Hi ${player.username}! Welcome to Room ${room.name}!`));
+
+    //     // Send current player info to Playground
+    //     socket.emit(SOCKETS.FETCH_CURRENT_PLAYER, player);
+
+    //     // Broadcast chat message when a player connects
+    //     socket.broadcast
+    //       .to(room.name)
+    //       .emit(
+    //         SOCKETS.CHAT_MESSAGE,
+    //         formatMessage(botName, `${player.username} has joined the chat`),
+    //       );
+
+    //     // Send players and room info when new player joins
+    //     io.to(room.name).emit(SOCKETS.UPDATE_ROOM_PLAYERS, {
+    //       room: room.name,
+    //       players: room.players,
+    //     });
+    //   }
+    // });
 
     socket.on(SOCKETS.START_GAME, ({ username, roomName }: { username: string, roomName: string }) => {
       const player = Player.getByUsername(username);
