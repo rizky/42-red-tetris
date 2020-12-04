@@ -4,18 +4,22 @@ const maxLength = 15;
 
 export const isEmpty = (value?: string | null): boolean => value === undefined || value === null || value === '';
 
-export const checkTextLength = (text?: string | null):boolean => {
+export const checkTextLength = (text?: string | null): boolean => {
   if (isEmpty(text)) return false;
   if (text && text.length > maxLength) return false;
   return true;
 };
 
-// TODO: regexpr checkup for special chars
+const checkSpecialChars = (text?: string | null): boolean => {
+  const regexpr =  new RegExp('\\W');
+  if (!text) return false;
+  if (text.match(regexpr)) return false;
+  return true;
+};
 
 export const checkUsername = async (username: string | null | undefined): Promise<boolean | undefined> => {
-  if (!checkTextLength(username)) {
-    throw Error('Name must be 1-15 symbols');
-  }
+  if (!checkTextLength(username)) throw Error('Name must be 1-15 symbols');
+  if (!checkSpecialChars(username)) throw Error('Use letters and numbers');
   try {
     const response = await axios.get(`${process.env.SERVER_URL}/player/${username}`);
     if (isEmpty(response.data.username)) return true;
@@ -28,9 +32,8 @@ export const checkUsername = async (username: string | null | undefined): Promis
 };
 
 export const checkRoomName = async (roomName: string | null | undefined): Promise<boolean | undefined> => {
-  if (!checkTextLength(roomName)) {
-    throw Error('Name must be 1-15 symbols');
-  }
+  if (!checkTextLength(roomName)) throw Error('Name must be 1-15 symbols');
+  if (!checkSpecialChars(roomName)) throw Error('Use letters and numbers');
   try {
     const response = await axios.get(`${process.env.SERVER_URL}/room/${roomName}`);
     if (isEmpty(response.data.name)) return true;
