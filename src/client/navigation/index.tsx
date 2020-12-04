@@ -28,21 +28,22 @@ export default function Navigation({ colorScheme }: { colorScheme?: ColorSchemeN
 const Stack = createStackNavigator<RootStackParamList>();
 
 function RootNavigator() {
-  const [socket, setSocket] = useState<undefined | SocketIOClient.Socket>(undefined);
+  const [socketContext, setSocketContext] = useState<undefined | SocketIOClient.Socket>(undefined);
 
-  const getSocket = () => {
-    if (socket) {
-      return socket;
-    }
-    const newSocket = io(`${process.env.SERVER_URL}`);
-    setSocket(newSocket);
-    return newSocket;
-  };
+  // const getSocket = () => {
+  //   if (socket) {
+  //     return socket;
+  //   }
+  //   const newSocket = io(`${process.env.SERVER_URL}`);
+  //   setSocket(newSocket);
+  //   return newSocket;
+  // };
   
   const [userContext, setUserContext] = useState<UserContextType>({username: undefined, room: undefined});
 
   return (
-    <SocketContext.Provider value={getSocket()} >
+    // <SocketContext.Provider value={getSocket()} >
+    <SocketContext.Provider value={{socketContext, setSocketContext}} >
       <UserContext.Provider value={{userContext, setUserContext}} >
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen name="Root" component={Login} />

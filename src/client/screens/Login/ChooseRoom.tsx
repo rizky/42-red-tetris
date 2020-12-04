@@ -16,7 +16,7 @@ export default function ChooseRoom(props: Props): JSX.Element {
   const {setScreenNumber} = props;
   const { userContext, setUserContext } = useContext(UserContext);
   const { username, room: roomName } = userContext;
-  const socket = useContext(SocketContext);
+  const {socketContext: socket} = useContext(SocketContext);
   const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'Root'>>();
   const [roomNameError, setRoomNameError] = useState<string>('');
   const [waitingRooms, setWaitingRooms] = useState<string[]>([]);
