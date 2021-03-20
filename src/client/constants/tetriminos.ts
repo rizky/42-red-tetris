@@ -54,12 +54,18 @@ export const speeds = [800, 650, 500, 370, 250, 160];
 
 export const delays = [50, 60, 70, 80, 90, 100];
 
-export const fillLine = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
+export enum cellState {
+  FREE,
+  OCCUPIED,
+  BLOCKED,
+}
 
-export const blankLine = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+export const fillLine = _.fill(Array(10), cellState.OCCUPIED); // never used
 
-export const penaltyLine = ['A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A']; // truthy so doesn't work
+export const blankLine = _.fill(Array(10), cellState.FREE);
 
-export const blankMatrix: Matrix = _.map(Array(20), () => _.map(Array(10), 0));
+export const penaltyLine = _.fill(Array(10), cellState.BLOCKED);
 
-export const blockMatrix: Matrix = _.map(Array(2), () => _.map(Array(4), 0));
+export const blankMatrix: Matrix = _.map(Array(20), () => _.fill(Array(10), cellState.FREE));
+
+export const blockMatrix: Matrix = _.map(Array(2), () => _.fill(Array(4), cellState.FREE));

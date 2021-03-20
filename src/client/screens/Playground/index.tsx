@@ -5,7 +5,7 @@ import useInterval from '@use-it/interval';
 import { useRoute, RouteProp } from '@react-navigation/native';
 
 import { SOCKETS } from '/config/constants';
-import { blankMatrix, blockMatrix, blankLine, penaltyLine } from '/client/constants/tetriminos';
+import { blankMatrix, blockMatrix, penaltyLine } from '/client/constants/tetriminos';
 import { blockTypes } from '/client/constants/tetriminos';
 import { ChatWidget, addResponseMessage } from '/client/components/Chat';
 import Block from '/client/models/block';
@@ -111,7 +111,7 @@ export default function Playground(): JSX.Element {
 
   const addPenaltyRows = (matrix: Matrix, rowsNumber: number): Matrix => {
     // Create array of blank lines
-    const penaltyMatrix = Array(rowsNumber).fill(blankLine);
+    const penaltyMatrix = Array(rowsNumber).fill(penaltyLine);
     // Add it to the bottom of matrix (matrix has 20 + rowsNumber lines)
     const newMatrix = _.cloneDeep([...matrix, ...penaltyMatrix]);
     // Return matrix without N start lines (matrix has 20 lines again)
