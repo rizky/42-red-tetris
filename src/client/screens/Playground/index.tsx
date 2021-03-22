@@ -3,6 +3,8 @@ import _ from 'lodash';
 import { View, Text } from 'react-native';
 import useInterval from '@use-it/interval';
 import { useRoute, RouteProp } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { useNavigation } from '@react-navigation/native';
 
 import { SOCKETS } from '/config/constants';
 import { blankMatrix, blockMatrix, penaltyLine } from '/client/constants/tetriminos';
@@ -18,7 +20,7 @@ import SocketContext from '/client/context/SocketContext';
 import UserContext from '/client/context/UserContext';
 
 export default function Playground(): JSX.Element {  
-  const socket = useContext(SocketContext);
+  const {socketContext: socket} = useContext(SocketContext);
   const { userContext, setUserContext } = useContext(UserContext);
 
   const route = useRoute<RouteProp<RootStackParamList, 'Playground'>>();
@@ -30,6 +32,12 @@ export default function Playground(): JSX.Element {
   const [matrix, setMatrix] = useState<Matrix>(blankMatrix);
   const [isPause, setIsPause] = useState<boolean>(true);
   const [player, setCurrentPlayer] = useState<PlayerType>();
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'Playground'>>();
+
+  // if (!socket) navigation.navigate('Root'); // doesn't work
+  // if (!socket) navigation.replace('Root'); // doesn't work
+  if (!socket) navigation.push('Root'); // doesn't work
+
 
   useKeyEvent({ setBlock, setMatrix, setIsPause });
 

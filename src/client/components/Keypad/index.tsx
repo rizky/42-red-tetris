@@ -42,7 +42,7 @@ const RoundButton = ({
 };
 
 const Keypad = ({ isPause, opponentsNumber, isLeader }: { isPause?: boolean, opponentsNumber: number, isLeader?: boolean }): JSX.Element => {
-  const socket = useContext(SocketContext);
+  const {socketContext: socket} = useContext(SocketContext);
   const { userContext, setUserContext } = useContext(UserContext);
   const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'Playground'>>();
   const showStartButton = isLeader; // || isLeader === undefined;

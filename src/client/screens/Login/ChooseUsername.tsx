@@ -1,7 +1,8 @@
-import  React, { useState, useContext, Dispatch, SetStateAction } from 'react';
+import  React, { useState, useContext, Dispatch, SetStateAction, useEffect } from 'react';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { StyleSheet, Text, TouchableOpacity, TextInput, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import io from 'socket.io-client';
 
 import { SOCKETS } from '/config/constants';
 import { checkUsername } from '/client/screens/Login/utils';
@@ -16,9 +17,14 @@ export default function ChooseUsername(props: Props): JSX.Element {
   const {setScreenNumber} = props;
   const { userContext, setUserContext } = useContext(UserContext);
   const { username } = userContext;
-  const socket = useContext(SocketContext);
+  const { socketContext: socket, setSocketContext } = useContext(SocketContext);
   const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'Root'>>();
   const [ussernameError, setUsernameError] = useState<string>('');
+
+  useEffect(() => {
+    setSocketContext(io(`${process.env.SERVER_URL}`));
+  }, []);
+  console.log('Sssssssocket', socket);
 
   const validateUsername = () => {
     checkUsername(username)
