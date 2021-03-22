@@ -8,3 +8,5 @@ type BlockOption = {
   type: TetriminosType,
   timeStamp?: number,
 };
+
+type CellStateType = 0 | 1 | 2; // FREE | OCCUPIED | BLOCKED

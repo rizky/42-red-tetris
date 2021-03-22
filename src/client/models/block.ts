@@ -1,5 +1,6 @@
 import _ from 'lodash';
-import { blockShape, initialPos, blankLine } from '/client/constants/tetriminos.ts';
+
+import { blockShape, initialPos, blankLine, cellState } from '/client/constants/tetriminos.ts';
 
 class Block {
   pos: number[];
@@ -87,7 +88,7 @@ class Block {
     return _.find(this.getBlockPos(), (shapePos) => _.isEqual(shapePos, pos)) !== undefined;
   }
   isValid(matrix: Matrix): boolean { 
-    const hitBlock = _.find(this.getBlockPos(), ([row, col]) => matrix?.[row]?.[col]);
+    const hitBlock = _.find(this.getBlockPos(), ([row, col]) => matrix?.[row]?.[col] === cellState.BLOCKED || matrix?.[row]?.[col] === cellState.OCCUPIED);
     const { left, right, bottom } = this.getCorner();
     return bottom < 20
       && left >= 0
@@ -99,16 +100,18 @@ class Block {
     _.map(this.getBlockPos(), (pos) => {
       if (pos[0] >= 0 && pos[0] < _.size(newMatrix)
         && pos[1] >= 0 && pos[1] < _.size(newMatrix[0])) {
-        newMatrix[pos[0]][pos[1]] = 1;
+        newMatrix[pos[0]][pos[1]] = cellState.OCCUPIED;
       }
     });
     return newMatrix;
   }
-  destroyBlock(matrix: Matrix): { newMatrix: Matrix, deletedRows: number} {
+  destroyBlock(matrix: Matrix): { newMatrix: Matrix, deletedRows: number} { // TODO: mistake of excessive socket emit penalty rows is coming from here
     let bottomMatrix: Matrix = [];
     let topMatrix: Matrix = [];
     _.map(matrix, (row) => {
-      if ((_.sum(row) ?? 0) < 10) {
+      // Row sum = 10 when row is complete (cellState.OCCUPIED);
+      // Row sum > 10 (row sum = 20) when there is a penalty row (because penalty row consists of cellState.BLOCKED = 2)
+      if (_.sum(row) < 10 || _.sum(row) > 10) {
         bottomMatrix = _.cloneDeep([...bottomMatrix, row]);
         // TODO: We can send SOCKETS.SPECTER_UPDATE here when bottomMatrix.length === 20
       } else {

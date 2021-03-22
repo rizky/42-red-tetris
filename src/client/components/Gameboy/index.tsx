@@ -15,7 +15,7 @@ export const previewText = (isMultiplayerMode: boolean, opponentsNumber: number,
     return (
       <View style={{ alignItems: 'center' }}>
         <Text style={styles.gameMode}>You are in multiplayer mode</Text>
-        <Text style={styles.gameMode}>{opponentsNumber} ohter players in your room</Text>
+        <Text style={styles.gameMode}>{opponentsNumber} other player(s) in your room</Text>
         <Text>{secondLineText(opponentsNumber, isLeader)}</Text>
       </View>
     );
