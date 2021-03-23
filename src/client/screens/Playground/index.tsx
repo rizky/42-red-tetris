@@ -10,7 +10,7 @@ import { blockTypes } from '/client/constants/tetriminos';
 import { ChatWidget, addResponseMessage } from '/client/components/Chat';
 import Block from '/client/models/block';
 import Digits from '/client/components/Digits';
-import formatChatSubtitle from '/client/screens/Playground/utils';
+import { formatChatSubtitle, formatChatTitle } from '/client/screens/Playground/utils';
 import Gameboy from '/client/components/Gameboy';
 import Matrix from '/client/components/Matrix';
 import { useKeyEvent } from '/client/hooks/useKeyEvent';
@@ -30,6 +30,7 @@ export default function Playground(): JSX.Element {
   const [matrix, setMatrix] = useState<Matrix>(blankMatrix);
   const [isPause, setIsPause] = useState<boolean>(true);
   const [player, setCurrentPlayer] = useState<PlayerType>();
+  const [roomLeader, setRoomLeader] = useState<PlayerType>();
 
   useKeyEvent({ setBlock, setMatrix, setIsPause });
 
@@ -44,6 +45,17 @@ export default function Playground(): JSX.Element {
 
   const socketUpdateRoomPlayers = (data: { room: string, players: PlayerType[] }) => {
     setRoomPlayers(data.players.map((player) => player.username));
+    
+    // When old leader leaves the room, we set a new leader
+    // And if new room leader and this room player are the same user, we update isLeader in player (or update the whole player)
+    const newLeader = _.find(data.players, (player) => player.isLeader);
+    setRoomLeader(newLeader);
+    setCurrentPlayer((prevCurrentPlayer) => {
+      if (prevCurrentPlayer && newLeader && prevCurrentPlayer.id === newLeader.id) {
+        return newLeader;
+      }
+      return prevCurrentPlayer;
+    });
   };
 
   const socketStartGame = ({ tilesStack, startTile }: { tilesStack: string[], startTile: string }) => {
@@ -122,6 +134,8 @@ export default function Playground(): JSX.Element {
   const nextBlockType = blockTypes[0]; // TODO: del after debugging
   useInterval(() => {
     if (isPause) return;
+    // TODO: What condition do we have on playground screen? If not solo mode, check if user left Playground screen and stop pieces from falling (issue #66 in github)
+    // if (!username) return; // If user left Playground screen
     if (_.includes(matrix[0], 1)) {
       setMatrix(blankMatrix);
       setIsPause(true);
@@ -170,7 +184,7 @@ export default function Playground(): JSX.Element {
         </>
       </Gameboy>
       {room && username &&
-        <ChatWidget title="RedTetris" subtitle={formatChatSubtitle(roomPlayers)} handleNewUserMessage={handleNewUserMessage}/>
+        <ChatWidget title={formatChatTitle(roomLeader?.username ?? 'no leader')} subtitle={formatChatSubtitle(roomPlayers)} handleNewUserMessage={handleNewUserMessage}/>
       }
     </>
   );

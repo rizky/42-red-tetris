@@ -178,6 +178,11 @@ const connectSocketIO = (): void => {
             socket.broadcast.emit(SOCKETS.UPDATE_WAITING_ROOMS, roomNames);
           }
         }
+
+        // If current player was room leader - assign another player as leader
+        if (room.players.length > 0 && player.isLeader) {
+          room.assignAnotherLeader(player.id);
+        }
     
         io.to(room.name).emit(
           SOCKETS.CHAT_MESSAGE,

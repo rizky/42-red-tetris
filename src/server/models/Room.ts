@@ -39,6 +39,21 @@ export class Room {
     return false;
   }
 
+  assignAnotherLeader(leftPlayerId: string): Player | undefined {
+    if (!this.players[0].isLeader && this.players[0].id !== leftPlayerId) {
+      // Update isLeader for room.players[0]
+      this.players[0].isLeader = true;
+    
+      // Update isLeader for const players[room.players[0]]
+      const newLeaderIndex = players.findIndex(player => player.id === this.players[0].id);
+      players[newLeaderIndex].isLeader = true;
+
+      const newLeader = this.players[0];
+      return newLeader;
+    }
+    return undefined;
+  }
+
   getPlayers(): Player[] {
     return this.players;
   }
