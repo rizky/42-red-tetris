@@ -66,4 +66,25 @@ export class Room {
     this.players.map(player => player.tilesStack = tilesStack);
     return startTile;
   }
+
+  // When player gameover he should not be deleted from the room but just unassigned from leader possition and player.gameover = true
+  playerGameover(playerGameover: Player): boolean {
+    const index = this.players.findIndex(player => player.id === playerGameover.id); // player's index in room.players[]
+    const index2 = players.findIndex(player => player.id === playerGameover.id); // player's index in const players[]
+
+    if (playerGameover.isLeader) {
+      this.players[index].isLeader = false;
+      players[index2].isLeader = false;
+    }
+
+    this.players[index].gameover = true;
+    players[index2].gameover = true;
+
+    return true;
+  }
+
+  isRoomGameover(): boolean {
+    const endGame = this.players.filter((player) => !player.gameover).length > 1 ? false : true;
+    return endGame;
+  }
 }

@@ -41,11 +41,21 @@ const RoundButton = ({
   );
 };
 
-const Keypad = ({ isPause, opponentsNumber, isLeader }: { isPause?: boolean, opponentsNumber: number, isLeader?: boolean }): JSX.Element => {
+type Props = {
+  isPause?: boolean,
+  opponentsNumber: number,
+  isLeader?: boolean,
+  disabled?: boolean,
+  isSoloMode?: boolean,
+}
+
+const Keypad = (props: Props): JSX.Element => {
+  const { isPause, opponentsNumber, isLeader, disabled, isSoloMode } = props;
   const socket = useContext(SocketContext);
   const { userContext, setUserContext } = useContext(UserContext);
   const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'Playground'>>();
   const showStartButton = isLeader; // || isLeader === undefined;
+  const isButtonDisabled = !isSoloMode && (disabled || opponentsNumber < 1);
 
   const keyDown = (key: number) => {
     // @ts-ignore https://github.com/microsoft/TSJS-lib-generator/pull/892
@@ -57,23 +67,26 @@ const Keypad = ({ isPause, opponentsNumber, isLeader }: { isPause?: boolean, opp
         <View style={{ flexDirection: 'row', marginVertical: 20, justifyContent: 'space-between'}}>
           {showStartButton &&
           <RoundButton
-            color="#2dc421" size={50} label='Start' text='▶'
-            disabled={opponentsNumber < 1}
+            color={isButtonDisabled ? '#c0c0c0' : '#2dc421'} size={50} label='Start' text='▶'
+            disabled={isButtonDisabled}
             onPress={() => {
               if (!socket) throw Error('No socket');
               socket.emit(SOCKETS.START_GAME, { username: userContext.username, roomName: userContext.room });
             }}
           />}
           <RoundButton
-            color="#2dc421" size={50} label={isPause ? 'Play(P)' : 'Pause(P)'}
+            disabled={isButtonDisabled}
+            color={isButtonDisabled ? '#c0c0c0' : '#2dc421'} size={50} label={isPause ? 'Play(P)' : 'Pause(P)'}
             onPress={() => keyDown(keyboard.pause)}
           />
           <RoundButton
-            color="#2dc421" size={50} label="Sound(S)"
+            disabled={isButtonDisabled}
+            color={isButtonDisabled ? '#c0c0c0' : '#2dc421'} size={50} label="Sound(S)"
             onPress={() => keyDown(keyboard.sound)}
           />
           <RoundButton
-            color="#efcc19" size={50} label="Reset(R)"
+            disabled={isButtonDisabled}
+            color={isButtonDisabled ? '#c0c0c0' : '#efcc19'} size={50} label="Reset(R)"
             onPress={() => keyDown(keyboard.reset)}
           />
           <RoundButton
@@ -89,32 +102,32 @@ const Keypad = ({ isPause, opponentsNumber, isLeader }: { isPause?: boolean, opp
         <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 20 }}>
           <View style={{ marginRight: 20 }}>
             <RoundButton
-              color="#5a65f1" size={160} label="Drop(Space)" style={{ marginTop: 20 }}
-              disabled={isPause}
+              color={isButtonDisabled ? '#c0c0c0' : '#5a65f1'} size={160} label="Drop(Space)" style={{ marginTop: 20 }}
+              disabled={isButtonDisabled || isPause}
               onPress={() => keyDown(keyboard.space)}
             />
           </View>
           <View style={{ marginLeft: 20 }}>
             <RoundButton
-              color="#5a65f1" size={70} style={{ margin: 0 }}
-              disabled={isPause}
+              color={isButtonDisabled ? '#c0c0c0' : '#5a65f1'} size={70} style={{ margin: 0 }}
+              disabled={isButtonDisabled || isPause}
               onPress={() => keyDown(keyboard.rotate)}
             />
             <View style={{ flexDirection: 'row' }}>
               <RoundButton
-                color="#5a65f1" size={70} style={{ margin: 0, marginRight: 60 }}
-                disabled={isPause}
+                color={isButtonDisabled ? '#c0c0c0' : '#5a65f1'} size={70} style={{ margin: 0, marginRight: 60 }}
+                disabled={isButtonDisabled || isPause}
                 onPress={() => keyDown(keyboard.left)}
               />
               <RoundButton
-                color="#5a65f1" size={70} style={{ margin: 0 }}
-                disabled={isPause}
+                color={isButtonDisabled ? '#c0c0c0' : '#5a65f1'} size={70} style={{ margin: 0 }}
+                disabled={isButtonDisabled || isPause}
                 onPress={() => keyDown(keyboard.right)}
               />
             </View>
             <RoundButton
-              color="#5a65f1" size={70} style={{ margin: 0 }}
-              disabled={isPause}
+              color={isButtonDisabled ? '#c0c0c0' : '#5a65f1'} size={70} style={{ margin: 0 }}
+              disabled={isButtonDisabled || isPause}
               onPress={() => keyDown(keyboard.down)}
             />
           </View>
