@@ -6,6 +6,7 @@ export default {
     screens: {
       Root: '/',
       Playground: '/play',
+      Ranking: '/ranking',
       NotFound: '*',
     },
   },

@@ -17,7 +17,7 @@ import { useKeyEvent } from '/client/hooks/useKeyEvent';
 import SocketContext from '/client/context/SocketContext';
 import UserContext from '/client/context/UserContext';
 
-export default function Playground(): JSX.Element {  
+export default function Playground(): JSX.Element {
   const socket = useContext(SocketContext);
   const { userContext, setUserContext } = useContext(UserContext);
 
