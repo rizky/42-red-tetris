@@ -7,4 +7,10 @@ const formatChatSubtitle = (players: string[]): string => {
   return `Players: ${players.join(', ')}`;
 };
 
-export { formatChatSubtitle, formatChatTitle };
+const roomPlayersNames = (players?: PlayerType[]): string[] => {
+  if (!players || players.length === 0) return [];
+  const namesArray = players.map((player) => player.username);
+  return namesArray;
+};
+
+export { formatChatSubtitle, formatChatTitle, roomPlayersNames };

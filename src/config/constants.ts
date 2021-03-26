@@ -14,7 +14,12 @@ export const SOCKETS = {
   /* ---- Game ---- */
   FETCH_WAITING_ROOMS: 'fetch waiting rooms',
   UPDATE_WAITING_ROOMS: 'update waiting rooms',
+  GAMEOVER: 'gameover',
+  FETCH_ROOM_RANKING: 'fetch room ranking',
   
   /* ---- Chat ---- */
   CHAT_MESSAGE: 'chat message',
+
+  /* ---- Error ---- */
+  FORBIDDEN: 'access forbidden',
 };

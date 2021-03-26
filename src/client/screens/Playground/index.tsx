@@ -3,6 +3,8 @@ import _ from 'lodash';
 import { View, Text } from 'react-native';
 import useInterval from '@use-it/interval';
 import { useRoute, RouteProp } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { useNavigation } from '@react-navigation/native';
 
 import { SOCKETS } from '/config/constants';
 import { blankMatrix, blockMatrix, penaltyLine } from '/client/constants/tetriminos';
@@ -10,7 +12,7 @@ import { blockTypes } from '/client/constants/tetriminos';
 import { ChatWidget, addResponseMessage } from '/client/components/Chat';
 import Block from '/client/models/block';
 import Digits from '/client/components/Digits';
-import { formatChatSubtitle, formatChatTitle } from '/client/screens/Playground/utils';
+import { formatChatSubtitle, formatChatTitle, roomPlayersNames } from '/client/screens/Playground/utils';
 import Gameboy from '/client/components/Gameboy';
 import Matrix from '/client/components/Matrix';
 import { useKeyEvent } from '/client/hooks/useKeyEvent';
@@ -20,17 +22,21 @@ import UserContext from '/client/context/UserContext';
 export default function Playground(): JSX.Element {
   const socket = useContext(SocketContext);
   const { userContext, setUserContext } = useContext(UserContext);
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'Root'>>();
 
   const route = useRoute<RouteProp<RootStackParamList, 'Playground'>>();
   const { params } = route;
   // const { room, username } = userContext;
   const { room, username } = params ?? {};
-  const [roomPlayers, setRoomPlayers] = useState<string[]>([]);
+  const [roomPlayers, setRoomPlayers] = useState<PlayerType[]>([]);
   const [block, setBlock] = useState<Block>(new Block({ type: _.sample(blockTypes) ?? 'T' }));
   const [matrix, setMatrix] = useState<Matrix>(blankMatrix);
   const [isPause, setIsPause] = useState<boolean>(true);
   const [player, setCurrentPlayer] = useState<PlayerType>();
   const [roomLeader, setRoomLeader] = useState<PlayerType>();
+  const [gameover, setGameover] = useState<boolean>(false);
+  //If there are no URL params, then it's solo mode
+  const isSoloMode = !room || !username;
 
   useKeyEvent({ setBlock, setMatrix, setIsPause });
 
@@ -44,7 +50,7 @@ export default function Playground(): JSX.Element {
   };
 
   const socketUpdateRoomPlayers = (data: { room: string, players: PlayerType[] }) => {
-    setRoomPlayers(data.players.map((player) => player.username));
+    setRoomPlayers(data.players);
     
     // When old leader leaves the room, we set a new leader
     // And if new room leader and this room player are the same user, we update isLeader in player (or update the whole player)
@@ -78,6 +84,18 @@ export default function Playground(): JSX.Element {
     });
   };
 
+  const socketEmitGameover = () => {
+    if (!socket) throw Error('No socket');
+    socket.emit(SOCKETS.GAMEOVER, {username: userContext.username, roomName: userContext.room });
+  };
+
+  const socketReceiveGameover = (data: { players: PlayerType[], endGame: boolean }) => {
+    console.log('Game players, endGame:', data.players, data.endGame); // TODO: HERE, when endGame - send room players to Ranking screen
+    if (data.endGame) setIsPause(true);
+    // here
+    navigation.push('Ranking', { username, room });
+  };
+
   useEffect(() => {
     /*
     ** TODO: del next line when tmp SOCKETS.ENTER_ROOM by url params is deleted
@@ -105,6 +123,10 @@ export default function Playground(): JSX.Element {
 
     // Receive penalty rows
     socket.on(SOCKETS.PENALTY_ROWS, socketReceivePenaltyRows);
+
+    // One of opponents has gameover
+    socket.on(SOCKETS.GAMEOVER, socketReceiveGameover);
+  
     return () => {
       socket.emit(SOCKETS.PLAYER_LEFT, username);
 
@@ -113,6 +135,7 @@ export default function Playground(): JSX.Element {
       socket.removeListener(SOCKETS.UPDATE_ROOM_PLAYERS, socketUpdateRoomPlayers);
       socket.removeListener(SOCKETS.START_GAME, socketStartGame);
       socket.removeListener(SOCKETS.PENALTY_ROWS, socketReceivePenaltyRows);
+      socket.removeListener(SOCKETS.GAMEOVER, socketReceiveGameover);
     };
   }, []);
 
@@ -140,6 +163,8 @@ export default function Playground(): JSX.Element {
       setMatrix(blankMatrix);
       setIsPause(true);
       console.log('GAME_OVER!!!!!'); // TODO: Game Over here
+      setGameover(true);
+      socketEmitGameover();
     } else {
       setBlock((currentBlock) => {
         if (!block.fall().isValid(matrix)) {
@@ -160,7 +185,7 @@ export default function Playground(): JSX.Element {
 
   return (
     <>
-      <Gameboy isPause={isPause} roomPlayers={roomPlayers} isLeader={player?.isLeader}>
+      <Gameboy isPause={isPause} roomPlayers={roomPlayersNames(roomPlayers)} isLeader={player?.isLeader} gameover={gameover} isSoloMode={isSoloMode}>
         <>
           {username && room &&
           <Text style={{ fontSize: 16, marginBottom: 10, alignSelf: 'flex-start' }}>{username} @ {room}</Text>}
@@ -184,7 +209,7 @@ export default function Playground(): JSX.Element {
         </>
       </Gameboy>
       {room && username &&
-        <ChatWidget title={formatChatTitle(roomLeader?.username ?? 'no leader')} subtitle={formatChatSubtitle(roomPlayers)} handleNewUserMessage={handleNewUserMessage}/>
+        <ChatWidget title={formatChatTitle(roomLeader?.username ?? 'no leader')} subtitle={formatChatSubtitle(roomPlayersNames(roomPlayers))} handleNewUserMessage={handleNewUserMessage}/>
       }
     </>
   );

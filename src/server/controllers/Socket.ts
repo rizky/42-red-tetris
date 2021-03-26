@@ -179,8 +179,11 @@ const connectSocketIO = (): void => {
           }
         }
 
+        // If there is only one active player leftin the room - endGame
+        if (room.isRoomGameover()) return (io.to(room.name).emit(SOCKETS.GAMEOVER, { players: room.players, endGame: true }));
+
         // If current player was room leader - assign another player as leader
-        if (room.players.length > 0 && player.isLeader) {
+        if (player.isLeader) {
           room.assignAnotherLeader(player.id);
         }
     
@@ -199,6 +202,35 @@ const connectSocketIO = (): void => {
     socket.on(SOCKETS.PLAYER_LEFT, (username: string) => {
       const player = Player.getByUsername(username);
       playerLeft(player);
+
+    });
+
+    socket.on(SOCKETS.GAMEOVER, ({ username, roomName }: { username: string, roomName: string }) => {
+      const room = Room.getByName(roomName);
+      const player = Player.getByUsername(username);
+
+      if (room && player) {
+        room.playerGameover(player);
+        const endGame = room.isRoomGameover();
+        // send to everyone in the room
+        io.to(roomName).emit(SOCKETS.GAMEOVER, { players: room.players, endGame });
+      }
+    });
+
+    socket.on(SOCKETS.FETCH_ROOM_RANKING, ({ username, roomName, gameMode }: { username: string, roomName: string, gameMode: string }) => {
+      const room = Room.getByName(roomName);
+      const player = Player.getByUsername(username);
+
+      if (room && player) {
+        // send to this user only
+        socket.emit(SOCKETS.FETCH_ROOM_RANKING, room.players);
+      }
+
+      // TODO: Here I tested how I can forbid access to pages that I entered fom URL but sis not create. Uncomment it at the end of development
+      // if (gameMode !== 'solo' && !(room || player)) {
+      //   console.log('why? ', room, player);
+      //   return (socket.emit(SOCKETS.FORBIDDEN));
+      // }
     });
 
     // Runs when socket disconnects

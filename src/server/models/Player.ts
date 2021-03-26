@@ -7,6 +7,7 @@ export class Player {
   username: string;
   room: string;
   isLeader: boolean;
+  gameover: boolean;
   score?: number;
   tilesStack: string[];
   // blockedRows: number;
@@ -16,6 +17,7 @@ export class Player {
     this.username = username;
     this.room = '';
     this.isLeader = false;
+    this.gameover = false;
     this.tilesStack = [];
     players.push(this);
   }
