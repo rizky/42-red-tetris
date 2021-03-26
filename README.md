@@ -1,6 +1,8 @@
 # 42-red-tetris
 👾 Multiplayer Tetris
 
+React hooks + TypeScript + Node.js
+
 ### yarn
 ### yarn web
 ### yarn api
