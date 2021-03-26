@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const Block = ({ value }: { value: CellStateType }): JSX.Element => {
+const Block = ({ value }: { value: CellStateType | number }): JSX.Element => {
   return (
     <View style={[styles.outer, value === cellState.OCCUPIED ? { borderColor: 'black' } : (value === cellState.BLOCKED ? { borderColor: 'black'} : undefined)]}>
       <View style={[styles.inner, value === cellState.OCCUPIED ? { backgroundColor: 'black' } : (value === cellState.BLOCKED ? { backgroundColor: 'transparent'} : undefined)]} />

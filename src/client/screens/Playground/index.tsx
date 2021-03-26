@@ -90,9 +90,8 @@ export default function Playground(): JSX.Element {
   };
 
   const socketReceiveGameover = (data: { players: PlayerType[], endGame: boolean }) => {
-    console.log('Game players, endGame:', data.players, data.endGame); // TODO: HERE, when endGame - send room players to Ranking screen
+    console.log('Game players, endGame:', data.players, data.endGame);
     if (data.endGame) setIsPause(true);
-    // here
     navigation.push('Ranking', { username, room });
   };
 
@@ -162,7 +161,6 @@ export default function Playground(): JSX.Element {
     if (_.includes(matrix[0], 1)) {
       setMatrix(blankMatrix);
       setIsPause(true);
-      console.log('GAME_OVER!!!!!'); // TODO: Game Over here
       setGameover(true);
       socketEmitGameover();
     } else {
