@@ -10,7 +10,6 @@ import { SOCKETS } from '/config/constants';
 import { blankMatrix, blockMatrix, penaltyLine } from '/client/constants/tetriminos';
 import { blockTypes } from '/client/constants/tetriminos';
 import { ChatWidget, addResponseMessage } from '/client/components/Chat';
-import Block from '/client/models/block';
 import Digits from '/client/components/Digits';
 import { formatChatSubtitle, formatChatTitle, roomPlayersNames } from '/client/screens/Playground/utils';
 import Gameboy from '/client/components/Gameboy';
@@ -18,6 +17,7 @@ import Matrix from '/client/components/Matrix';
 import { useKeyEvent } from '/client/hooks/useKeyEvent';
 import SocketContext from '/client/context/SocketContext';
 import UserContext from '/client/context/UserContext';
+import { blockCreate, blockFall, isBlockValid, printBlock, destroyBlock } from '/client/controllers/blockControllers';
 
 export default function Playground(): JSX.Element {
   const socket = useContext(SocketContext);
@@ -29,7 +29,7 @@ export default function Playground(): JSX.Element {
   // const { room, username } = userContext;
   const { room, username } = params ?? {};
   const [roomPlayers, setRoomPlayers] = useState<PlayerType[]>([]);
-  const [block, setBlock] = useState<Block>(new Block({ type: _.sample(blockTypes) ?? 'T' }));
+  const [block, setBlock] = useState<BlockType>(blockCreate({ type: _.sample(blockTypes) ?? 'T' }));
   const [matrix, setMatrix] = useState<Matrix>(blankMatrix);
   const [isPause, setIsPause] = useState<boolean>(true);
   const [player, setCurrentPlayer] = useState<PlayerType>();
@@ -165,17 +165,17 @@ export default function Playground(): JSX.Element {
       socketEmitGameover();
     } else {
       setBlock((currentBlock) => {
-        if (!block.fall().isValid(matrix)) {
-          const { newMatrix, deletedRows } = block.destroyBlock(block.printBlock(matrix));
+        if (!isBlockValid(blockFall(currentBlock), matrix)) {
+          const { newMatrix, deletedRows } = destroyBlock(printBlock(block, matrix));
           setMatrix(newMatrix);
           // if (deletedRows > 1)
           if (deletedRows > 0) // TODO: del after debugging
           //   socketEmitPenaltyRows(deletedRows - 1);
             socketEmitPenaltyRows(deletedRows); // TODO: del after debugging
 
-          return new Block({ type: nextBlockType });
+          return blockCreate({ type: nextBlockType });
         } else {
-          return currentBlock.fall();
+          return blockFall(currentBlock);
         }
       });
     }
@@ -199,7 +199,7 @@ export default function Playground(): JSX.Element {
               <Text style={{ fontSize: 20 }}>Next</Text>
               <Matrix
                 matrix={blockMatrix}
-                block={new Block({ type: nextBlockType, pos: [0, 0] })}
+                block={blockCreate({ type: nextBlockType, pos: [0, 0] })}
                 style={{ borderWidth: 0, marginVertical: 10, alignSelf: 'flex-end' }}
               />
             </View>

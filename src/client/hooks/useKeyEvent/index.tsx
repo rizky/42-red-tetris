@@ -5,18 +5,27 @@ import _ from 'lodash';
 import { blankMatrix } from '/client/constants/tetriminos';
 import { blockTypes } from '/client/constants/tetriminos';
 import { keyboard } from '/client/constants/keyboard';
-import Block from '/client/models/block';
+import {
+  blockCreate,
+  blockRotate,
+  blockFall,
+  blockRight,
+  blockLeft,
+  blockDrop,
+  isBlockValid,
+  printBlock,
+} from '/client/controllers/blockControllers';
 
 export const useKeyEvent = ({ setIsPause, setMatrix, setBlock }
   : {
     setIsPause: Dispatch<SetStateAction<boolean>>,
     setMatrix: Dispatch<SetStateAction<Matrix>>,
-    setBlock: Dispatch<SetStateAction<Block>>,
+    setBlock: Dispatch<SetStateAction<BlockType>>,
   }): void => {
   useKey((_key: number, { keyCode }: { keyCode: number }) => {
     if (keyCode === keyboard.pause) setIsPause((prevState) => !prevState);
     if (keyCode === keyboard.reset) {
-      setBlock(new Block({ type: _.sample(blockTypes) ?? 'T' }));
+      setBlock(blockCreate({ type: _.sample(blockTypes) ?? 'T' }));
       setMatrix(blankMatrix);
       setIsPause(true);
     }
@@ -24,27 +33,27 @@ export const useKeyEvent = ({ setIsPause, setMatrix, setBlock }
       setMatrix((prevMatrix) => {
         if (!prevIsPause) {
           if (keyCode === keyboard.rotate) {
-            setBlock((currentBlock) => currentBlock.rotate().isValid(prevMatrix) ? currentBlock.rotate() : currentBlock);
+            setBlock((currentBlock) => isBlockValid(blockRotate(currentBlock), prevMatrix) ? blockRotate(currentBlock) : currentBlock);
           }
           if (keyCode === keyboard.left) {
-            setBlock((currentBlock) => currentBlock.left().isValid(prevMatrix) ? currentBlock.left() : currentBlock);
+            setBlock((currentBlock) => isBlockValid(blockLeft(currentBlock), prevMatrix) ? blockLeft(currentBlock) : currentBlock);
           }
           if (keyCode === keyboard.right) {
-            setBlock((currentBlock) => currentBlock.right().isValid(prevMatrix) ? currentBlock.right() : currentBlock);
+            setBlock((currentBlock) => isBlockValid(blockRight(currentBlock), prevMatrix) ? blockRight(currentBlock) : currentBlock);
           }
           if (keyCode === keyboard.down) {
             setBlock((currentBlock) => {
-              if (currentBlock.fall().isValid(prevMatrix)) return currentBlock.fall();
+              if (isBlockValid(blockFall(currentBlock), prevMatrix)) return blockFall(currentBlock);
               else {
-                setMatrix(currentBlock.printBlock(prevMatrix));
+                setMatrix(printBlock(currentBlock, prevMatrix));
                 return currentBlock;
               }
             });
           }
           if (keyCode === keyboard.space) {
             setBlock((currentBlock) => {
-              const nextBlock = currentBlock.drop(prevMatrix);
-              setMatrix(nextBlock.printBlock(prevMatrix));
+              const nextBlock = blockDrop(currentBlock, prevMatrix);
+              setMatrix(printBlock(nextBlock, prevMatrix));
               return nextBlock;
             });
           }
