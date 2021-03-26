@@ -24,7 +24,7 @@ const Ranking = (props: Props): JSX.Element => {
   const { room, username } = params ?? {};
   const [roomPlayers, setRoomPlayers] = useState<PlayerType[]>([]);
 
-console.log('roomPlayers:', roomPlayers);
+  console.log('roomPlayers:', roomPlayers);
 
   const socketAccessForbidden = () => {
     console.log('aaaaaaaaaaaa forbidden');
