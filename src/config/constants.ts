@@ -10,6 +10,7 @@ export const SOCKETS = {
   PLAYER_LEFT: 'player left',
   START_GAME: 'start game',
   PENALTY_ROWS: 'penalty rows',
+  UPDATE_SPECTRUM: 'update spectrum',
   
   /* ---- Game ---- */
   FETCH_WAITING_ROOMS: 'fetch waiting rooms',

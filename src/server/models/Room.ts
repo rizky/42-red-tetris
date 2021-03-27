@@ -1,5 +1,6 @@
 import { Player, players } from './Player';
 import { Piece } from './Piece';
+import { throwStatement } from '@babel/types';
 
 export const rooms: Room[] = [];
 
@@ -81,6 +82,16 @@ export class Room {
     players[index2].gameover = true;
 
     return true;
+  }
+
+  updatePlayerSpectrum(playerId: string, spectrum: Matrix): Player[] {
+    const index = this.players.findIndex(player => player.id === playerId); // player's index in room.players[]
+    const index2 = players.findIndex(player => player.id === playerId); // player's index in const players[]
+
+    this.players[index].spectrum = spectrum;
+    players[index2].spectrum = spectrum;
+
+    return this.players;
   }
 
   isRoomGameover(): boolean {

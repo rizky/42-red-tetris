@@ -11,7 +11,7 @@ import { blankMatrix, blockMatrix, penaltyLine } from '/client/constants/tetrimi
 import { blockTypes } from '/client/constants/tetriminos';
 import { ChatWidget, addResponseMessage } from '/client/components/Chat';
 import Digits from '/client/components/Digits';
-import { formatChatSubtitle, formatChatTitle, roomPlayersNames } from '/client/screens/Playground/utils';
+import { formatChatSubtitle, formatChatTitle, roomPlayersNames, fillSpectrum } from '/client/screens/Playground/utils';
 import Gameboy from '/client/components/Gameboy';
 import Matrix from '/client/components/Matrix';
 import { useKeyEvent } from '/client/hooks/useKeyEvent';
@@ -37,6 +37,10 @@ export default function Playground(): JSX.Element {
   const [gameover, setGameover] = useState<boolean>(false);
   //If there are no URL params, then it's solo mode
   const isSoloMode = !room || !username;
+
+  const filteredOpponents = (roomPlayers: PlayerType[], currentPlayerUsername: string) => {
+    return _.filter(roomPlayers, (player) => player.username !== currentPlayerUsername);
+  };
 
   useKeyEvent({ setBlock, setMatrix, setIsPause });
 
@@ -86,13 +90,23 @@ export default function Playground(): JSX.Element {
 
   const socketEmitGameover = () => {
     if (!socket) throw Error('No socket');
-    socket.emit(SOCKETS.GAMEOVER, {username: userContext.username, roomName: userContext.room });
+    socket.emit(SOCKETS.GAMEOVER, { username: userContext.username, roomName: userContext.room });
   };
 
   const socketReceiveGameover = (data: { players: PlayerType[], endGame: boolean }) => {
     console.log('Game players, endGame:', data.players, data.endGame);
     if (data.endGame) setIsPause(true);
     navigation.push('Ranking', { username, room });
+  };
+
+  const socketUpdateSpectrum = (spectrum: Matrix) => {
+    if (!socket) throw Error('No socket');
+    socket.emit(SOCKETS.UPDATE_SPECTRUM, { username: userContext.username, roomName: userContext.room, spectrum });
+  };
+
+  const socketReceiveSpectrum = (roomPlayers: PlayerType[]) => {
+    console.log('UPDATE_SPECTRUM spectrum players:', roomPlayers);
+    setRoomPlayers(roomPlayers);
   };
 
   useEffect(() => {
@@ -125,6 +139,9 @@ export default function Playground(): JSX.Element {
 
     // One of opponents has gameover
     socket.on(SOCKETS.GAMEOVER, socketReceiveGameover);
+
+    // One of opponents updated his spectrum
+    socket.on(SOCKETS.UPDATE_SPECTRUM, socketReceiveSpectrum);
   
     return () => {
       socket.emit(SOCKETS.PLAYER_LEFT, username);
@@ -135,6 +152,7 @@ export default function Playground(): JSX.Element {
       socket.removeListener(SOCKETS.START_GAME, socketStartGame);
       socket.removeListener(SOCKETS.PENALTY_ROWS, socketReceivePenaltyRows);
       socket.removeListener(SOCKETS.GAMEOVER, socketReceiveGameover);
+      socket.removeListener(SOCKETS.UPDATE_SPECTRUM, socketReceiveSpectrum);
     };
   }, []);
 
@@ -173,6 +191,7 @@ export default function Playground(): JSX.Element {
           //   socketEmitPenaltyRows(deletedRows - 1);
             socketEmitPenaltyRows(deletedRows); // TODO: del after debugging
 
+          socketUpdateSpectrum(fillSpectrum(newMatrix)); // MAYBE HERE, MAYBE NOT !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
           return blockCreate({ type: nextBlockType });
         } else {
           return blockFall(currentBlock);
@@ -186,7 +205,13 @@ export default function Playground(): JSX.Element {
       <Gameboy isPause={isPause} roomPlayers={roomPlayersNames(roomPlayers)} isLeader={player?.isLeader} gameover={gameover} isSoloMode={isSoloMode}>
         <>
           {username && room &&
-          <Text style={{ fontSize: 16, marginBottom: 10, alignSelf: 'flex-start' }}>{username} @ {room}</Text>}
+            <Text style={{ fontSize: 16, marginBottom: 10, alignSelf: 'flex-start' }}>{username} @ {room}</Text>
+          }
+          <View style={{ position: 'absolute', zIndex: 1, marginLeft: 600 }}>
+            {_.map(filteredOpponents(roomPlayers, userContext.username || 'aaa'), (player) =>
+              <Matrix key={player.id} matrix={player.spectrum} isSpectrum={true} block={blockCreate({ type: nextBlockType, pos: [-10, -10] })}/>)
+            }
+          </View>
           <View style={{ flexDirection: 'row', alignSelf:'flex-start', width: '100%' }}>
             <Matrix matrix={matrix} block={block}/>
             <View style={{ marginLeft: 20, flex: 1 }} >
