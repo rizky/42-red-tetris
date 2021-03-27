@@ -1,4 +1,5 @@
 import { Room } from './Room';
+import _ from 'lodash';
 
 export const players: Player[] = [];
 
@@ -9,7 +10,8 @@ export class Player {
   isLeader: boolean;
   gameover: boolean;
   score?: number;
-  tilesStack: string[];
+  tilesStack: string[]; // array of future tetriminos
+  spectrum: Matrix;
   // blockedRows: number;
   
   constructor({ id, username }: {id: string, username: string }) {
@@ -19,6 +21,7 @@ export class Player {
     this.isLeader = false;
     this.gameover = false;
     this.tilesStack = [];
+    this.spectrum = _.map(Array(20), () => _.fill(Array(10), 0));
     players.push(this);
   }
 

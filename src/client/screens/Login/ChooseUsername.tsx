@@ -8,6 +8,9 @@ import { checkUsername } from '/client/screens/Login/utils';
 import SocketContext from '/client/context/SocketContext';
 import UserContext from '/client/context/UserContext';
 
+import { fillSpectrum, rowFillWithOccupied, matrixSpectrum } from '/client/screens/Playground/utils';
+
+
 type Props = {
 	setScreenNumber: Dispatch<SetStateAction<1 | 2>>,
 };
@@ -19,6 +22,18 @@ export default function ChooseUsername(props: Props): JSX.Element {
   const socket = useContext(SocketContext);
   const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'Root'>>();
   const [ussernameError, setUsernameError] = useState<string>('');
+
+  const test = [
+    [0, 0, 0, 1, 0],
+    [0, 0, 1, 0, 0],
+    [0, 1, 0, 0, 0],
+    [0, 0, 0, 0, 1]];
+  
+  console.time('fillSpectrum');
+  console.log('rowFillWithOccupied', rowFillWithOccupied([0, 0, 0, 0]));
+  console.log('fillSpectrum', fillSpectrum(test));
+  console.log('matrixSpectrum', matrixSpectrum(test));
+  console.timeEnd('fillSpectrum');
 
   const validateUsername = () => {
     checkUsername(username)

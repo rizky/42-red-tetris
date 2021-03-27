@@ -217,6 +217,16 @@ const connectSocketIO = (): void => {
       }
     });
 
+    socket.on(SOCKETS.UPDATE_SPECTRUM, ({ username, roomName, spectrum }: { username: string, roomName: string, spectrum: Matrix }) => {
+      const room = Room.getByName(roomName);
+      const player = Player.getByUsername(username);
+
+      if (room && player) {
+        const roomPlayers = room.updatePlayerSpectrum(player.id, spectrum);
+        socket.broadcast.to(roomName).emit(SOCKETS.UPDATE_SPECTRUM, roomPlayers);
+      }
+    });
+
     socket.on(SOCKETS.FETCH_ROOM_RANKING, ({ username, roomName, gameMode }: { username: string, roomName: string, gameMode: string }) => {
       const room = Room.getByName(roomName);
       const player = Player.getByUsername(username);

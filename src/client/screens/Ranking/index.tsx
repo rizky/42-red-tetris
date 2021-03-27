@@ -49,6 +49,7 @@ const Ranking = (props: Props): JSX.Element => {
     };
   }, []);
 
+  // There is no score, the last player of the game is the winner.
   const rankedPlayers = [{ username: 'sqss', room: '1', id: 'aaa', score: 22800 }, { username: 'bbb', room: '1', id: 'bbb', score: 12003 }, { username: 'ccc', room: '1', id: 'acccaa', score: 5453 }, { username: 'ddd', room: '1', id: 'acccaa', score: 5453 }, { username: 'eee', room: '1', id: 'acccaa', score: 5453 }, { username: 'fff', room: '1', id: 'acccaa', score: 5453 }, { username: 'ggg', room: '1', id: 'acccaa', score: 5453 }, { username: 'hhh', room: '1', id: 'acccaa', score: 5453 },{ username: 'iii', room: '1', id: 'acccaa', score: 5453 }, { username: 'jjj', room: '1', id: 'acccaa', score: 5453 }];
 
   return (
