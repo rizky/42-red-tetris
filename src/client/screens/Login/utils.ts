@@ -1,17 +1,16 @@
 import axios from 'axios';
 
-const maxLength = 15;
-
 export const isEmpty = (value?: string | null): boolean => value === undefined || value === null || value === '';
 
 export const checkTextLength = (text?: string | null): boolean => {
+  const maxLength = 15;
   if (isEmpty(text)) return false;
   if (text && text.length > maxLength) return false;
   return true;
 };
 
-const checkSpecialChars = (text?: string | null): boolean => {
-  const regexpr =  new RegExp('\\W');
+export const checkSpecialChars = (text?: string | null): boolean => {
+  const regexpr =  new RegExp('\\W'); // matches any non-word-character, to only allow [a-zA-Z0-9_]
   if (!text) return false;
   if (text.match(regexpr)) return false;
   return true;

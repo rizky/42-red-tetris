@@ -17,3 +17,6 @@ yarn-error.log
 build/
 src/client/.expo
 .idea/
+
+# testing
+/coverage
