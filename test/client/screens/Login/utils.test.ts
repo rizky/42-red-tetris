@@ -9,8 +9,7 @@ const fakePlayer = {
   id: 'wwf7DFQkHAHh2b7IAAAE',
   username: 'www', 
   room: '',
-  isLeader:
-  false,
+  isLeader: false,
   gameover: false,
 };
 
@@ -85,33 +84,33 @@ describe('checkSpecialChars', () => {
 });
 
 describe('checkUsername', () => {
-  it('should throw an error for undefinedValue', () => {
+  it('should throw an error for undefinedValue', async () => {
     const undefinedValue = undefined;
     expect(checkUsername(undefinedValue)).rejects.toThrow('Name must be 1-15 symbols');
   });
-  it('should throw an error for emptyStringValue', () => {
+  it('should throw an error for emptyStringValue', async () => {
     const emptyStringValue = '';
     expect(checkUsername(emptyStringValue)).rejects.toThrow('Name must be 1-15 symbols');
   });
-  it('should throw an error for nullValue', () => {
+  it('should throw an error for nullValue', async () => {
     const nullValue = null;
     expect(checkUsername(nullValue)).rejects.toThrow('Name must be 1-15 symbols');
   });
-  it('should throw an error for specialCharacterUsername1', () => {
+  it('should throw an error for specialCharacterUsername1', async () => {
     const specialCharacterUsername1 = 'n@pe';
     expect(checkUsername(specialCharacterUsername1)).rejects.toThrow('Use letters and numbers');
   });
-  it('should throw an error for specialCharacterUsername2', () => {
+  it('should throw an error for specialCharacterUsername2', async () => {
     const specialCharacterUsername2 = 'a b';
     expect(checkUsername(specialCharacterUsername2)).rejects.toThrow('Use letters and numbers');
   });
-  it('should call checkUsername with fake axios and return taken username error', () => {
+  it('should call checkUsername with fake axios and return taken username error', async () => {
     const existingUsername = 'ma_sha';
     const playerWithExistingUsername = { ...fakePlayer, username: existingUsername };
     mockedAxios.get.mockResolvedValue({ data: playerWithExistingUsername });
     expect(checkUsername(existingUsername)).rejects.toThrow(Error('Username already taken'));
   });
-  it('should call checkUsername with fake axios and return true as the username is unique', () => {
+  it('should call checkUsername with fake axios and return true as the username is unique', async () => {
     const uniqueUsername = 'ma_sha';
     mockedAxios.get.mockResolvedValue({ data: '' }); // When username is not taken, response returns { data: "" }
     expect(checkUsername(uniqueUsername)).resolves.toBe(true);
@@ -119,33 +118,33 @@ describe('checkUsername', () => {
 });
 
 describe('checkRoomName', () => {
-  it('should throw an error for undefinedValue', () => {
+  it('should throw an error for undefinedValue', async () => {
     const undefinedValue = undefined;
     expect(checkRoomName(undefinedValue)).rejects.toThrow('Name must be 1-15 symbols');
   });
-  it('should throw an error for emptyStringValue', () => {
+  it('should throw an error for emptyStringValue', async () => {
     const emptyStringValue = '';
     expect(checkRoomName(emptyStringValue)).rejects.toThrow('Name must be 1-15 symbols');
   });
-  it('should throw an error for nullValue', () => {
+  it('should throw an error for nullValue', async () => {
     const nullValue = null;
     expect(checkRoomName(nullValue)).rejects.toThrow('Name must be 1-15 symbols');
   });
-  it('should throw an error for specialCharacterRoomName1', () => {
+  it('should throw an error for specialCharacterRoomName1', async () => {
     const specialCharacterRoomName1 = 'n@pe';
     expect(checkRoomName(specialCharacterRoomName1)).rejects.toThrow('Use letters and numbers');
   });
-  it('should throw an error for specialCharacterRoomName2', () => {
+  it('should throw an error for specialCharacterRoomName2', async () => {
     const specialCharacterRoomName2 = 'a b';
     expect(checkRoomName(specialCharacterRoomName2)).rejects.toThrow('Use letters and numbers');
   });
-  it('should call checkUsername with fake axios and return taken room name error', () => {
+  it('should call checkUsername with fake axios and return taken room name error', async () => {
     const existingRoomName = 'ro_om';
     const roomWithExistingName = { ...fakeRoom, name: existingRoomName };
     mockedAxios.get.mockResolvedValue({ data: roomWithExistingName });
     expect(checkRoomName(existingRoomName)).rejects.toThrow('Room name already taken');
   });
-  it('should call checkRoomName with fake axios and return true as the room name is unique', () => {
+  it('should call checkRoomName with fake axios and return true as the room name is unique', async () => {
     const uniqueRoomName = 'ro_om';
     mockedAxios.get.mockResolvedValue({ data: '' }); // When room name is not taken, response returns { data: "" }
     expect(checkRoomName(uniqueRoomName)).resolves.toBe(true);

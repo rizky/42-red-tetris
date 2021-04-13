@@ -1,0 +1,231 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PreviewText should render PreviewText for Leader in multiplayer mode after gameover 1`] = `
+<View
+  style={
+    Object {
+      "alignItems": "center",
+    }
+  }
+>
+  <Text
+    style={
+      Object {
+        "color": "#990011",
+        "fontSize": 24,
+        "fontWeight": "bold",
+        "marginBottom": 20,
+      }
+    }
+  >
+    Game Over
+  </Text>
+  <Text
+    style={
+      Object {
+        "fontSize": 18,
+        "marginBottom": 20,
+      }
+    }
+  >
+    Please wait for other players to finish
+  </Text>
+</View>
+`;
+
+exports[`PreviewText should render PreviewText for Leader in multiplayer mode and no opponents 1`] = `
+<View
+  style={
+    Object {
+      "alignItems": "center",
+    }
+  }
+>
+  <Text
+    style={
+      Object {
+        "fontSize": 18,
+        "marginBottom": 20,
+      }
+    }
+  >
+    You are in multiplayer mode
+  </Text>
+  <Text
+    style={
+      Object {
+        "fontSize": 18,
+        "marginBottom": 20,
+      }
+    }
+  >
+    0
+     other player(s) in your room
+  </Text>
+  <Text>
+    Wait for other players
+  </Text>
+</View>
+`;
+
+exports[`PreviewText should render PreviewText for Leader in multiplayer mode with opponents 1`] = `
+<View
+  style={
+    Object {
+      "alignItems": "center",
+    }
+  }
+>
+  <Text
+    style={
+      Object {
+        "fontSize": 18,
+        "marginBottom": 20,
+      }
+    }
+  >
+    You are in multiplayer mode
+  </Text>
+  <Text
+    style={
+      Object {
+        "fontSize": 18,
+        "marginBottom": 20,
+      }
+    }
+  >
+    2
+     other player(s) in your room
+  </Text>
+  <Text>
+    Press Start to begin
+  </Text>
+</View>
+`;
+
+exports[`PreviewText should render PreviewText for not Leader in multiplayer mode after gameover 1`] = `
+<View
+  style={
+    Object {
+      "alignItems": "center",
+    }
+  }
+>
+  <Text
+    style={
+      Object {
+        "color": "#990011",
+        "fontSize": 24,
+        "fontWeight": "bold",
+        "marginBottom": 20,
+      }
+    }
+  >
+    Game Over
+  </Text>
+  <Text
+    style={
+      Object {
+        "fontSize": 18,
+        "marginBottom": 20,
+      }
+    }
+  >
+    Please wait for other players to finish
+  </Text>
+</View>
+`;
+
+exports[`PreviewText should render PreviewText for not Leader in multiplayer mode and no opponents 1`] = `
+<View
+  style={
+    Object {
+      "alignItems": "center",
+    }
+  }
+>
+  <Text
+    style={
+      Object {
+        "fontSize": 18,
+        "marginBottom": 20,
+      }
+    }
+  >
+    You are in multiplayer mode
+  </Text>
+  <Text
+    style={
+      Object {
+        "fontSize": 18,
+        "marginBottom": 20,
+      }
+    }
+  >
+    0
+     other player(s) in your room
+  </Text>
+  <Text>
+    Wait for other players
+  </Text>
+</View>
+`;
+
+exports[`PreviewText should render PreviewText for not Leader in multiplayer mode with opponents 1`] = `
+<View
+  style={
+    Object {
+      "alignItems": "center",
+    }
+  }
+>
+  <Text
+    style={
+      Object {
+        "fontSize": 18,
+        "marginBottom": 20,
+      }
+    }
+  >
+    You are in multiplayer mode
+  </Text>
+  <Text
+    style={
+      Object {
+        "fontSize": 18,
+        "marginBottom": 20,
+      }
+    }
+  >
+    2
+     other player(s) in your room
+  </Text>
+  <Text>
+    Wait for leader to start the game
+  </Text>
+</View>
+`;
+
+exports[`PreviewText should render PreviewText for solo mode 1`] = `
+<View
+  style={
+    Object {
+      "alignItems": "center",
+    }
+  }
+>
+  <Text
+    style={
+      Object {
+        "fontSize": 18,
+        "marginBottom": 20,
+      }
+    }
+  >
+    You are in solo mode
+  </Text>
+  <Text>
+    Press Play(P) to start
+  </Text>
+</View>
+`;
