@@ -1,0 +1,426 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Snapshots should render Playground 1`] = `
+<Fragment>
+  <Gameboy
+    gameover={false}
+    isPause={true}
+    isSoloMode={true}
+    roomPlayers={Array []}
+  >
+    <View
+      style={
+        Object {
+          "alignSelf": "flex-start",
+          "flexDirection": "row",
+          "width": "100%",
+        }
+      }
+    >
+      <Matrix
+        block={
+          Object {
+            "pos": Array [
+              -2,
+              4,
+            ],
+            "shape": Array [
+              Array [
+                0,
+                0,
+                1,
+              ],
+              Array [
+                1,
+                1,
+                1,
+              ],
+              Array [
+                0,
+                0,
+                0,
+              ],
+            ],
+            "timeStamp": 1618306144971,
+            "type": "L",
+          }
+        }
+        matrix={
+          Array [
+            Array [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+            ],
+            Array [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+            ],
+            Array [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+            ],
+            Array [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+            ],
+            Array [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+            ],
+            Array [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+            ],
+            Array [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+            ],
+            Array [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+            ],
+            Array [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+            ],
+            Array [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+            ],
+            Array [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+            ],
+            Array [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+            ],
+            Array [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+            ],
+            Array [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+            ],
+            Array [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+            ],
+            Array [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+            ],
+            Array [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+            ],
+            Array [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+            ],
+            Array [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+            ],
+            Array [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+            ],
+          ]
+        }
+      />
+      <View
+        style={
+          Object {
+            "flex": 1,
+            "marginLeft": 20,
+          }
+        }
+      >
+        <Text
+          style={
+            Object {
+              "fontSize": 20,
+            }
+          }
+        >
+          Score
+        </Text>
+        <Digits
+          style={
+            Object {
+              "alignSelf": "flex-end",
+              "marginVertical": 10,
+            }
+          }
+        />
+        <Text
+          style={
+            Object {
+              "fontSize": 20,
+            }
+          }
+        >
+          Start Line
+        </Text>
+        <Digits
+          style={
+            Object {
+              "alignSelf": "flex-end",
+              "marginVertical": 10,
+            }
+          }
+        />
+        <Text
+          style={
+            Object {
+              "fontSize": 20,
+            }
+          }
+        >
+          Level
+        </Text>
+        <Digits
+          style={
+            Object {
+              "alignSelf": "flex-end",
+              "marginVertical": 10,
+            }
+          }
+        />
+        <Text
+          style={
+            Object {
+              "fontSize": 20,
+            }
+          }
+        >
+          Next
+        </Text>
+        <Matrix
+          block={
+            Object {
+              "pos": Array [
+                0,
+                0,
+              ],
+              "shape": Array [
+                Array [
+                  0,
+                  0,
+                  0,
+                  0,
+                ],
+                Array [
+                  1,
+                  1,
+                  1,
+                  1,
+                ],
+                Array [
+                  0,
+                  0,
+                  0,
+                  0,
+                ],
+                Array [
+                  0,
+                  0,
+                  0,
+                  0,
+                ],
+              ],
+              "timeStamp": 1618306146194,
+              "type": "I",
+            }
+          }
+          matrix={
+            Array [
+              Array [
+                0,
+                0,
+                0,
+                0,
+              ],
+              Array [
+                0,
+                0,
+                0,
+                0,
+              ],
+            ]
+          }
+          style={
+            Object {
+              "alignSelf": "flex-end",
+              "borderWidth": 0,
+              "marginVertical": 10,
+            }
+          }
+        />
+      </View>
+    </View>
+  </Gameboy>
+</Fragment>
+`;

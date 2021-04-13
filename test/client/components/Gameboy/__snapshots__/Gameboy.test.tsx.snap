@@ -1,0 +1,76 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Snapshots should render Gameboy 1`] = `
+<View
+  style={
+    Object {
+      "alignItems": "center",
+      "backgroundColor": "#1f393e",
+      "flex": 1,
+      "height": "100%",
+      "justifyContent": "center",
+      "padding": 20,
+    }
+  }
+>
+  <View
+    style={
+      Array [
+        Object {
+          "alignItems": "center",
+          "backgroundColor": "#990011",
+          "borderRadius": 20,
+          "justifyContent": "center",
+          "paddingBottom": 30,
+          "paddingHorizontal": 50,
+        },
+        Object {
+          "transform": Array [
+            Object {
+              "scale": 1.3392857142857142,
+            },
+          ],
+        },
+      ]
+    }
+  >
+    <Text
+      style={
+        Object {
+          "fontSize": 30,
+          "marginVertical": 15,
+          "textAlign": "center",
+        }
+      }
+    >
+      R E D ■ T E T R I S
+    </Text>
+    <View
+      style={
+        Object {
+          "alignItems": "center",
+          "backgroundColor": "#9ead86",
+          "borderBottomColor": "#fa6b6b",
+          "borderLeftColor": "#980f0f",
+          "borderRightColor": "#fa6b6b",
+          "borderTopColor": "#980f0f",
+          "borderWidth": 5,
+          "height": 500,
+          "justifyContent": "center",
+          "padding": 10,
+          "width": 400,
+        }
+      }
+    >
+      <View>
+        <Text>
+          aaa
+        </Text>
+      </View>
+    </View>
+    <Keypad
+      opponentsNumber={0}
+    />
+  </View>
+</View>
+`;

@@ -1,0 +1,102 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Snapshots should render Block with cellState.BLOCKED 1`] = `
+<View
+  style={
+    Array [
+      Object {
+        "alignItems": "center",
+        "borderColor": "#879372",
+        "borderWidth": 1,
+        "height": 20,
+        "justifyContent": "center",
+        "width": 20,
+      },
+      Object {
+        "borderColor": "black",
+      },
+    ]
+  }
+>
+  <View
+    style={
+      Array [
+        Object {
+          "backgroundColor": "#879372",
+          "height": 12,
+          "width": 12,
+        },
+        Object {
+          "backgroundColor": "transparent",
+        },
+      ]
+    }
+  />
+</View>
+`;
+
+exports[`Snapshots should render Block with cellState.FREE 1`] = `
+<View
+  style={
+    Array [
+      Object {
+        "alignItems": "center",
+        "borderColor": "#879372",
+        "borderWidth": 1,
+        "height": 20,
+        "justifyContent": "center",
+        "width": 20,
+      },
+      undefined,
+    ]
+  }
+>
+  <View
+    style={
+      Array [
+        Object {
+          "backgroundColor": "#879372",
+          "height": 12,
+          "width": 12,
+        },
+        undefined,
+      ]
+    }
+  />
+</View>
+`;
+
+exports[`Snapshots should render Block with cellState.OCCUPIED 1`] = `
+<View
+  style={
+    Array [
+      Object {
+        "alignItems": "center",
+        "borderColor": "#879372",
+        "borderWidth": 1,
+        "height": 20,
+        "justifyContent": "center",
+        "width": 20,
+      },
+      Object {
+        "borderColor": "black",
+      },
+    ]
+  }
+>
+  <View
+    style={
+      Array [
+        Object {
+          "backgroundColor": "#879372",
+          "height": 12,
+          "width": 12,
+        },
+        Object {
+          "backgroundColor": "black",
+        },
+      ]
+    }
+  />
+</View>
+`;

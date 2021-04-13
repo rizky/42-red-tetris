@@ -1,40 +1,10 @@
 import { StyleSheet, Text, View } from 'react-native';
 import React, { useContext } from 'react';
-import Keypad from '/client/components/Keypad';
 
+import Keypad from '/client/components/Keypad';
 import { useWindowDimensions } from '/client/hooks/useWindowDimensions';
 import UserContext from '/client/context/UserContext';
-
-export const previewText = (isMultiplayerMode: boolean, opponentsNumber: number, isLeader?: boolean, gameover?: boolean):React.ReactChild  => {
-  const secondLineText = (opponentsNumber: number, isLeader?: boolean) => {
-    if (opponentsNumber <= 0) return 'Wait for other players';
-    if (opponentsNumber > 0 && isLeader) return 'Press Start to begin';
-    if (opponentsNumber > 0 && !isLeader) return 'Wait for leader to start the game';
-  };
-  if (gameover) {
-    return (
-      <View style={{ alignItems: 'center' }}>
-        <Text style={styles.gameover}>Game Over</Text>
-        <Text style={styles.gameMode}>Please wait for other players to finish</Text>
-      </View>
-    );
-  }
-  if (isMultiplayerMode) {
-    return (
-      <View style={{ alignItems: 'center' }}>
-        <Text style={styles.gameMode}>You are in multiplayer mode</Text>
-        <Text style={styles.gameMode}>{opponentsNumber} other player(s) in your room</Text>
-        <Text>{secondLineText(opponentsNumber, isLeader)}</Text>
-      </View>
-    );
-  }
-  return (
-    <View style={{ alignItems: 'center' }}>
-      <Text style={styles.gameMode}>You are in solo mode</Text>
-      <Text>Press Play(P) to start</Text>
-    </View>
-  );
-};
+import PreviewText from '/client/components/Gameboy/PreviewText';
 
 type Props = {
   children: React.ReactChild,
@@ -71,7 +41,7 @@ export default function Gameboy(props: Props): JSX.Element {
           {children}
           {isPause ?
             <View style={[styles.display, { position: 'absolute', opacity: 0.8 }]} >
-              {previewText(isMultiplayerMode, opponentsNumber, isLeader, gameover)}
+              <PreviewText isMultiplayerMode={isMultiplayerMode} opponentsNumber={opponentsNumber} isLeader={isLeader} gameover={gameover} />
             </View>
             : null}
         </View>
@@ -81,7 +51,7 @@ export default function Gameboy(props: Props): JSX.Element {
   );
 }
 
-const styles = StyleSheet.create({
+export const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#1f393e',
