@@ -105,6 +105,7 @@ export default function Playground(): JSX.Element {
   };
 
   const socketReceiveUpdateSpectrum = (roomPlayers: PlayerType[]) => {
+    console.log('SOCKET.UPDATE_SPECTRUM, roomPlayers', roomPlayers);
     setRoomPlayers(roomPlayers);
   };
 
@@ -208,7 +209,7 @@ export default function Playground(): JSX.Element {
           }
           <View style={{ position: 'absolute', zIndex: 1, marginLeft: 600 }}>
             {_.map(filteredOpponents(roomPlayers, userContext.username || ''), (player) =>
-              <View key={player.id}>
+              <View key={player.id} style={{ width: 85 }}>
                 <View style={{ alignItems: 'center' }}><Text style={{ fontWeight: 'bold', color: 'white' }}>{player.username}</Text></View>
                 <Matrix matrix={player.spectrum} isSpectrum={true} block={blockCreate({ type: nextBlockType, pos: [-10, -10] })}/>
               </View>)
