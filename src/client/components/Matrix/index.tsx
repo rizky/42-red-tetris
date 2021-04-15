@@ -4,7 +4,7 @@ import * as React from 'react';
 
 import BlockComponent from '/client/components/Block';
 import { isBlock } from '/client/controllers/blockControllers';
-import { cellState } from '/client/constants/tetriminos.ts';
+import { cellState } from '/client/constants/tetriminos';
 
 
 const Matrix = ({ block, matrix, style, isSpectrum }: { block: BlockType, matrix: Matrix, style?: ViewStyle, isSpectrum?:boolean }): JSX.Element => {

@@ -223,6 +223,7 @@ const connectSocketIO = (): void => {
 
       if (room && player) {
         const roomPlayers = room.updatePlayerSpectrum(player.id, spectrum);
+        // Send to everyone in the room except sender
         socket.broadcast.to(roomName).emit(SOCKETS.UPDATE_SPECTRUM, roomPlayers);
       }
     });
