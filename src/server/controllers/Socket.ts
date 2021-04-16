@@ -1,4 +1,5 @@
 import moment from 'moment';
+import _ from 'lodash';
 
 import { SOCKETS } from '../../config/constants';
 import { Player, players } from '../models/Player';
@@ -212,6 +213,7 @@ const connectSocketIO = (): void => {
       if (room && player) {
         room.playerGameover(player);
         const endGame = room.isRoomGameover();
+        if (endGame) room.assignWinner();
         // send to everyone in the room
         io.to(roomName).emit(SOCKETS.GAMEOVER, { players: room.players, endGame });
       }
@@ -228,13 +230,25 @@ const connectSocketIO = (): void => {
       }
     });
 
+    socket.on(SOCKETS.UPDATE_SCORE, ({ username, roomName, score }: { username: string, roomName: string, score: number }) => {
+      const room = Room.getByName(roomName);
+      const player = Player.getByUsername(username);
+
+      if (room && player) {
+        room.updatePlayerScore(player.id, score);
+        if (player.isWinner)
+          io.to(roomName).emit(SOCKETS.REDIRECT_TO_RANKING); // Redirect all players to ranking page after player.isWinner score was updated
+      }
+    });
+
     socket.on(SOCKETS.FETCH_ROOM_RANKING, ({ username, roomName, gameMode }: { username: string, roomName: string, gameMode: string }) => {
       const room = Room.getByName(roomName);
       const player = Player.getByUsername(username);
 
       if (room && player) {
+        const rankedPlayers = _.reverse(_.sortBy(room.players, (player) => player.score));
         // send to this user only
-        socket.emit(SOCKETS.FETCH_ROOM_RANKING, room.players);
+        socket.emit(SOCKETS.FETCH_ROOM_RANKING, rankedPlayers);
       }
 
       // TODO: Here I tested how I can forbid access to pages that I entered fom URL but sis not create. Uncomment it at the end of development

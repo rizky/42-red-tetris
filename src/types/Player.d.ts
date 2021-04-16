@@ -5,6 +5,7 @@ type PlayerType = {
   room: string,
   isLeader: boolean,
   gameover: boolean,
-  score?: number,
+  score: number,
   spectrum: Matrix,
+  isWinner: boolean,
 };

@@ -6,7 +6,7 @@ import { useRoute, RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useNavigation } from '@react-navigation/native';
 
-import { SOCKETS } from '/config/constants';
+import { SOCKETS, SCORING } from '/config/constants';
 import { blankMatrix, blockMatrix, penaltyLine } from '/client/constants/tetriminos';
 import { blockTypes } from '/client/constants/tetriminos';
 import { ChatWidget, addResponseMessage } from '/client/components/Chat';
@@ -87,16 +87,42 @@ export default function Playground(): JSX.Element {
       return newMatrix;
     });
   };
+  
+  const socketEmitUpdatePlayerScore = () => {
+    if (!socket) throw Error('No socket');
+
+    setCurrentPlayer((prevCurrentPlayer) => {
+      if (!prevCurrentPlayer) return;
+      socket.emit(SOCKETS.UPDATE_SCORE, { username: prevCurrentPlayer.username, roomName: prevCurrentPlayer.room, score: prevCurrentPlayer.score });
+      return prevCurrentPlayer;
+    });
+  };
+
+  const socketReceiveRedirectToRanking = () => {
+    navigation.push('Ranking', { username, room });
+  };
 
   const socketEmitGameover = () => {
     if (!socket) throw Error('No socket');
     socket.emit(SOCKETS.GAMEOVER, { username: userContext.username, roomName: userContext.room });
   };
 
-  const socketReceiveGameover = (data: { players: PlayerType[], endGame: boolean }) => {
-    console.log('Game players, endGame:', data.players, data.endGame);
-    if (data.endGame) setIsPause(true);
-    navigation.push('Ranking', { username, room });
+  const socketReceiveGameover = ({ players, endGame }: { players: PlayerType[], endGame: boolean }) => {
+    const roomWinner = _.find(players, (player) => player.isWinner);
+
+    setCurrentPlayer((prevCurrentPlayer) => {
+      if (prevCurrentPlayer && roomWinner && roomWinner.username === prevCurrentPlayer.username) {
+        const playerWithUpdatedScore = { ...prevCurrentPlayer, score: prevCurrentPlayer.score + SCORING.LAST_PLAYER };
+        return playerWithUpdatedScore;
+      }
+      return prevCurrentPlayer;
+    });
+
+    if (endGame) {
+      socketEmitUpdatePlayerScore();
+      setIsPause(true);
+      setGameover(true);
+    }
   };
 
   const socketEmitUpdateSpectrum = (spectrum: Matrix) => {
@@ -142,6 +168,9 @@ export default function Playground(): JSX.Element {
 
     // One of opponents updated his spectrum
     socket.on(SOCKETS.UPDATE_SPECTRUM, socketReceiveUpdateSpectrum);
+
+    // Redirect player to ranking page after player.isWinner score was updated
+    socket.on(SOCKETS.REDIRECT_TO_RANKING, socketReceiveRedirectToRanking);
   
     return () => {
       socket.emit(SOCKETS.PLAYER_LEFT, username);
@@ -153,6 +182,7 @@ export default function Playground(): JSX.Element {
       socket.removeListener(SOCKETS.PENALTY_ROWS, socketReceivePenaltyRows);
       socket.removeListener(SOCKETS.GAMEOVER, socketReceiveGameover);
       socket.removeListener(SOCKETS.UPDATE_SPECTRUM, socketReceiveUpdateSpectrum);
+      socket.removeListener(SOCKETS.REDIRECT_TO_RANKING, socketReceiveRedirectToRanking);
     };
   }, []);
 
@@ -192,6 +222,13 @@ export default function Playground(): JSX.Element {
             socketEmitPenaltyRows(deletedRows); // TODO: del after debugging
 
           socketEmitUpdateSpectrum(convertMatrixToSpectrum(newMatrix));
+
+          // Update player in state each time he gains score
+          setCurrentPlayer((prevCurrentPlayer) => {
+            if (!prevCurrentPlayer) return;
+            const playerWithUpdatedScore = { ...prevCurrentPlayer, score: prevCurrentPlayer.score + SCORING.PIECE_PLACED + SCORING.ROW_DESTROYED * deletedRows };
+            return playerWithUpdatedScore;
+          });
           return blockCreate({ type: nextBlockType });
         } else {
           return blockFall(currentBlock);
@@ -208,6 +245,7 @@ export default function Playground(): JSX.Element {
             <Text style={{ fontSize: 16, marginBottom: 10, alignSelf: 'flex-start' }}>{username} @ {room}</Text>
           }
           <View style={{ position: 'absolute', zIndex: 1, marginLeft: 600 }}>
+            <Text>{player?.score}</Text>
             {_.map(filteredOpponents(roomPlayers, userContext.username || ''), (player) =>
               <View key={player.id} style={{ width: 85 }}>
                 <View style={{ alignItems: 'center' }}><Text style={{ fontWeight: 'bold', color: 'white' }}>{player.username}</Text></View>
