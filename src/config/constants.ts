@@ -17,10 +17,18 @@ export const SOCKETS = {
   UPDATE_WAITING_ROOMS: 'update waiting rooms',
   GAMEOVER: 'gameover',
   FETCH_ROOM_RANKING: 'fetch room ranking',
+  UPDATE_SCORE: 'update score',
+  REDIRECT_TO_RANKING: 'redirect to ranking',
   
   /* ---- Chat ---- */
   CHAT_MESSAGE: 'chat message',
 
   /* ---- Error ---- */
   FORBIDDEN: 'access forbidden',
+};
+
+export const SCORING = {
+  ROW_DESTROYED: 10,
+  PIECE_PLACED: 4,
+  LAST_PLAYER: 200,
 };

@@ -1,6 +1,5 @@
 import { Player, players } from './Player';
 import { Piece } from './Piece';
-import { throwStatement } from '@babel/types';
 
 export const rooms: Room[] = [];
 
@@ -94,8 +93,31 @@ export class Room {
     return this.players;
   }
 
+  assignWinner(): Player | undefined {
+    const playersLeft = this.players.filter((player) => !player.gameover);
+
+    if (playersLeft.length === 1) {
+      const index = this.players.findIndex(player => player.id === playersLeft[0].id); // player's index in room.players[]
+      const index2 = players.findIndex(player => player.id === playersLeft[0].id); // player's index in const players[]
+
+      this.players[index].isWinner = true;
+      players[index2].isWinner = true;
+      return this.players[index];
+    }
+    return;
+  }
+
   isRoomGameover(): boolean {
     const endGame = this.players.filter((player) => !player.gameover).length > 1 ? false : true;
+
     return endGame;
+  }
+
+  updatePlayerScore(playerId: string, score: number): void {
+    const index = this.players.findIndex(player => player.id === playerId); // player's index in room.players[]
+    const index2 = players.findIndex(player => player.id === playerId); // player's index in const players[]
+
+    this.players[index].score = score;
+    players[index2].score = score;
   }
 }
