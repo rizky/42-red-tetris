@@ -23,7 +23,6 @@ export const useKeyEvent = ({ setIsPause, setMatrix, setBlock }
     setBlock: Dispatch<SetStateAction<BlockType>>,
   }): void => {
   useKey((_key: number, { keyCode }: { keyCode: number }) => {
-    if (keyCode === keyboard.pause) setIsPause((prevState) => !prevState);
     if (keyCode === keyboard.reset) {
       setBlock(blockCreate({ type: _.sample(blockTypes) ?? 'T' }));
       setMatrix(blankMatrix);

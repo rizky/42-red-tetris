@@ -9,6 +9,7 @@ export const SOCKETS = {
   UPDATE_ROOM_PLAYERS: 'update room players',
   PLAYER_LEFT: 'player left',
   START_GAME: 'start game',
+  PAUSE_GAME: 'pause game',
   PENALTY_ROWS: 'penalty rows',
   UPDATE_SPECTRUM: 'update spectrum',
   

@@ -45,16 +45,18 @@ type Props = {
   isPause?: boolean,
   opponentsNumber: number,
   isLeader?: boolean,
+  gameStarted?: boolean,
   disabled?: boolean,
   isSoloMode?: boolean,
 }
 
 const Keypad = (props: Props): JSX.Element => {
-  const { isPause, opponentsNumber, isLeader, disabled, isSoloMode } = props;
+  const { isPause, opponentsNumber, isLeader, gameStarted, disabled, isSoloMode } = props;
   const socket = useContext(SocketContext);
   const { userContext, setUserContext } = useContext(UserContext);
   const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'Playground'>>();
-  const showStartButton = isLeader; // || isLeader === undefined;
+  const showStartButton = !isSoloMode && isLeader && !gameStarted;
+  const showPauseButton = (isLeader && gameStarted ) || isSoloMode;
   const isButtonDisabled = !isSoloMode && (disabled || opponentsNumber < 1);
 
   const keyDown = (key: number) => {
@@ -74,11 +76,15 @@ const Keypad = (props: Props): JSX.Element => {
               socket.emit(SOCKETS.START_GAME, { username: userContext.username, roomName: userContext.room });
             }}
           />}
-          <RoundButton
-            disabled={isButtonDisabled}
-            color={isButtonDisabled ? '#c0c0c0' : '#2dc421'} size={50} label={isPause ? 'Play(P)' : 'Pause(P)'}
-            onPress={() => keyDown(keyboard.pause)}
-          />
+          {showPauseButton &&
+            <RoundButton
+              disabled={isButtonDisabled}
+              color={isButtonDisabled ? '#c0c0c0' : '#efcc19'} size={50} label={isPause ? 'Play(P)' : 'Pause(P)'} text={isPause ? '▶' : '||' }
+              onPress={() => {
+                if (!socket) throw Error('No socket');
+                socket.emit(SOCKETS.PAUSE_GAME, { username: userContext.username, roomName: userContext.room });
+              }}
+            />}
           <RoundButton
             disabled={isButtonDisabled}
             color={isButtonDisabled ? '#c0c0c0' : '#2dc421'} size={50} label="Sound(S)"

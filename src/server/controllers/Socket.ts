@@ -140,6 +140,15 @@ const connectSocketIO = (): void => {
       }
     });
 
+    socket.on(SOCKETS.PAUSE_GAME, ({ username, roomName }: { username: string, roomName: string }) => {
+      const player = Player.getByUsername(username);
+      const room = Room.getByName(roomName);
+
+      if (room && player) {
+        io.to(room.name).emit(SOCKETS.PAUSE_GAME);
+      }
+    });
+
     // Listen to chat message and send it to the room
     socket.on(SOCKETS.CHAT_MESSAGE, ({ username, message, roomName }: { username: string, message: string, roomName: string }) => {
       // Send to everyone in the room except sender
