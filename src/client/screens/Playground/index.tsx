@@ -35,6 +35,7 @@ export default function Playground(): JSX.Element {
   const [player, setCurrentPlayer] = useState<PlayerType>();
   const [roomLeader, setRoomLeader] = useState<PlayerType>();
   const [gameover, setGameover] = useState<boolean>(false);
+  const [gameStarted, setGameStarted] = useState<boolean>(false);
   //If there are no URL params, then it's solo mode
   const isSoloMode = !room || !username;
 
@@ -68,10 +69,15 @@ export default function Playground(): JSX.Element {
     });
   };
 
-  const socketStartGame = ({ tilesStack, startTile }: { tilesStack: string[], startTile: string }) => {
+  const socketReceiveStartGame = ({ tilesStack, startTile }: { tilesStack: string[], startTile: string }) => {
+    // TODO: assign tile stack here
     console.log('START_GAME', startTile, tilesStack, isPause);
-    // TODO: smth to separate START_GAME from PAUSE
+    setGameStarted(true);
     setIsPause(false);
+  };
+
+  const socketReceivePauseGame = () => {
+    setIsPause(prevState => !prevState);
   };
 
   const socketEmitPenaltyRows = (rowsNumber: number) => {
@@ -158,7 +164,10 @@ export default function Playground(): JSX.Element {
     socket.on(SOCKETS.UPDATE_ROOM_PLAYERS, socketUpdateRoomPlayers);
 
     // Receive block type and stack of 3 next blocks
-    socket.on(SOCKETS.START_GAME, socketStartGame);
+    socket.on(SOCKETS.START_GAME, socketReceiveStartGame);
+
+    // Pause playgound matrix
+    socket.on(SOCKETS.PAUSE_GAME, socketReceivePauseGame);
 
     // Receive penalty rows
     socket.on(SOCKETS.PENALTY_ROWS, socketReceivePenaltyRows);
@@ -178,7 +187,8 @@ export default function Playground(): JSX.Element {
       socket.removeListener(SOCKETS.CHAT_MESSAGE, socketChatMessage);
       socket.removeListener(SOCKETS.FETCH_CURRENT_PLAYER, socketFetchCurrentPlayer);
       socket.removeListener(SOCKETS.UPDATE_ROOM_PLAYERS, socketUpdateRoomPlayers);
-      socket.removeListener(SOCKETS.START_GAME, socketStartGame);
+      socket.removeListener(SOCKETS.START_GAME, socketReceivePauseGame);
+      socket.removeListener(SOCKETS.PAUSE_GAME, socketReceiveStartGame);
       socket.removeListener(SOCKETS.PENALTY_ROWS, socketReceivePenaltyRows);
       socket.removeListener(SOCKETS.GAMEOVER, socketReceiveGameover);
       socket.removeListener(SOCKETS.UPDATE_SPECTRUM, socketReceiveUpdateSpectrum);
@@ -239,7 +249,7 @@ export default function Playground(): JSX.Element {
 
   return (
     <>
-      <Gameboy isPause={isPause} roomPlayers={roomPlayersNames(roomPlayers)} isLeader={player?.isLeader} gameover={gameover} isSoloMode={isSoloMode}>
+      <Gameboy isPause={isPause} roomPlayers={roomPlayersNames(roomPlayers)} isLeader={player?.isLeader} gameStarted={gameStarted} gameover={gameover} isSoloMode={isSoloMode}>
         <>
           {username && room &&
             <Text style={{ fontSize: 16, marginBottom: 10, alignSelf: 'flex-start' }}>{username} @ {room}</Text>
