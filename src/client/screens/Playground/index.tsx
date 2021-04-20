@@ -251,7 +251,7 @@ export default function Playground(): JSX.Element {
 
   return (
     <>
-      <Gameboy isPause={isPause} roomPlayers={roomPlayersNames(roomPlayers)} isLeader={player?.isLeader} gameStarted={gameStarted} gameover={gameover} isSoloMode={isSoloMode}>
+      <Gameboy isPause={isPause} setIsPause={setIsPause} roomPlayers={roomPlayersNames(roomPlayers)} isLeader={player?.isLeader} gameStarted={gameStarted} gameover={gameover} isSoloMode={isSoloMode}>
         <>
           {username && room &&
             <Text style={{ fontSize: 16, marginBottom: 10, alignSelf: 'flex-start' }}>{username} @ {room}</Text>

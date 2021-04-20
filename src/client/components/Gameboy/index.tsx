@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from 'react-native';
-import React, { useContext } from 'react';
+import React, { useContext, Dispatch, SetStateAction } from 'react';
 
 import Keypad from '/client/components/Keypad';
 import { useWindowDimensions } from '/client/hooks/useWindowDimensions';
@@ -9,6 +9,7 @@ import PreviewText from '/client/components/Gameboy/PreviewText';
 type Props = {
   children: React.ReactChild,
   isPause?: boolean,
+  setIsPause: Dispatch<SetStateAction<boolean>>,
   roomPlayers?: string[],
   isLeader?: boolean,
   gameStarted?: boolean,
@@ -17,7 +18,7 @@ type Props = {
 }
 
 export default function Gameboy(props: Props): JSX.Element {
-  const {children, isPause, roomPlayers, isLeader, gameStarted, gameover, isSoloMode} = props;
+  const {children, isPause, setIsPause, roomPlayers, isLeader, gameStarted, gameover, isSoloMode} = props;
   const {userContext} = useContext(UserContext);
   const opponentsNumber = !roomPlayers || roomPlayers.length === 0 ? 0 : roomPlayers.length - 1;
   const isMultiplayerMode = userContext.username && userContext.room ? true : false;
@@ -46,7 +47,7 @@ export default function Gameboy(props: Props): JSX.Element {
             </View>
             : null}
         </View>
-        <Keypad isPause={isPause} opponentsNumber={opponentsNumber} isLeader={isLeader} gameStarted={gameStarted} disabled={isKeypadDisabled} isSoloMode={isSoloMode}/>
+        <Keypad isPause={isPause} setIsPause={setIsPause} opponentsNumber={opponentsNumber} isLeader={isLeader} gameStarted={gameStarted} disabled={isKeypadDisabled} isSoloMode={isSoloMode}/>
       </View>
     </View>
   );
