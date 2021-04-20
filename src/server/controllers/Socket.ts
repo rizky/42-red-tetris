@@ -189,8 +189,13 @@ const connectSocketIO = (): void => {
           }
         }
 
-        // If there is only one active player leftin the room - endGame
-        if (room.isRoomGameover()) return (io.to(room.name).emit(SOCKETS.GAMEOVER, { players: room.players, endGame: true }));
+        // If there is only one active player left in the room - endGame and assign him as winner
+        const endGame = room.isRoomGameover();
+        if (endGame) {
+          room.assignWinner();
+          // send to everyone in the room
+          return io.to(room.name).emit(SOCKETS.GAMEOVER, { players: room.players, endGame });
+        }
 
         // If current player was room leader - assign another player as leader
         if (player.isLeader) {
@@ -212,7 +217,6 @@ const connectSocketIO = (): void => {
     socket.on(SOCKETS.PLAYER_LEFT, (username: string) => {
       const player = Player.getByUsername(username);
       playerLeft(player);
-
     });
 
     socket.on(SOCKETS.GAMEOVER, ({ username, roomName }: { username: string, roomName: string }) => {
