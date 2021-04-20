@@ -9,7 +9,7 @@ import { useNavigation } from '@react-navigation/native';
 import { SOCKETS, SCORING } from '/config/constants';
 import { blankMatrix, blockMatrix, penaltyLine } from '/client/constants/tetriminos';
 import { blockTypes } from '/client/constants/tetriminos';
-import { ChatWidget, addResponseMessage } from '/client/components/Chat';
+import { ChatWidget, addResponseMessage, dropMessages } from '/client/components/Chat';
 import Digits from '/client/components/Digits';
 import { formatChatSubtitle, formatChatTitle, roomPlayersNames, convertMatrixToSpectrum } from '/client/screens/Playground/utils';
 import Gameboy from '/client/components/Gameboy';
@@ -142,6 +142,7 @@ export default function Playground(): JSX.Element {
   };
 
   useEffect(() => {
+    dropMessages();
     /*
     ** TODO: del next line when tmp SOCKETS.ENTER_ROOM by url params is deleted
     */
@@ -193,6 +194,7 @@ export default function Playground(): JSX.Element {
       socket.removeListener(SOCKETS.GAMEOVER, socketReceiveGameover);
       socket.removeListener(SOCKETS.UPDATE_SPECTRUM, socketReceiveUpdateSpectrum);
       socket.removeListener(SOCKETS.REDIRECT_TO_RANKING, socketReceiveRedirectToRanking);
+      dropMessages();
     };
   }, []);
 
