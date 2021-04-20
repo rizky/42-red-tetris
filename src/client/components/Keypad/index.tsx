@@ -1,5 +1,5 @@
 import { TouchableOpacity, View, Text, ViewStyle } from 'react-native';
-import React, { useContext } from 'react';
+import React, { useContext, Dispatch, SetStateAction } from 'react';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useNavigation } from '@react-navigation/native';
 
@@ -43,6 +43,7 @@ const RoundButton = ({
 
 type Props = {
   isPause?: boolean,
+  setIsPause: Dispatch<SetStateAction<boolean>>,
   opponentsNumber: number,
   isLeader?: boolean,
   gameStarted?: boolean,
@@ -51,7 +52,7 @@ type Props = {
 }
 
 const Keypad = (props: Props): JSX.Element => {
-  const { isPause, opponentsNumber, isLeader, gameStarted, disabled, isSoloMode } = props;
+  const { isPause, setIsPause, opponentsNumber, isLeader, gameStarted, disabled, isSoloMode } = props;
   const socket = useContext(SocketContext);
   const { userContext, setUserContext } = useContext(UserContext);
   const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'Playground'>>();
@@ -100,6 +101,7 @@ const Keypad = (props: Props): JSX.Element => {
             onPress={() => {
               if (!socket) throw Error('No socket');
               setUserContext({username: undefined, room: undefined});
+              setIsPause(true);
               socket.emit(SOCKETS.PLAYER_LEFT, userContext.username);
               navigation.navigate('Root');
             }}
