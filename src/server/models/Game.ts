@@ -15,11 +15,11 @@ export class Game {
   // when only 1 player left - he is a winner
 
   static getWaitingRooms(): Maybe<Room[]> {
-    return rooms.filter((room) => room.gameStarted === false);
+    return rooms.filter((room) => !room.gameStarted && !room.gameover);
   }
 
   static getWaitingRoomNames(): Maybe<string[]> {
-    const roomObjects = rooms.filter((room) => room.gameStarted === false);
+    const roomObjects = rooms.filter((room) => !room.gameStarted && !room.gameover);
     return roomObjects?.map((room) => room.name);
   }
 

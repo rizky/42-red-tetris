@@ -4,7 +4,7 @@ import { StyleSheet, Text, TouchableOpacity, TextInput, View } from 'react-nativ
 import { useNavigation } from '@react-navigation/native';
 
 import { SOCKETS } from '/config/constants';
-import { checkRoomName } from '/client/screens/Login/utils';
+import { checkRoomName, isRoomPlayersLimitAvailable } from '/client/screens/Login/utils';
 import SocketContext from '/client/context/SocketContext';
 import UserContext from '/client/context/UserContext';
 
@@ -19,13 +19,18 @@ export default function ChooseRoom(props: Props): JSX.Element {
   const socket = useContext(SocketContext);
   const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'Root'>>();
   const [roomNameError, setRoomNameError] = useState<string>('');
+  const [joinRoomError, setJoinRoomError] = useState<string>('');
   const [waitingRooms, setWaitingRooms] = useState<string[]>([]);
 
   console.log('Updates for waitingRooms:', waitingRooms);
 
   const handleFetchWaitingRooms = (roomNames: string[]) => setWaitingRooms(roomNames);
 
-  const handleUpdateWaitingRooms = (roomNames: string[]) => setWaitingRooms(roomNames);
+  const handleUpdateWaitingRooms = (roomNames: string[]) => {
+    setRoomNameError('');
+    setJoinRoomError('');
+    return setWaitingRooms(roomNames);
+  };
 
   useEffect(() => {
     if (!socket) throw Error('No socket');
@@ -37,6 +42,7 @@ export default function ChooseRoom(props: Props): JSX.Element {
 
     // Get waitingRooms when other users create / delete rooms and ChooseUsername screen is already open
     socket.on(SOCKETS.UPDATE_WAITING_ROOMS, handleUpdateWaitingRooms);
+  
     return () => {
       socket.removeListener(SOCKETS.FETCH_WAITING_ROOMS, handleFetchWaitingRooms);
       socket.removeListener(SOCKETS.UPDATE_WAITING_ROOMS, handleUpdateWaitingRooms);
@@ -54,16 +60,28 @@ export default function ChooseRoom(props: Props): JSX.Element {
         }
       })
       .catch(err => {
+        setJoinRoomError('');
         setRoomNameError(err.message);
       });
   };
 
   const onJoinRoomPress = (roomName: string | null | undefined) => {
-    setUserContext({ username, room: roomName });
-    if (!socket) throw Error('No socket');
-    socket.emit(SOCKETS.CHOOSE_ROOM, { username, roomName });
-    username && roomName && navigation.push('Playground', { username, room: roomName });
-    setScreenNumber(1);
+    setRoomNameError('');
+    setJoinRoomError('');
+    isRoomPlayersLimitAvailable(roomName)
+      .then(data => {
+        if (data === true) {
+          setUserContext({ username, room: roomName });
+          if (!socket) throw Error('No socket');
+          socket.emit(SOCKETS.CHOOSE_ROOM, { username, roomName });
+          username && roomName && navigation.push('Playground', { username, room: roomName });
+          setScreenNumber(1);
+        }
+      })
+      .catch(err => {
+        setRoomNameError('');
+        setJoinRoomError(err.message);
+      });
   };
 
   return (
@@ -75,6 +93,7 @@ export default function ChooseRoom(props: Props): JSX.Element {
         value={roomName ?? ''}
         onChangeText={text => {
           setRoomNameError('');
+          setJoinRoomError('');
           setUserContext({username, room: text});
         }}
         style={{ borderWidth: 1, marginBottom: 20, height: 30, width: '100%' }}
@@ -85,8 +104,9 @@ export default function ChooseRoom(props: Props): JSX.Element {
       >
         <Text style={styles.linkText}>Play</Text>
       </TouchableOpacity>
-      <View style={{ width: '80%', marginTop: 20 }}>
+      <View style={{ width: '90%', marginTop: 20 }}>
         {waitingRooms.length > 0 && <Text style={styles.title}>Join room</Text>}
+        <Text style={styles.error}>{joinRoomError}</Text>
         {waitingRooms.length > 0 && waitingRooms.map((waitingRoom) =>
           <View key={waitingRoom}>
             <TouchableOpacity

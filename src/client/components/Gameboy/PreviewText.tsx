@@ -1,6 +1,9 @@
 import React from 'react';
 import { Text, View } from 'react-native';
+
 import { styles } from '/client/components/Gameboy';
+import { maxPlayersLimit } from '/client/constants/game';
+
 
 type Props = {
   isMultiplayerMode: boolean,
@@ -13,7 +16,9 @@ const PreviewText = (props: Props): JSX.Element  => {
   const { isMultiplayerMode, opponentsNumber, isLeader, gameover } = props;
   const secondLineText = (opponentsNumber: number, isLeader?: boolean) => {
     if (opponentsNumber <= 0) return 'Wait for other players';
+    if (opponentsNumber > 0 && (opponentsNumber + 1 >= maxPlayersLimit) && isLeader) return 'Room is full, press Start to begin';
     if (opponentsNumber > 0 && isLeader) return 'Press Start to begin';
+    if (opponentsNumber > 0 && (opponentsNumber + 1 >= maxPlayersLimit) && !isLeader) return 'Room is full, ask leader to start the game';
     if (opponentsNumber > 0 && !isLeader) return 'Wait for leader to start the game';
   };
 

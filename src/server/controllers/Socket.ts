@@ -25,14 +25,17 @@ const connectSocketIO = (): void => {
     socket.on(SOCKETS.CREATE_USER, (username: string) => {
       new Player({ id: socket.id, username });
     });
+    const updateWaitingRooms = () => {
+      const roomNames = Game.getWaitingRoomNames();
+      socket.broadcast.emit(SOCKETS.UPDATE_WAITING_ROOMS, roomNames);
+    };
 
     socket.on(SOCKETS.CHOOSE_ROOM, ({ username, roomName }: { username: string, roomName: string }) => {
       // Fetch room if it exists or create if it doesn't exist
       let room = Room.getByName(roomName);
       if (!room) {
         room = new Room(roomName);
-        const roomNames = Game.getWaitingRoomNames();
-        socket.broadcast.emit(SOCKETS.UPDATE_WAITING_ROOMS, roomNames);
+        updateWaitingRooms();
       }
 
       // Add player to current room
@@ -57,8 +60,7 @@ const connectSocketIO = (): void => {
       let room = Room.getByName(roomName);
       if (!room) {
         room = new Room(roomName);
-        const roomNames = Game.getWaitingRoomNames();
-        socket.broadcast.emit(SOCKETS.UPDATE_WAITING_ROOMS, roomNames);
+        updateWaitingRooms();
       }
 
       // Fetch or create player and add player to current room
@@ -134,8 +136,7 @@ const connectSocketIO = (): void => {
       if (!player || !room) return;
       if (player.isLeader) {
         const startTile = room.startGame();
-        const roomNames = Game.getWaitingRoomNames();
-        socket.broadcast.emit(SOCKETS.UPDATE_WAITING_ROOMS, roomNames);
+        updateWaitingRooms();
         io.to(room.name).emit(SOCKETS.START_GAME, { tilesStack: player.tilesStack, startTile });
       }
     });
@@ -184,8 +185,7 @@ const connectSocketIO = (): void => {
           // If started game was finished we don't care about waiting rooms -
           // room with started game was deleted from waiting rooms on START_GAME
           if (!gameStarted) {
-            const roomNames = Game.getWaitingRoomNames();
-            socket.broadcast.emit(SOCKETS.UPDATE_WAITING_ROOMS, roomNames);
+            updateWaitingRooms();
           }
         }
 
@@ -193,6 +193,7 @@ const connectSocketIO = (): void => {
         const endGame = room.isRoomGameover();
         if (endGame) {
           room.assignWinner();
+          updateWaitingRooms();
           // send to everyone in the room
           return io.to(room.name).emit(SOCKETS.GAMEOVER, { players: room.players, endGame });
         }
@@ -226,7 +227,10 @@ const connectSocketIO = (): void => {
       if (room && player) {
         room.playerGameover(player);
         const endGame = room.isRoomGameover();
-        if (endGame) room.assignWinner();
+        if (endGame) {
+          room.assignWinner();
+          updateWaitingRooms();
+        }
         // send to everyone in the room
         io.to(roomName).emit(SOCKETS.GAMEOVER, { players: room.players, endGame });
       }

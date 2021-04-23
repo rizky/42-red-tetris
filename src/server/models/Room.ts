@@ -7,12 +7,13 @@ export class Room {
   name: string;
   players: Player[];
   gameStarted: boolean; // Room is closed when game has started, default false
-  // isValid: boolean; // Room is valid when there are 2 or more players. If number of players < 2 - game stops
+  gameover: boolean; // room is gameover when all the players are gameover (except winner)
   
   constructor(name: string) {
     this.players = [];
     this.name = name;
     this.gameStarted = false;
+    this.gameover = false;
     rooms.push(this);
   }
 
@@ -109,6 +110,7 @@ export class Room {
 
   isRoomGameover(): boolean {
     const endGame = this.players.filter((player) => !player.gameover).length > 1 ? false : true;
+    if (endGame) this.gameover = true;
 
     return endGame;
   }
