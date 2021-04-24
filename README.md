@@ -55,12 +55,12 @@ Just enjoy classic tetris on your own!
 ## Learnings of the project
 **Client-server communication with Sockets.** When you create an action (like drop a tetrimino piece on the playground or send a chat message), you will `emit(SOCKET_NAME)` a socket. Backend will receive this socket and send this action to every one of your opponents. They will receive this info from the backend with `socket.on(SOCKET_NAME)` and will update the info on the screen (instantly receive a new message in chat, get penalty row).
 
-Functional VS Object-oriented programming. The frontend of this app is done with functions and functional components thank to React hooks. Backend is using classes: Game, Room, Player, Piece. Because why not. No database is needed for this project.
+**Functional VS Object-oriented programming.** The frontend of this app is done with functions and functional components thank to React hooks. Backend is using classes: Game, Room, Player, Piece. Because why not. No database is needed for this project.
 
 ## Launch the project
 Click the link on the right, on this page
 
-OR
+**OR**
 
 Clone the repo and make sure you have Yarn installed. Go to the cloned repo, open 2 terminals, and from your command line run:
 
@@ -70,7 +70,7 @@ Clone the repo and make sure you have Yarn installed. Go to the cloned repo, ope
 
 `yarn api` in the second terminal
 
-OR
+**OR**
 
 Clone the repo and make sure you have Docker installed. Go to the pero and run:
 
