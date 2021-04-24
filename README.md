@@ -2,9 +2,9 @@
 
 ## Stack
 #### Front
-- React with hooks
+- React with hooks and Native
 - TypeScript
-- React Native tags
+- Expo
 
 #### Back
 - Node.js + Express
@@ -13,7 +13,7 @@
 #### The rest
 - Client-server communication with Socket.io
 - Tests with Jest
-- Docker to build the app
+- Docker
 
 ## How to play
 
