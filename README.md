@@ -15,7 +15,7 @@
 - Tests with Jest
 - Docker to build the app
 
-## Rules
+## How to play
 
 #### 🎮 Move around:
 Arrow left, right - move tetris piece
@@ -65,7 +65,9 @@ OR
 Clone the repo and make sure you have Yarn installed. Go to the cloned repo, open 2 terminals, and from your command line run:
 
 `yarn` and wait for it to finish
+
 `yarn web` in the first terminal
+
 `yarn api` in the second terminal
 
 OR
@@ -75,5 +77,7 @@ Clone the repo and make sure you have Docker installed. Go to the pero and run:
 `docker compose up`
 
 Backend will run on http://localhost:3001/
+
 Frontend will open Expo on http://localhost:19002/
+
 After clicking "Run in web browser" app will open on http://localhost:19006/
