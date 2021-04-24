@@ -48,7 +48,7 @@ Just enjoy classic tetris on your own!
 
 ### Playground screens
 <div style="display: flex; flex-direction: row">
-  <img src="https://user-images.githubusercontent.com/33632673/115971017-6ecaa480-a546-11eb-8033-491558661679.png" width="500" />
+  <img src="https://user-images.githubusercontent.com/33632673/115971017-6ecaa480-a546-11eb-8033-491558661679.png" width="489" />
   <img src="https://user-images.githubusercontent.com/33632673/115971061-aafe0500-a546-11eb-9b34-9fbc943ae907.png" width="500" />
 </div>
 
