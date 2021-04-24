@@ -41,15 +41,15 @@ Just enjoy classic tetris on your own!
 ## How it looks
 
 ### Login screen, create username
-<img src="https://user-images.githubusercontent.com/33632673/115970947-07145980-a546-11eb-853d-3f1cc2df1ad1.png" width="500" />
+<img src="https://user-images.githubusercontent.com/33632673/115970947-07145980-a546-11eb-853d-3f1cc2df1ad1.png" width="400" />
 
 ### Login screen, create or join room
-<img src="https://user-images.githubusercontent.com/33632673/115970995-5195d600-a546-11eb-8488-e2092abb404d.png" width="500" />
+<img src="https://user-images.githubusercontent.com/33632673/115970995-5195d600-a546-11eb-8488-e2092abb404d.png" width="400" />
 
 ### Playground screens
-<div style="display: flex; flex-direction: row">
-  <img src="https://user-images.githubusercontent.com/33632673/115971017-6ecaa480-a546-11eb-8033-491558661679.png" width="489" />
-  <img src="https://user-images.githubusercontent.com/33632673/115971061-aafe0500-a546-11eb-9b34-9fbc943ae907.png" width="500" />
+<div style="display: flex; flex-direction: row; justify-content: space-between">
+  <img src="https://user-images.githubusercontent.com/33632673/115971017-6ecaa480-a546-11eb-8033-491558661679.png" width="391" />
+  <img src="https://user-images.githubusercontent.com/33632673/115971061-aafe0500-a546-11eb-9b34-9fbc943ae907.png" width="400" />
 </div>
 
 ## Learnings of the project
