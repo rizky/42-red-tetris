@@ -1,4 +1,4 @@
-# 👾 Red-tetris - multiplayer online tetris
+# 👾 Red-tetris - multiplayer online tetris (Work In Progress)
 
 ## Stack
 #### Front
