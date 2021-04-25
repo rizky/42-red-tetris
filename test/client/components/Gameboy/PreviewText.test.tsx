@@ -33,7 +33,7 @@ describe('PreviewText', () => {
     const wrapper = shallow(<PreviewText {...props} />);
     expect(toJson(wrapper)).toMatchSnapshot();
   });
-  it('should render PreviewText for Leader in multiplayer mode with opponents', () => {
+  it('should render PreviewText for Leader in multiplayer mode with opponents < maxPlayersLimit', () => {
     const props = {
       isMultiplayerMode: true,
       opponentsNumber: 2,
@@ -43,10 +43,30 @@ describe('PreviewText', () => {
     const wrapper = shallow(<PreviewText {...props} />);
     expect(toJson(wrapper)).toMatchSnapshot();
   });
-  it('should render PreviewText for not Leader in multiplayer mode with opponents', () => {
+  it('should render PreviewText for Leader in multiplayer mode with opponents >= maxPlayersLimit', () => {
+    const props = {
+      isMultiplayerMode: true,
+      opponentsNumber: 5,
+      isLeader: true,
+      gameover: false,
+    };
+    const wrapper = shallow(<PreviewText {...props} />);
+    expect(toJson(wrapper)).toMatchSnapshot();
+  });
+  it('should render PreviewText for not Leader in multiplayer mode with opponents < maxPlayersLimit', () => {
     const props = {
       isMultiplayerMode: true,
       opponentsNumber: 2,
+      isLeader: false,
+      gameover: false,
+    };
+    const wrapper = shallow(<PreviewText {...props} />);
+    expect(toJson(wrapper)).toMatchSnapshot();
+  });
+  it('should render PreviewText for not Leader in multiplayer mode with opponents >= maxPlayersLimit', () => {
+    const props = {
+      isMultiplayerMode: true,
+      opponentsNumber: 5,
       isLeader: false,
       gameover: false,
     };
