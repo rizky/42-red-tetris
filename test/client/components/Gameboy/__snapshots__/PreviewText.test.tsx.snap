@@ -68,7 +68,7 @@ exports[`PreviewText should render PreviewText for Leader in multiplayer mode an
 </View>
 `;
 
-exports[`PreviewText should render PreviewText for Leader in multiplayer mode with opponents 1`] = `
+exports[`PreviewText should render PreviewText for Leader in multiplayer mode with opponents < maxPlayersLimit 1`] = `
 <View
   style={
     Object {
@@ -99,6 +99,41 @@ exports[`PreviewText should render PreviewText for Leader in multiplayer mode wi
   </Text>
   <Text>
     Press Start to begin
+  </Text>
+</View>
+`;
+
+exports[`PreviewText should render PreviewText for Leader in multiplayer mode with opponents >= maxPlayersLimit 1`] = `
+<View
+  style={
+    Object {
+      "alignItems": "center",
+    }
+  }
+>
+  <Text
+    style={
+      Object {
+        "fontSize": 18,
+        "marginBottom": 20,
+      }
+    }
+  >
+    You are in multiplayer mode
+  </Text>
+  <Text
+    style={
+      Object {
+        "fontSize": 18,
+        "marginBottom": 20,
+      }
+    }
+  >
+    5
+     other player(s) in your room
+  </Text>
+  <Text>
+    Room is full, press Start to begin
   </Text>
 </View>
 `;
@@ -171,7 +206,7 @@ exports[`PreviewText should render PreviewText for not Leader in multiplayer mod
 </View>
 `;
 
-exports[`PreviewText should render PreviewText for not Leader in multiplayer mode with opponents 1`] = `
+exports[`PreviewText should render PreviewText for not Leader in multiplayer mode with opponents < maxPlayersLimit 1`] = `
 <View
   style={
     Object {
@@ -202,6 +237,41 @@ exports[`PreviewText should render PreviewText for not Leader in multiplayer mod
   </Text>
   <Text>
     Wait for leader to start the game
+  </Text>
+</View>
+`;
+
+exports[`PreviewText should render PreviewText for not Leader in multiplayer mode with opponents >= maxPlayersLimit 1`] = `
+<View
+  style={
+    Object {
+      "alignItems": "center",
+    }
+  }
+>
+  <Text
+    style={
+      Object {
+        "fontSize": 18,
+        "marginBottom": 20,
+      }
+    }
+  >
+    You are in multiplayer mode
+  </Text>
+  <Text
+    style={
+      Object {
+        "fontSize": 18,
+        "marginBottom": 20,
+      }
+    }
+  >
+    5
+     other player(s) in your room
+  </Text>
+  <Text>
+    Room is full, ask leader to start the game
   </Text>
 </View>
 `;

@@ -26,6 +26,9 @@ describe('roomPlayersNames', () => {
       room: '1',
       isLeader: false,
       gameover: false,
+      score: 0,
+      spectrum: [[]],
+      isWinner: false,
     },
     {
       id: 'wwf7DFQkHAHh2b7IAAweweAE',
@@ -33,6 +36,9 @@ describe('roomPlayersNames', () => {
       room: '1',
       isLeader: false,
       gameover: false,
+      score: 0,
+      spectrum: [[]],
+      isWinner: false,
     },
   ];
 

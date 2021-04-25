@@ -82,10 +82,21 @@ exports[`Snapshots should render ChooseRoom 1`] = `
     style={
       Object {
         "marginTop": 20,
-        "width": "80%",
+        "width": "90%",
       }
     }
-  />
+  >
+    <Text
+      style={
+        Object {
+          "alignSelf": "flex-start",
+          "color": "#980f0f",
+          "marginBottom": 5,
+          "textAlign": "center",
+        }
+      }
+    />
+  </View>
 </View>
 `;
 

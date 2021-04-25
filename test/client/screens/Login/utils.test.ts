@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { isEmpty, checkTextLength, checkSpecialChars, checkUsername, checkRoomName } from '/client/screens/Login/utils';
+import { isEmpty, checkTextLength, checkSpecialChars, checkUsername, checkRoomName, isRoomPlayersLimitAvailable } from '/client/screens/Login/utils';
 
 jest.mock('axios');
 const mockedAxios = axios as jest.Mocked<typeof axios>;
@@ -148,5 +148,18 @@ describe('checkRoomName', () => {
     const uniqueRoomName = 'ro_om';
     mockedAxios.get.mockResolvedValue({ data: '' }); // When room name is not taken, response returns { data: "" }
     expect(checkRoomName(uniqueRoomName)).resolves.toBe(true);
+  });
+});
+
+describe('isRoomPlayersLimitAvailable', () => {
+  it('should return true for room players number less than maxPlayersLimit', async () => {
+    // Only one player in the room => return true
+    mockedAxios.get.mockResolvedValue({ data: fakeRoom });
+    expect(isRoomPlayersLimitAvailable(fakeRoom.name)).resolves.toBe(true);
+  });
+  it('should throw an error for room players limit exceeding maxPlayersLimit', async () => {
+    // More than max limit of players in the room => throw an error
+    mockedAxios.get.mockResolvedValue({ data: fakeRoom });
+    expect(isRoomPlayersLimitAvailable(fakeRoom.name)).rejects.toThrow('Too many players in the room');
   });
 });
