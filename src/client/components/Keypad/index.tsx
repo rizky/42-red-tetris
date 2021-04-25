@@ -101,7 +101,7 @@ const Keypad = (props: Props): JSX.Element => {
             onPress={() => {
               if (!socket) throw Error('No socket');
               setUserContext({username: undefined, room: undefined});
-              setIsPause(true);
+              if (setIsPause) setIsPause(true);
               socket.emit(SOCKETS.PLAYER_LEFT, userContext.username);
               navigation.navigate('Root');
             }}
