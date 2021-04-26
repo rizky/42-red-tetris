@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 import { Room, rooms } from './Room';
 
 export class Game {
@@ -15,11 +17,11 @@ export class Game {
   // when only 1 player left - he is a winner
 
   static getWaitingRooms(): Maybe<Room[]> {
-    return rooms.filter((room) => !room.gameStarted && !room.gameover);
+    return rooms.filter((room) => !room.gameStarted && !room.gameover && !_.includes(room.name, 'solo'));
   }
 
   static getWaitingRoomNames(): Maybe<string[]> {
-    const roomObjects = rooms.filter((room) => !room.gameStarted && !room.gameover);
+    const roomObjects = rooms.filter((room) => !room.gameStarted && !room.gameover && !_.includes(room.name, 'solo'));
     return roomObjects?.map((room) => room.name);
   }
 

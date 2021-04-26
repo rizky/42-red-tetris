@@ -47,7 +47,7 @@ const Ranking = (): JSX.Element => {
     <Gameboy>
       <View style={{ justifyContent: 'space-between' }}>
         <Text style={styles.title}>Game report</Text>
-        {username && rankedRoomPlayers[0] && (username === rankedRoomPlayers[0].username)
+        {username && rankedRoomPlayers.length > 1 && (username === rankedRoomPlayers[0].username)
           ? <Text style={styles.subtitle}>{username}, you are the winner!</Text>
           : <Text style={styles.subtitle}>{username} @ {room}</Text>
         }

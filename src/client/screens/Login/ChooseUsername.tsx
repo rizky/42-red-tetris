@@ -1,12 +1,11 @@
 import  React, { useState, useContext, Dispatch, SetStateAction } from 'react';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { StyleSheet, Text, TouchableOpacity, TextInput, View } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { Text, TouchableOpacity, TextInput, View } from 'react-native';
 
 import { SOCKETS } from '/config/constants';
 import { checkUsername } from '/client/screens/Login/utils';
 import SocketContext from '/client/context/SocketContext';
 import UserContext from '/client/context/UserContext';
+import { styles } from '/client/screens/Login';
 
 type Props = {
 	setScreenNumber: Dispatch<SetStateAction<1 | 2>>,
@@ -17,7 +16,6 @@ export default function ChooseUsername(props: Props): JSX.Element {
   const { userContext, setUserContext } = useContext(UserContext);
   const { username } = userContext;
   const socket = useContext(SocketContext);
-  const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'Root'>>();
   const [ussernameError, setUsernameError] = useState<string>('');
 
   const validateUsername = () => {
@@ -36,15 +34,17 @@ export default function ChooseUsername(props: Props): JSX.Element {
 
   return (
     <View style={{ width: '100%', alignItems: 'center' }}>
-      <Text style={styles.title}>{'Username'}</Text>
-      <Text style={styles.error}>{ussernameError}</Text>
+      <View style={{width: '90%'}}>
+        <Text style={styles.title}>{'Username'}</Text>
+        <Text style={styles.error}>{ussernameError}</Text>
+      </View>
       <TextInput
         value={username ?? ''}
         onChangeText={text => {
           setUsernameError('');
           setUserContext({username: text, room: undefined});
         }}
-        style={{ borderWidth: 1, marginBottom: 20, height: 30, width: '100%' }}
+        style={styles.input}
       />
       <TouchableOpacity
         style={styles.button}
@@ -52,37 +52,6 @@ export default function ChooseUsername(props: Props): JSX.Element {
       >
         <Text style={styles.linkText}>Next</Text>
       </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => navigation.push('Playground', {})} // TODO: do we need to validate username here too?
-      >
-        <Text style={styles.linkText}>Solo mode</Text>
-      </TouchableOpacity>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  title: {
-    marginBottom: 5,
-    alignSelf: 'flex-start',
-    textAlign: 'center',
-  },
-  error: {
-    marginBottom: 5,
-    alignSelf: 'flex-start',
-    textAlign: 'center',
-    color: '#980f0f',
-  },
-  linkText: {
-    fontSize: 14,
-  },
-  button: {
-    width: '70%',
-    borderWidth: 1,
-    borderRadius: 10,
-    alignItems: 'center',
-    padding: 3,
-    marginBottom: 30,
-  },
-});

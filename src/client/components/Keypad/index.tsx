@@ -43,7 +43,7 @@ const RoundButton = ({
 
 type Props = {
   isPause?: boolean,
-  setIsPause: Dispatch<SetStateAction<boolean>>,
+  setIsPause?: Dispatch<SetStateAction<boolean>>,
   opponentsNumber: number,
   isLeader?: boolean,
   gameStarted?: boolean,
@@ -60,6 +60,27 @@ const Keypad = (props: Props): JSX.Element => {
   const showPauseButton = (isLeader && gameStarted ) || isSoloMode;
   const isButtonDisabled = !isSoloMode && (disabled || opponentsNumber < 1);
 
+  const socketEmitStartGame = () => {
+    if (!socket) throw Error('No socket');
+    socket.emit(SOCKETS.START_GAME, { username: userContext.username, roomName: userContext.room });
+  };
+
+  const socketEmitPlayPause = () => {
+    if (isSoloMode) {
+      if (setIsPause) setIsPause(prevState => !prevState);
+    }
+    if (!socket) throw Error('No socket');
+    socket.emit(SOCKETS.PAUSE_GAME, { username: userContext.username, roomName: userContext.room });
+  };
+
+  const socketExitPage = () => {
+    if (!socket) throw Error('No socket');
+    setUserContext({username: undefined, room: undefined});
+    if (setIsPause) setIsPause(true);
+    socket.emit(SOCKETS.PLAYER_LEFT, userContext.username);
+    navigation.navigate('Root');
+  };
+
   const keyDown = (key: number) => {
     // @ts-ignore https://github.com/microsoft/TSJS-lib-generator/pull/892
     document.dispatchEvent(new KeyboardEvent('keydown', { keyCode: key, which: key }));
@@ -72,19 +93,13 @@ const Keypad = (props: Props): JSX.Element => {
           <RoundButton
             color={isButtonDisabled ? '#c0c0c0' : '#2dc421'} size={50} label='Start' text='▶'
             disabled={isButtonDisabled}
-            onPress={() => {
-              if (!socket) throw Error('No socket');
-              socket.emit(SOCKETS.START_GAME, { username: userContext.username, roomName: userContext.room });
-            }}
+            onPress={() => socketEmitStartGame()}
           />}
           {showPauseButton &&
             <RoundButton
               disabled={isButtonDisabled}
               color={isButtonDisabled ? '#c0c0c0' : '#efcc19'} size={50} label={isPause ? 'Play(P)' : 'Pause(P)'} text={isPause ? '▶' : '||' }
-              onPress={() => {
-                if (!socket) throw Error('No socket');
-                socket.emit(SOCKETS.PAUSE_GAME, { username: userContext.username, roomName: userContext.room });
-              }}
+              onPress={() => socketEmitPlayPause()}
             />}
           <RoundButton
             disabled={isButtonDisabled}
@@ -98,13 +113,7 @@ const Keypad = (props: Props): JSX.Element => {
           />
           <RoundButton
             color="white" size={50} style={{ margin: 0 }} label='Exit' text='╳'
-            onPress={() => {
-              if (!socket) throw Error('No socket');
-              setUserContext({username: undefined, room: undefined});
-              if (setIsPause) setIsPause(true);
-              socket.emit(SOCKETS.PLAYER_LEFT, userContext.username);
-              navigation.navigate('Root');
-            }}
+            onPress={() => socketExitPage()}
           />
         </View>
         <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 20 }}>

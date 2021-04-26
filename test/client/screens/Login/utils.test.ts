@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { isEmpty, checkTextLength, checkSpecialChars, checkUsername, checkRoomName, isRoomPlayersLimitAvailable } from '/client/screens/Login/utils';
+import { isEmpty, checkTextLength, checkSpecialChars, checkUsername, checkRoomName, isRoomPlayersLimitAvailable, composeSoloRoomName } from '/client/screens/Login/utils';
 
 jest.mock('axios');
 const mockedAxios = axios as jest.Mocked<typeof axios>;
@@ -163,3 +163,16 @@ describe('isRoomPlayersLimitAvailable', () => {
     expect(isRoomPlayersLimitAvailable(fakeRoom.name)).rejects.toThrow('Too many players in the room');
   });
 });
+
+describe('composeSoloRoomName', () => {
+  const usernameValid = 'masha';
+  const usernameNotValid1 = undefined;
+
+  it('should return solo room name for valid username', () => {
+    expect(composeSoloRoomName(usernameValid)).toEqual('solo_masha');
+  });
+  it('should return solo room name for not valid username', () => {
+    expect(composeSoloRoomName(usernameNotValid1)).toContain('solo_');
+  });
+});
+

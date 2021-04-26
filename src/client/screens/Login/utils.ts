@@ -1,4 +1,5 @@
 import axios from 'axios';
+import _ from 'lodash';
 
 import { maxPlayersLimit } from '/client/constants/game';
 
@@ -42,4 +43,9 @@ export const isRoomPlayersLimitAvailable = async (roomName: string | null | unde
   if (response && response.data.players.length >= maxPlayersLimit)
     throw Error('Too many players in the room');
   return true;
+};
+
+export const composeSoloRoomName = (username?: string): string => {
+  if (!username) return ('solo_' + _.random(1000));
+  return('solo_' + username);
 };

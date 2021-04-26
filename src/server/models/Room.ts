@@ -29,8 +29,8 @@ export class Room {
   }
 
   removePlayer(playerId: string): boolean {
-    const index = this.players.findIndex(player => player.id === playerId); // remove from room.players[]
-    const index2 = players.findIndex(player => player.id === playerId); // remove from const players[]
+    const index = this.players.findIndex(player => player.id === playerId); // player's index in room.players[]
+    const index2 = players.findIndex(player => player.id === playerId); // player's index in const players[]
 
     if (index !== -1 && index2 !== -1) {
       this.players.splice(index, 1)[0];

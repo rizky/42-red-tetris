@@ -9,7 +9,7 @@ import PreviewText from '/client/components/Gameboy/PreviewText';
 type Props = {
   children: React.ReactChild,
   isPause?: boolean,
-  setIsPause: Dispatch<SetStateAction<boolean>>,
+  setIsPause?: Dispatch<SetStateAction<boolean>>,
   roomPlayers?: string[],
   isLeader?: boolean,
   gameStarted?: boolean,
@@ -21,7 +21,7 @@ export default function Gameboy(props: Props): JSX.Element {
   const {children, isPause, setIsPause, roomPlayers, isLeader, gameStarted, gameover, isSoloMode} = props;
   const {userContext} = useContext(UserContext);
   const opponentsNumber = !roomPlayers || roomPlayers.length === 0 ? 0 : roomPlayers.length - 1;
-  const isMultiplayerMode = userContext.username && userContext.room ? true : false;
+  const isMultiplayerMode = (userContext.username && userContext.room && !isSoloMode) ? true : false;
   const window = useWindowDimensions();
   const w = window.width;
   const h = window.height;

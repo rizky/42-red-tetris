@@ -59,14 +59,14 @@ const connectSocketIO = (): void => {
       // Fetch room if it exists or create if it doesn't exist
       let room = Room.getByName(roomName);
       if (!room) {
-        room = new Room(roomName);
+        room = new Room(roomName); // TODO: this is to create room by URL
         updateWaitingRooms();
       }
 
       // Fetch or create player and add player to current room
       let player = Player.getByUsername(username);
       if (!player) {
-        player = new Player({ id: socket.id, username });
+        player = new Player({ id: socket.id, username }); // TODO: this is to create room by URL
         room.addPlayer(player);
         console.log('On join room: ', players);
       }
@@ -247,13 +247,13 @@ const connectSocketIO = (): void => {
       }
     });
 
-    socket.on(SOCKETS.UPDATE_SCORE, ({ username, roomName, score }: { username: string, roomName: string, score: number }) => {
+    socket.on(SOCKETS.UPDATE_SCORE, ({ username, roomName, score, isSoloMode }: { username: string, roomName: string, score: number, isSoloMode: boolean | undefined }) => {
       const room = Room.getByName(roomName);
       const player = Player.getByUsername(username);
 
       if (room && player) {
         room.updatePlayerScore(player.id, score);
-        if (player.isWinner)
+        if (player.isWinner || isSoloMode)
           io.to(roomName).emit(SOCKETS.REDIRECT_TO_RANKING); // Redirect all players to ranking page after player.isWinner score was updated
       }
     });
