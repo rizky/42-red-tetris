@@ -1,12 +1,13 @@
 import  React, { useState, useEffect, useContext, Dispatch, SetStateAction } from 'react';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { StyleSheet, Text, TouchableOpacity, TextInput, View } from 'react-native';
+import { Text, TouchableOpacity, TextInput, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 import { SOCKETS } from '/config/constants';
-import { checkRoomName, isRoomPlayersLimitAvailable } from '/client/screens/Login/utils';
+import { checkRoomName, isRoomPlayersLimitAvailable, composeSoloRoomName } from '/client/screens/Login/utils';
 import SocketContext from '/client/context/SocketContext';
 import UserContext from '/client/context/UserContext';
+import { styles } from '/client/screens/Login';
 
 type Props = {
   setScreenNumber: Dispatch<SetStateAction<1 | 2>>,
@@ -22,6 +23,8 @@ export default function ChooseRoom(props: Props): JSX.Element {
   const [joinRoomError, setJoinRoomError] = useState<string>('');
   const [waitingRooms, setWaitingRooms] = useState<string[]>([]);
 
+  if (!username) setScreenNumber(1);
+
   console.log('Updates for waitingRooms:', waitingRooms);
 
   const handleFetchWaitingRooms = (roomNames: string[]) => setWaitingRooms(roomNames);
@@ -30,6 +33,12 @@ export default function ChooseRoom(props: Props): JSX.Element {
     setRoomNameError('');
     setJoinRoomError('');
     return setWaitingRooms(roomNames);
+  };
+
+  const socketEmitChooseOrCreateRoom = (roomName: string  | null | undefined) => {
+    if(!socket) throw Error('No socket');
+    socket.emit(SOCKETS.CHOOSE_ROOM, { username, roomName });
+    username && roomName && navigation.push('Playground', { username, room: roomName });
   };
 
   useEffect(() => {
@@ -53,9 +62,7 @@ export default function ChooseRoom(props: Props): JSX.Element {
     checkRoomName(roomName)
       .then(data => {
         if (data === true) {
-          if(!socket) throw Error('No socket');
-          socket.emit(SOCKETS.CHOOSE_ROOM, { username, roomName });
-          username && roomName && navigation.push('Playground', { username, room: roomName });
+          socketEmitChooseOrCreateRoom(roomName);
           setScreenNumber(1);
         }
       })
@@ -72,9 +79,7 @@ export default function ChooseRoom(props: Props): JSX.Element {
       .then(data => {
         if (data === true) {
           setUserContext({ username, room: roomName });
-          if (!socket) throw Error('No socket');
-          socket.emit(SOCKETS.CHOOSE_ROOM, { username, roomName });
-          username && roomName && navigation.push('Playground', { username, room: roomName });
+          socketEmitChooseOrCreateRoom(roomName);
           setScreenNumber(1);
         }
       })
@@ -84,11 +89,25 @@ export default function ChooseRoom(props: Props): JSX.Element {
       });
   };
 
+  const onSoloModePress = () => {
+    setRoomNameError('');
+    setJoinRoomError('');
+    setUserContext({ username, room: composeSoloRoomName(username) });
+    socketEmitChooseOrCreateRoom(composeSoloRoomName(username));
+  };
+
   return (
     <View style={{ width: '100%', alignItems: 'center' }}>
-      <Text style={{ fontSize: 16, marginBottom: 50 }}>Hello, {username}</Text>
-      <Text style={styles.title}>Create room</Text>
-      <Text style={styles.error}>{roomNameError}</Text>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => onSoloModePress()}
+      >
+        <Text style={styles.linkText}>Play solo</Text>
+      </TouchableOpacity>
+      <View style={{width: '90%'}}>
+        <Text style={styles.title}>Room name</Text>
+        <Text style={styles.error}>{roomNameError}</Text>
+      </View>
       <TextInput
         value={roomName ?? ''}
         onChangeText={text => {
@@ -96,15 +115,15 @@ export default function ChooseRoom(props: Props): JSX.Element {
           setJoinRoomError('');
           setUserContext({username, room: text});
         }}
-        style={{ borderWidth: 1, marginBottom: 20, height: 30, width: '100%' }}
+        style={styles.input}
       />
       <TouchableOpacity
         style={styles.button}
         onPress={() => onCreateRoomPress(roomName)}
       >
-        <Text style={styles.linkText}>Play</Text>
+        <Text style={styles.linkText}>Create</Text>
       </TouchableOpacity>
-      <View style={{ width: '90%', marginTop: 20 }}>
+      <View style={{ width: '90%' }}>
         {waitingRooms.length > 0 && <Text style={styles.title}>Join room</Text>}
         <Text style={styles.error}>{joinRoomError}</Text>
         {waitingRooms.length > 0 && waitingRooms.map((waitingRoom) =>
@@ -121,35 +140,3 @@ export default function ChooseRoom(props: Props): JSX.Element {
   );
 }
 
-const styles = StyleSheet.create({
-  title: {
-    marginBottom: 5,
-    alignSelf: 'flex-start',
-    textAlign: 'center',
-  },
-  error: {
-    marginBottom: 5,
-    alignSelf: 'flex-start',
-    textAlign: 'center',
-    color: '#980f0f',
-  },
-  linkText: {
-    fontSize: 14,
-  },
-  roomsList: {
-    borderWidth: 1,
-    borderRadius: 5,
-    margin: 3,
-    padding: 2,
-    alignItems:
-		'center',
-  },
-  button: {
-    width: '70%',
-    borderWidth: 1,
-    borderRadius: 10,
-    alignItems: 'center',
-    padding: 3,
-    marginBottom: 10,
-  },
-});

@@ -36,8 +36,7 @@ export default function Playground(): JSX.Element {
   const [roomLeader, setRoomLeader] = useState<PlayerType>();
   const [gameover, setGameover] = useState<boolean>(false);
   const [gameStarted, setGameStarted] = useState<boolean>(false);
-  //If there are no URL params, then it's solo mode
-  const isSoloMode = !room || !username;
+  const isSoloMode = _.includes(userContext.room, 'solo') || _.includes(room, 'solo'); // works both for context and URL params
 
   const filteredOpponents = (roomPlayers: PlayerType[], currentPlayerUsername: string) => {
     return _.filter(roomPlayers, (player) => player.username !== currentPlayerUsername);
@@ -49,9 +48,14 @@ export default function Playground(): JSX.Element {
     addResponseMessage(message.username + ': ' + message.text, message.username);
   };
   
+  const handleNewUserMessage = (message: string) => {
+    if (!socket) throw Error('No socket');
+    socket.emit(SOCKETS.CHAT_MESSAGE, { username, message, roomName: room });
+  };
+
   const socketFetchCurrentPlayer = (player: PlayerType) => {
     setCurrentPlayer(player);
-    console.log('FETCH_CURRENT_PLAYER', player); // TODO: use player.isLeader to show/hide tetris buttons
+    console.log('FETCH_CURRENT_PLAYER', player);
   };
 
   const socketUpdateRoomPlayers = (data: { room: string, players: PlayerType[] }) => {
@@ -99,7 +103,7 @@ export default function Playground(): JSX.Element {
 
     setCurrentPlayer((prevCurrentPlayer) => {
       if (!prevCurrentPlayer) return;
-      socket.emit(SOCKETS.UPDATE_SCORE, { username: prevCurrentPlayer.username, roomName: prevCurrentPlayer.room, score: prevCurrentPlayer.score });
+      socket.emit(SOCKETS.UPDATE_SCORE, { username: prevCurrentPlayer.username, roomName: prevCurrentPlayer.room, score: prevCurrentPlayer.score, isSoloMode });
       return prevCurrentPlayer;
     });
   };
@@ -109,8 +113,12 @@ export default function Playground(): JSX.Element {
   };
 
   const socketEmitGameover = () => {
-    if (!socket) throw Error('No socket');
-    socket.emit(SOCKETS.GAMEOVER, { username: userContext.username, roomName: userContext.room });
+    if (isSoloMode) {
+      socketEmitUpdatePlayerScore();
+    } else {
+      if (!socket) throw Error('No socket');
+      socket.emit(SOCKETS.GAMEOVER, { username: userContext.username, roomName: userContext.room });
+    }
   };
 
   const socketReceiveGameover = ({ players, endGame }: { players: PlayerType[], endGame: boolean }) => {
@@ -127,6 +135,7 @@ export default function Playground(): JSX.Element {
     if (endGame) {
       socketEmitUpdatePlayerScore();
       setIsPause(true);
+      setMatrix(blankMatrix);
       setGameover(true);
     }
   };
@@ -146,42 +155,44 @@ export default function Playground(): JSX.Element {
     /*
     ** TODO: del next line when tmp SOCKETS.ENTER_ROOM by url params is deleted
     */
-    setUserContext({ username, room }); // for components that use UserContext
+    if (!userContext.username || !userContext.room) setUserContext({ username, room }); // for components that use UserContext
     console.log('Playground, User context:', userContext);
     if (!socket) throw Error('No socket');
+
     /*
     ** TODO: uncomment when tmp SOCKETS.ENTER_ROOM by url params is deleted
     */
     // if (userContext.username && userContext.room) // If not solo mode, enter room
     socket.emit(SOCKETS.ENTER_ROOM, { username, roomName: room });
 
-    // Message from server
-    socket.on(SOCKETS.CHAT_MESSAGE, socketChatMessage);
-
     // Current player sent from server
     socket.on(SOCKETS.FETCH_CURRENT_PLAYER, socketFetchCurrentPlayer);
 
-    // When new players join the room
-    socket.on(SOCKETS.UPDATE_ROOM_PLAYERS, socketUpdateRoomPlayers);
-
-    // Receive block type and stack of 3 next blocks
-    socket.on(SOCKETS.START_GAME, socketReceiveStartGame);
-
-    // Pause playgound matrix
-    socket.on(SOCKETS.PAUSE_GAME, socketReceivePauseGame);
-
-    // Receive penalty rows
-    socket.on(SOCKETS.PENALTY_ROWS, socketReceivePenaltyRows);
-
-    // One of opponents has gameover
-    socket.on(SOCKETS.GAMEOVER, socketReceiveGameover);
-
-    // One of opponents updated his spectrum
-    socket.on(SOCKETS.UPDATE_SPECTRUM, socketReceiveUpdateSpectrum);
-
     // Redirect player to ranking page after player.isWinner score was updated
     socket.on(SOCKETS.REDIRECT_TO_RANKING, socketReceiveRedirectToRanking);
-  
+
+    if (!isSoloMode) {
+      // Message from server
+      socket.on(SOCKETS.CHAT_MESSAGE, socketChatMessage);
+
+      // When new players join the room
+      socket.on(SOCKETS.UPDATE_ROOM_PLAYERS, socketUpdateRoomPlayers);
+
+      // Receive block type and stack of 3 next blocks
+      socket.on(SOCKETS.START_GAME, socketReceiveStartGame);
+
+      // Pause playgound matrix
+      socket.on(SOCKETS.PAUSE_GAME, socketReceivePauseGame);
+
+      // Receive penalty rows
+      socket.on(SOCKETS.PENALTY_ROWS, socketReceivePenaltyRows);
+
+      // One of opponents has gameover
+      socket.on(SOCKETS.GAMEOVER, socketReceiveGameover);
+
+      // One of opponents updated his spectrum
+      socket.on(SOCKETS.UPDATE_SPECTRUM, socketReceiveUpdateSpectrum);
+    }
     return () => {
       socket.emit(SOCKETS.PLAYER_LEFT, username);
 
@@ -197,11 +208,6 @@ export default function Playground(): JSX.Element {
       dropMessages();
     };
   }, []);
-
-  const handleNewUserMessage = (message: string) => {
-    if (!socket) throw Error('No socket');
-    socket.emit(SOCKETS.CHAT_MESSAGE, { username, message, roomName: room });
-  };
 
   const addPenaltyRows = (matrix: Matrix, rowsNumber: number): Matrix => {
     // Create array of blank lines
@@ -284,7 +290,7 @@ export default function Playground(): JSX.Element {
           </View>
         </>
       </Gameboy>
-      {room && username &&
+      {!isSoloMode &&
         <ChatWidget title={formatChatTitle(roomLeader?.username ?? 'no leader')} subtitle={formatChatSubtitle(roomPlayersNames(roomPlayers))} handleNewUserMessage={handleNewUserMessage}/>
       }
     </>
