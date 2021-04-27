@@ -169,10 +169,10 @@ describe('composeSoloRoomName', () => {
   const usernameNotValid1 = undefined;
 
   it('should return solo room name for valid username', () => {
-    expect(composeSoloRoomName(usernameValid)).toEqual('solo_masha');
+    expect(composeSoloRoomName(usernameValid)).toEqual('solo-masha');
   });
   it('should return solo room name for not valid username', () => {
-    expect(composeSoloRoomName(usernameNotValid1)).toContain('solo_');
+    expect(composeSoloRoomName(usernameNotValid1)).toContain('solo-');
   });
 });
 

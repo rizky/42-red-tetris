@@ -59,13 +59,15 @@ export class Room {
     return this.players;
   }
 
-  startGame(): string {
+  startGame(): TetriminosType[] {
     this.gameStarted = true;
-    const startTile = new Piece().type;
-    const tilesStack = [new Piece().type, new Piece().type, new Piece().type];
-    players.map(player => player.tilesStack = tilesStack);
-    this.players.map(player => player.tilesStack = tilesStack);
-    return startTile;
+    const tileStack = [new Piece().type, new Piece().type, new Piece().type, new Piece().type, new Piece().type];
+
+    return tileStack;
+  }
+
+  uploadMoreTetrisTiles(): TetriminosType[] {
+    return [new Piece().type, new Piece().type, new Piece().type, new Piece().type, new Piece().type];
   }
 
   // When player gameover he should not be deleted from the room but just unassigned from leader possition and player.gameover = true

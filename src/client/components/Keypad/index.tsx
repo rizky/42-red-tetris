@@ -56,8 +56,8 @@ const Keypad = (props: Props): JSX.Element => {
   const socket = useContext(SocketContext);
   const { userContext, setUserContext } = useContext(UserContext);
   const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'Playground'>>();
-  const showStartButton = !isSoloMode && isLeader && !gameStarted;
-  const showPauseButton = (isLeader && gameStarted ) || isSoloMode;
+  const showStartButton = isLeader && !gameStarted;
+  const showPauseButton = (isLeader && gameStarted);
   const isButtonDisabled = !isSoloMode && (disabled || opponentsNumber < 1);
 
   const socketEmitStartGame = () => {
