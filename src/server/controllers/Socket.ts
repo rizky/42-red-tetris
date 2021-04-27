@@ -286,6 +286,16 @@ const connectSocketIO = (): void => {
       // }
     });
 
+    socket.on(SOCKETS.SPEED_MODE, ({ username, roomName }: { username: string, roomName: string }) => {
+      const room = Room.getByName(roomName);
+      const player = Player.getByUsername(username);
+
+      if (room && player) {
+        // send to everyone in the room
+        io.to(roomName).emit(SOCKETS.SPEED_MODE);
+      }
+    });
+
     // Runs when socket disconnects
     socket.on('disconnect', () => {
       const player = Player.getById(socket.id);

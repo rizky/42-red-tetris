@@ -49,16 +49,18 @@ type Props = {
   gameStarted?: boolean,
   disabled?: boolean,
   isSoloMode?: boolean,
+  speedMode?: boolean,
 }
 
 const Keypad = (props: Props): JSX.Element => {
-  const { isPause, setIsPause, opponentsNumber, isLeader, gameStarted, disabled, isSoloMode } = props;
+  const { isPause, setIsPause, opponentsNumber, isLeader, gameStarted, disabled, isSoloMode, speedMode } = props;
   const socket = useContext(SocketContext);
   const { userContext, setUserContext } = useContext(UserContext);
   const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'Playground'>>();
   const showStartButton = isLeader && !gameStarted;
   const showPauseButton = (isLeader && gameStarted);
   const isButtonDisabled = !isSoloMode && (disabled || opponentsNumber < 1);
+  const showSpeedModeButton = speedMode !== undefined ? true : false;
 
   const socketEmitStartGame = () => {
     if (!socket) throw Error('No socket');
@@ -79,6 +81,11 @@ const Keypad = (props: Props): JSX.Element => {
     if (setIsPause) setIsPause(true);
     socket.emit(SOCKETS.PLAYER_LEFT, userContext.username);
     navigation.navigate('Root');
+  };
+
+  const socketEmitSpeedMode = () => {
+    if (!socket) throw Error('No socket');
+    socket.emit(SOCKETS.SPEED_MODE, { username: userContext.username, roomName: userContext.room });
   };
 
   const keyDown = (key: number) => {
@@ -106,6 +113,12 @@ const Keypad = (props: Props): JSX.Element => {
             color={isButtonDisabled ? '#c0c0c0' : '#2dc421'} size={50} label="Sound(S)"
             onPress={() => keyDown(keyboard.sound)}
           />
+          {showSpeedModeButton &&
+          <RoundButton
+            disabled={isButtonDisabled}
+            color={isButtonDisabled ? '#c0c0c0' : 'white'} size={50} label="Super speed" text={speedMode ? 'on' : 'off'}
+            onPress={() => socketEmitSpeedMode()}
+          />}
           <RoundButton
             disabled={isButtonDisabled}
             color={isButtonDisabled ? '#c0c0c0' : '#efcc19'} size={50} label="Reset(R)"

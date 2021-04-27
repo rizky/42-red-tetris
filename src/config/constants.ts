@@ -13,6 +13,7 @@ export const SOCKETS = {
   PENALTY_ROWS: 'penalty rows',
   UPDATE_SPECTRUM: 'update spectrum',
   MORE_TETRIS_TILES: 'load more tetris tiles',
+  SPEED_MODE: 'increase tetris falling speed',
   
   /* ---- Game ---- */
   FETCH_WAITING_ROOMS: 'fetch waiting rooms',

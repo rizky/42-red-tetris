@@ -15,10 +15,11 @@ type Props = {
   gameStarted?: boolean,
   gameover?: boolean,
   isSoloMode?: boolean,
+  speedMode?: boolean,
 }
 
 export default function Gameboy(props: Props): JSX.Element {
-  const {children, isPause, setIsPause, roomPlayers, isLeader, gameStarted, gameover, isSoloMode} = props;
+  const {children, isPause, setIsPause, roomPlayers, isLeader, gameStarted, gameover, isSoloMode, speedMode} = props;
   const {userContext} = useContext(UserContext);
   const opponentsNumber = !roomPlayers || roomPlayers.length === 0 ? 0 : roomPlayers.length - 1;
   const isMultiplayerMode = (userContext.username && userContext.room && !isSoloMode) ? true : false;
@@ -47,7 +48,7 @@ export default function Gameboy(props: Props): JSX.Element {
             </View>
             : null}
         </View>
-        <Keypad isPause={isPause} setIsPause={setIsPause} opponentsNumber={opponentsNumber} isLeader={isLeader} gameStarted={gameStarted} disabled={isKeypadDisabled} isSoloMode={isSoloMode}/>
+        <Keypad isPause={isPause} setIsPause={setIsPause} opponentsNumber={opponentsNumber} isLeader={isLeader} gameStarted={gameStarted} disabled={isKeypadDisabled} isSoloMode={isSoloMode} speedMode={speedMode}/>
       </View>
     </View>
   );
