@@ -135,9 +135,9 @@ const connectSocketIO = (): void => {
 
       if (!player || !room) return;
       if (player.isLeader) {
-        const startTile = room.startGame();
+        const tileStack = room.startGame();
         updateWaitingRooms();
-        io.to(room.name).emit(SOCKETS.START_GAME, { tilesStack: player.tilesStack, startTile });
+        io.to(room.name).emit(SOCKETS.START_GAME, tileStack);
       }
     });
 
@@ -147,6 +147,17 @@ const connectSocketIO = (): void => {
 
       if (room && player) {
         io.to(room.name).emit(SOCKETS.PAUSE_GAME);
+      }
+    });
+
+    socket.on(SOCKETS.MORE_TETRIS_TILES, ({ username, roomName }: { username: string, roomName: string }) => {
+      const player = Player.getByUsername(username);
+      const room = Room.getByName(roomName);
+
+      if (room && player) {
+        const tileStack = room.uploadMoreTetrisTiles();
+        // sens to everyone in the room
+        io.to(room.name).emit(SOCKETS.MORE_TETRIS_TILES, tileStack);
       }
     });
 

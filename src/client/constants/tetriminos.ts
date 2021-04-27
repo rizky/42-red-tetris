@@ -48,7 +48,7 @@ export const initialPos = {
   T: [-2, 4],
 };
 
-export const blockTypes: TetriminosType[] = ['I','L','J','Z','S','O', 'T'];
+export const blockTypes: TetriminosType[] = ['I', 'L', 'J', 'Z', 'S', 'O', 'T'];
 
 export const speeds = [800, 650, 500, 370, 250, 160];
 

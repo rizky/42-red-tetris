@@ -1,10 +1,8 @@
 import { Dispatch, SetStateAction } from 'react';
 import useKey from 'use-key-hook';
-import _ from 'lodash';
 import { isWidgetOpened } from '/client/components/Chat';
 
 import { blankMatrix } from '/client/constants/tetriminos';
-import { blockTypes } from '/client/constants/tetriminos';
 import { keyboard } from '/client/constants/keyboard';
 import {
   blockCreate,
@@ -27,7 +25,7 @@ export const useKeyEvent = ({ setIsPause, setMatrix, setBlock }
     // When Chat widget is opened, key press should not affect movement on Matrix Playground
     if (isWidgetOpened()) return;
     if (keyCode === keyboard.reset) {
-      setBlock(blockCreate({ type: _.sample(blockTypes) ?? 'T' }));
+      setBlock(blockCreate({ type: 'T' }));
       setMatrix(blankMatrix);
       setIsPause(true);
     }

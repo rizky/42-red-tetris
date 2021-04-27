@@ -10,10 +10,8 @@ export class Player {
   isLeader: boolean;
   gameover: boolean;
   score: number;
-  tilesStack: string[]; // array of future tetriminos
   spectrum: Matrix;
   isWinner: boolean;
-  // blockedRows: number;
   
   constructor({ id, username }: {id: string, username: string }) {
     this.id = id;
@@ -22,7 +20,6 @@ export class Player {
     this.isLeader = false;
     this.gameover = false;
     this.score = 0;
-    this.tilesStack = [];
     this.spectrum = _.map(Array(20), () => _.fill(Array(10), 0));
     this.isWinner = false;
     players.push(this);

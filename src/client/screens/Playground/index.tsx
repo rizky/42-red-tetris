@@ -8,7 +8,6 @@ import { useNavigation } from '@react-navigation/native';
 
 import { SOCKETS, SCORING } from '/config/constants';
 import { blankMatrix, blockMatrix, penaltyLine } from '/client/constants/tetriminos';
-import { blockTypes } from '/client/constants/tetriminos';
 import { ChatWidget, addResponseMessage, dropMessages } from '/client/components/Chat';
 import Digits from '/client/components/Digits';
 import { formatChatSubtitle, formatChatTitle, roomPlayersNames, convertMatrixToSpectrum } from '/client/screens/Playground/utils';
@@ -29,7 +28,8 @@ export default function Playground(): JSX.Element {
   // const { room, username } = userContext;
   const { room, username } = params ?? {};
   const [roomPlayers, setRoomPlayers] = useState<PlayerType[]>([]);
-  const [block, setBlock] = useState<BlockType>(blockCreate({ type: _.sample(blockTypes) ?? 'T' }));
+  const [tileStack, setTileStack] = useState<TetriminosType[]>(['O']);
+  const [block, setBlock] = useState<BlockType>(blockCreate({ type: tileStack[0] }));
   const [matrix, setMatrix] = useState<Matrix>(blankMatrix);
   const [isPause, setIsPause] = useState<boolean>(true);
   const [player, setCurrentPlayer] = useState<PlayerType>();
@@ -73,9 +73,10 @@ export default function Playground(): JSX.Element {
     });
   };
 
-  const socketReceiveStartGame = ({ tilesStack, startTile }: { tilesStack: string[], startTile: string }) => {
+  const socketReceiveStartGame = (tileStack: TetriminosType[]) => {
     // TODO: assign tile stack here
-    console.log('START_GAME', startTile, tilesStack, isPause);
+    console.log('START_GAME', tileStack, isPause);
+    setTileStack(tileStack);
     setGameStarted(true);
     setIsPause(false);
   };
@@ -114,7 +115,7 @@ export default function Playground(): JSX.Element {
 
   const socketEmitGameover = () => {
     if (isSoloMode) {
-      socketEmitUpdatePlayerScore();
+      return socketEmitUpdatePlayerScore();
     } else {
       if (!socket) throw Error('No socket');
       socket.emit(SOCKETS.GAMEOVER, { username: userContext.username, roomName: userContext.room });
@@ -150,6 +151,15 @@ export default function Playground(): JSX.Element {
     setRoomPlayers(roomPlayers);
   };
 
+  const socketEmitMoreTetrisTiles = () => {
+    if (!socket) throw Error('No socket');
+    socket.emit(SOCKETS.MORE_TETRIS_TILES, { username: userContext.username, roomName: userContext.room });
+  };
+
+  const socketReceiveMoreTetrisTiles = (tileStack: TetriminosType[]) => {
+    setTileStack((prevTileStack) => [...prevTileStack, ...tileStack]);
+  };
+
   useEffect(() => {
     dropMessages();
     /*
@@ -168,8 +178,14 @@ export default function Playground(): JSX.Element {
     // Current player sent from server
     socket.on(SOCKETS.FETCH_CURRENT_PLAYER, socketFetchCurrentPlayer);
 
+    // Receive block type and stack of 3 next blocks
+    socket.on(SOCKETS.START_GAME, socketReceiveStartGame);
+
     // Redirect player to ranking page after player.isWinner score was updated
     socket.on(SOCKETS.REDIRECT_TO_RANKING, socketReceiveRedirectToRanking);
+
+    // Receive more tetris tiles
+    socket.on(SOCKETS.MORE_TETRIS_TILES, socketReceiveMoreTetrisTiles);
 
     if (!isSoloMode) {
       // Message from server
@@ -178,8 +194,6 @@ export default function Playground(): JSX.Element {
       // When new players join the room
       socket.on(SOCKETS.UPDATE_ROOM_PLAYERS, socketUpdateRoomPlayers);
 
-      // Receive block type and stack of 3 next blocks
-      socket.on(SOCKETS.START_GAME, socketReceiveStartGame);
 
       // Pause playgound matrix
       socket.on(SOCKETS.PAUSE_GAME, socketReceivePauseGame);
@@ -218,12 +232,8 @@ export default function Playground(): JSX.Element {
     return _.slice(newMatrix, rowsNumber, newMatrix.length);
   };
 
-  // const nextBlockType = blockTypes[(_.indexOf(blockTypes, block.type) + 1) % _.size(blockTypes)];
-  const nextBlockType = blockTypes[0]; // TODO: del after debugging
   useInterval(() => {
     if (isPause) return;
-    // TODO: What condition do we have on playground screen? If not solo mode, check if user left Playground screen and stop pieces from falling (issue #66 in github)
-    // if (!username) return; // If user left Playground screen
     if (_.includes(matrix[0], 1)) {
       setMatrix(blankMatrix);
       setIsPause(true);
@@ -247,7 +257,16 @@ export default function Playground(): JSX.Element {
             const playerWithUpdatedScore = { ...prevCurrentPlayer, score: prevCurrentPlayer.score + SCORING.PIECE_PLACED + SCORING.ROW_DESTROYED * deletedRows };
             return playerWithUpdatedScore;
           });
-          return blockCreate({ type: nextBlockType });
+
+          // Remove tileStack[0] that was just placed on the bottom
+          setTileStack((prevTileStack) => {
+            if (prevTileStack.length < 4) {
+              socketEmitMoreTetrisTiles();
+            }
+            return _.drop(prevTileStack);
+          });
+
+          return blockCreate({ type: tileStack[0] });
         } else {
           return blockFall(currentBlock);
         }
@@ -267,7 +286,7 @@ export default function Playground(): JSX.Element {
             {_.map(filteredOpponents(roomPlayers, userContext.username || ''), (player) =>
               <View key={player.id} style={{ width: 85 }}>
                 <View style={{ alignItems: 'center' }}><Text style={{ fontWeight: 'bold', color: 'white' }}>{player.username}</Text></View>
-                <Matrix matrix={player.spectrum} isSpectrum={true} block={blockCreate({ type: nextBlockType, pos: [-10, -10] })}/>
+                <Matrix matrix={player.spectrum} isSpectrum={true} block={blockCreate({ type: tileStack[0], pos: [-10, -10] })}/>
               </View>)
             }
           </View>
@@ -283,7 +302,7 @@ export default function Playground(): JSX.Element {
               <Text style={{ fontSize: 20 }}>Next</Text>
               <Matrix
                 matrix={blockMatrix}
-                block={blockCreate({ type: nextBlockType, pos: [0, 0] })}
+                block={blockCreate({ type: tileStack[0], pos: [0, 0] })}
                 style={{ borderWidth: 0, marginVertical: 10, alignSelf: 'flex-end' }}
               />
             </View>

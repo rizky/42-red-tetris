@@ -46,6 +46,6 @@ export const isRoomPlayersLimitAvailable = async (roomName: string | null | unde
 };
 
 export const composeSoloRoomName = (username?: string): string => {
-  if (!username) return ('solo_' + _.random(1000));
-  return('solo_' + username);
+  if (!username) return ('solo-' + _.random(1000));
+  return('solo-' + username);
 };
