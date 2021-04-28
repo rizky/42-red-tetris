@@ -306,7 +306,7 @@ export default function Playground(): JSX.Element {
                 />
               </View>
               {roomPlayers.length - 1 > 0 &&
-                <View style={{ height: 355, width: 175, flexWrap: 'wrap', alignContent: 'space-between' }}>
+                <View style={{ height: roomPlayers.length > 2 ? 355 : 180, width: 175, flexWrap: 'wrap', alignContent: 'space-between' }}>
                   {_.map(filteredOpponents(roomPlayers, userContext.username || ''), (player) =>
                     <View key={player.id} style={{ width: 85 }}>
                       <View style={{ alignItems: 'center' }}>
