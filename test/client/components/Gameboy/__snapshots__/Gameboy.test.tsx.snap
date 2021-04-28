@@ -22,7 +22,7 @@ exports[`Snapshots should render Gameboy 1`] = `
           "borderRadius": 20,
           "justifyContent": "center",
           "paddingBottom": 30,
-          "paddingHorizontal": 50,
+          "paddingHorizontal": 30,
         },
         Object {
           "transform": Array [
@@ -58,7 +58,7 @@ exports[`Snapshots should render Gameboy 1`] = `
           "height": 500,
           "justifyContent": "center",
           "padding": 10,
-          "width": 400,
+          "width": 440,
         }
       }
     >

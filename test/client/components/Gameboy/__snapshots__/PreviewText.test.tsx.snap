@@ -295,7 +295,7 @@ exports[`PreviewText should render PreviewText for solo mode 1`] = `
     You are in solo mode
   </Text>
   <Text>
-    Press Play(P) to start
+    Press Start / Play
   </Text>
 </View>
 `;

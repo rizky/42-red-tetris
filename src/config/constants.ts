@@ -35,3 +35,6 @@ export const SCORING = {
   PIECE_PLACED: 4,
   LAST_PLAYER: 200,
 };
+
+export const maxPlayersLimit = 4;
+

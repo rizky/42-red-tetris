@@ -2,7 +2,7 @@ import React from 'react';
 import { Text, View } from 'react-native';
 
 import { styles } from '/client/components/Gameboy';
-import { maxPlayersLimit } from '/client/constants/game';
+import { maxPlayersLimit } from '/config/constants';
 
 
 type Props = {
@@ -42,7 +42,7 @@ const PreviewText = (props: Props): JSX.Element  => {
   return (
     <View style={{ alignItems: 'center' }}>
       <Text style={styles.gameMode}>You are in solo mode</Text>
-      <Text>Press Play(P) to start</Text>
+      <Text>Press Start / Play</Text>
     </View>
   );
 };

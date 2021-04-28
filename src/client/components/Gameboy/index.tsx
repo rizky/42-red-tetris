@@ -74,7 +74,7 @@ export const styles = StyleSheet.create({
     height: 500,
     justifyContent: 'center',
     padding: 10,
-    width: 400,
+    width: 440,
   },
   gameboy: {
     justifyContent: 'center',
@@ -82,7 +82,7 @@ export const styles = StyleSheet.create({
     backgroundColor: '#990011',
     borderRadius: 20,
     paddingBottom: 30,
-    paddingHorizontal: 50,
+    paddingHorizontal: 30,
   },
   title: {
     fontSize: 30,

@@ -3,6 +3,7 @@ import React from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import Navigation from './src/client/navigation';
+import './web/index.css';
 
 export default function App(): JSX.Element | null {
   // Prevent window from scrolling on Space button click
