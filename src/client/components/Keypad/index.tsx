@@ -105,12 +105,12 @@ const Keypad = (props: Props): JSX.Element => {
           {showPauseButton &&
             <RoundButton
               disabled={isButtonDisabled}
-              color={isButtonDisabled ? '#c0c0c0' : '#efcc19'} size={50} label={isPause ? 'Play(P)' : 'Pause(P)'} text={isPause ? '▶' : '||' }
+              color={isButtonDisabled ? '#c0c0c0' : '#efcc19'} size={50} label={isPause ? 'Play' : 'Pause'} text={isPause ? '▶' : '||' }
               onPress={() => socketEmitPlayPause()}
             />}
           <RoundButton
             disabled={isButtonDisabled}
-            color={isButtonDisabled ? '#c0c0c0' : '#2dc421'} size={50} label="Sound(S)"
+            color={isButtonDisabled ? '#c0c0c0' : '#2dc421'} size={50} label="Sound"
             onPress={() => keyDown(keyboard.sound)}
           />
           {showSpeedModeButton &&
@@ -121,7 +121,7 @@ const Keypad = (props: Props): JSX.Element => {
           />}
           <RoundButton
             disabled={isButtonDisabled}
-            color={isButtonDisabled ? '#c0c0c0' : '#efcc19'} size={50} label="Reset(R)"
+            color={isButtonDisabled ? '#c0c0c0' : '#efcc19'} size={50} label="Reset"
             onPress={() => keyDown(keyboard.reset)}
           />
           <RoundButton

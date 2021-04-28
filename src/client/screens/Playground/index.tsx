@@ -9,7 +9,6 @@ import { useNavigation } from '@react-navigation/native';
 import { SOCKETS, SCORING } from '/config/constants';
 import { blankMatrix, blockMatrix, penaltyLine } from '/client/constants/tetriminos';
 import { ChatWidget, addResponseMessage, dropMessages } from '/client/components/Chat';
-import Digits from '/client/components/Digits';
 import { formatChatSubtitle, formatChatTitle, roomPlayersNames, convertMatrixToSpectrum } from '/client/screens/Playground/utils';
 import Gameboy from '/client/components/Gameboy';
 import Matrix from '/client/components/Matrix';
@@ -281,37 +280,48 @@ export default function Playground(): JSX.Element {
     }
   }, speedMode ? 200 : 500);
 
+  // TODO: rm after debugging
+  // const fakePlayersSpectrums = [{id: '1', username: 'a', spectrum: blankMatrix}, {id: '2', username: 'b', spectrum: blankMatrix}, {id: '3', username: 'c', spectrum: blankMatrix}, {id: '4', username: 'd', spectrum: blankMatrix}];
+
   return (
     <>
       <Gameboy isPause={isPause} setIsPause={setIsPause} roomPlayers={roomPlayersNames(roomPlayers)} isLeader={player?.isLeader} gameStarted={gameStarted} gameover={gameover} isSoloMode={isSoloMode} speedMode={speedMode}>
         <>
           {username && room &&
-            <Text style={{ fontSize: 16, marginBottom: 10, alignSelf: 'flex-start' }}>{username} @ {room}</Text>
+            <Text style={{ fontSize: 16, marginBottom: 5, alignSelf: 'flex-start' }}>{username} @ {room}</Text>
           }
-          <View style={{ position: 'absolute', zIndex: 1, marginLeft: 600 }}>
-            <Text>{player?.score}</Text>
-            {_.map(filteredOpponents(roomPlayers, userContext.username || ''), (player) =>
-              <View key={player.id} style={{ width: 85 }}>
-                <View style={{ alignItems: 'center' }}><Text style={{ fontWeight: 'bold', color: 'white' }}>{player.username}</Text></View>
-                <Matrix matrix={player.spectrum} isSpectrum={true} block={blockCreate({ type: tileStack[0], pos: [-10, -10] })}/>
-              </View>)
-            }
-          </View>
           <View style={{ flexDirection: 'row', alignSelf:'flex-start', width: '100%' }}>
             <Matrix matrix={matrix} block={block}/>
-            <View style={{ marginLeft: 20, flex: 1 }} >
-              <Text style={{ fontSize: 20 }}>Score</Text>
-              <Digits style={{ marginVertical: 10, alignSelf: 'flex-end' }} />
-              <Text style={{ fontSize: 20 }}>Start Line</Text>
-              <Digits style={{ marginVertical: 10, alignSelf: 'flex-end' }} />
-              <Text style={{ fontSize: 20 }}>Level</Text>
-              <Digits style={{ marginVertical: 10, alignSelf: 'flex-end' }} />
-              <Text style={{ fontSize: 20 }}>Next</Text>
-              <Matrix
-                matrix={blockMatrix}
-                block={blockCreate({ type: tileStack[0], pos: [0, 0] })}
-                style={{ borderWidth: 0, marginVertical: 10, alignSelf: 'flex-end' }}
-              />
+            <View style={{ marginLeft: 10, flex: 1, justifyContent: 'space-around' }}>
+              <View style={{ flexDirection: 'row' }}>
+                <Text style={{ fontSize: 20 }}>Score</Text>
+                <Text style={{ fontSize: 30, fontFamily: 'Digital', marginLeft: 10 }}>{player?.score || 0}</Text>
+              </View>
+              <View style={{ flexDirection: 'row' }}>
+                <Text style={{ fontSize: 20 }}>Next</Text>
+                <Matrix
+                  matrix={blockMatrix}
+                  block={blockCreate({ type: tileStack[0], pos: [0, 0] })}
+                  style={{ marginLeft: 10, borderWidth: 0, marginVertical: 10 }}
+                />
+              </View>
+              {roomPlayers.length - 1 > 0 &&
+                <View style={{ height: 355, width: 175, flexWrap: 'wrap', alignContent: 'space-between' }}>
+                  {_.map(filteredOpponents(roomPlayers, userContext.username || ''), (player) =>
+                    <View key={player.id} style={{ width: 85 }}>
+                      <View style={{ alignItems: 'center' }}>
+                        <Text style={{ fontWeight: 'bold', fontSize: 12 }}>{player.username}</Text>
+                      </View>
+                      <Matrix
+                        matrix={player.spectrum}
+                        isSpectrum={true}
+                        block={blockCreate({ type: tileStack[0], pos: [-10, -10] })}
+                        style={{ borderWidth: 0 }}
+                      />
+                    </View>)
+                  }
+                </View>
+              }
             </View>
           </View>
         </>

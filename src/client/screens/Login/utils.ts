@@ -1,7 +1,7 @@
 import axios from 'axios';
 import _ from 'lodash';
 
-import { maxPlayersLimit } from '/client/constants/game';
+import { maxPlayersLimit } from '/config/constants';
 
 export const isEmpty = (value?: string | null): boolean => value === undefined || value === null || value === '';
 

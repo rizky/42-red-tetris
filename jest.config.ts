@@ -162,7 +162,6 @@ export default {
   testPathIgnorePatterns: [
     '/node_modules/',
     './src/client/components/Chat',
-    './src/client/components/Digits',
   ],
 
   // The regexp pattern or array of patterns that Jest uses to detect test files
