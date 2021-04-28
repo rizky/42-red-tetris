@@ -110,7 +110,7 @@ export default function Playground(): JSX.Element {
   };
 
   const socketReceiveRedirectToRanking = () => {
-    navigation.push('Ranking', { username, room });
+    navigation.replace('Ranking', { username, room });
   };
 
   const socketEmitGameover = () => {
