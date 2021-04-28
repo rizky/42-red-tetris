@@ -36,6 +36,7 @@ export default function Playground(): JSX.Element {
   const [roomLeader, setRoomLeader] = useState<PlayerType>();
   const [gameover, setGameover] = useState<boolean>(false);
   const [gameStarted, setGameStarted] = useState<boolean>(false);
+  const [speedMode, setSpeedMode] = useState<boolean>(false);
   const isSoloMode = _.includes(userContext.room, 'solo') || _.includes(room, 'solo'); // works both for context and URL params
 
   const filteredOpponents = (roomPlayers: PlayerType[], currentPlayerUsername: string) => {
@@ -160,6 +161,10 @@ export default function Playground(): JSX.Element {
     setTileStack((prevTileStack) => [...prevTileStack, ...tileStack]);
   };
 
+  const socketReceiveSpeedMode = () => {
+    setSpeedMode((prevSpeedMode) => !prevSpeedMode);
+  };
+
   useEffect(() => {
     dropMessages();
     /*
@@ -187,13 +192,15 @@ export default function Playground(): JSX.Element {
     // Receive more tetris tiles
     socket.on(SOCKETS.MORE_TETRIS_TILES, socketReceiveMoreTetrisTiles);
 
+    // Receive speed mode socket
+    socket.on(SOCKETS.SPEED_MODE, socketReceiveSpeedMode);
+
     if (!isSoloMode) {
       // Message from server
       socket.on(SOCKETS.CHAT_MESSAGE, socketChatMessage);
 
       // When new players join the room
       socket.on(SOCKETS.UPDATE_ROOM_PLAYERS, socketUpdateRoomPlayers);
-
 
       // Pause playgound matrix
       socket.on(SOCKETS.PAUSE_GAME, socketReceivePauseGame);
@@ -272,11 +279,11 @@ export default function Playground(): JSX.Element {
         }
       });
     }
-  }, 500);
+  }, speedMode ? 200 : 500);
 
   return (
     <>
-      <Gameboy isPause={isPause} setIsPause={setIsPause} roomPlayers={roomPlayersNames(roomPlayers)} isLeader={player?.isLeader} gameStarted={gameStarted} gameover={gameover} isSoloMode={isSoloMode}>
+      <Gameboy isPause={isPause} setIsPause={setIsPause} roomPlayers={roomPlayersNames(roomPlayers)} isLeader={player?.isLeader} gameStarted={gameStarted} gameover={gameover} isSoloMode={isSoloMode} speedMode={speedMode}>
         <>
           {username && room &&
             <Text style={{ fontSize: 16, marginBottom: 10, alignSelf: 'flex-start' }}>{username} @ {room}</Text>
