@@ -4,7 +4,7 @@ export const keyboard = {
   'right': 39,
   'down': 40,
   'space': 32,
-  'sound': 83,
+  // 'sound': 83,
   'reset': 82,
   // 'pause': 80,
 };

@@ -13,6 +13,9 @@ export default function App(): JSX.Element | null {
     }
   });
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  (window as any).soundManager.setup({debugMode: false}); // To stop react-sound from console logs in dev mode
+
   return (
     <SafeAreaProvider>
       <Navigation />
