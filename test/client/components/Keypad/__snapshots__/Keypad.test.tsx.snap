@@ -1,0 +1,1565 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Snapshots should render Keypad for Login and Ranking screens 1`] = `
+<View
+  style={
+    Object {
+      "width": 400,
+    }
+  }
+>
+  <View
+    style={
+      Object {
+        "width": "100%",
+      }
+    }
+  >
+    <View
+      style={
+        Object {
+          "flexDirection": "row",
+          "justifyContent": "space-between",
+          "marginVertical": 20,
+        }
+      }
+    >
+      <RoundButton
+        color="#c0c0c0"
+        disabled={true}
+        label="Reset"
+        onPress={[Function]}
+        size={50}
+      />
+      <RoundButton
+        color="white"
+        label="Exit"
+        onPress={[Function]}
+        size={50}
+        style={
+          Object {
+            "margin": 0,
+          }
+        }
+        text="╳"
+      />
+    </View>
+    <View
+      style={
+        Object {
+          "alignItems": "center",
+          "flexDirection": "row",
+          "marginTop": 20,
+        }
+      }
+    >
+      <View
+        style={
+          Object {
+            "marginRight": 20,
+          }
+        }
+      >
+        <RoundButton
+          color="#c0c0c0"
+          disabled={true}
+          label="Drop(Space)"
+          onPress={[Function]}
+          size={160}
+          style={
+            Object {
+              "marginTop": 20,
+            }
+          }
+        />
+      </View>
+      <View
+        style={
+          Object {
+            "marginLeft": 20,
+          }
+        }
+      >
+        <RoundButton
+          color="#c0c0c0"
+          disabled={true}
+          onPress={[Function]}
+          size={70}
+          style={
+            Object {
+              "margin": 0,
+            }
+          }
+        />
+        <View
+          style={
+            Object {
+              "flexDirection": "row",
+            }
+          }
+        >
+          <RoundButton
+            color="#c0c0c0"
+            disabled={true}
+            onPress={[Function]}
+            size={70}
+            style={
+              Object {
+                "margin": 0,
+                "marginRight": 60,
+              }
+            }
+          />
+          <RoundButton
+            color="#c0c0c0"
+            disabled={true}
+            onPress={[Function]}
+            size={70}
+            style={
+              Object {
+                "margin": 0,
+              }
+            }
+          />
+        </View>
+        <RoundButton
+          color="#c0c0c0"
+          disabled={true}
+          onPress={[Function]}
+          size={70}
+          style={
+            Object {
+              "margin": 0,
+            }
+          }
+        />
+      </View>
+    </View>
+  </View>
+  <Sound
+    autoLoad={true}
+    loop={true}
+    onBufferChange={[Function]}
+    onError={[Function]}
+    onFinishedPlaying={[Function]}
+    onLoad={[Function]}
+    onLoading={[Function]}
+    onPause={[Function]}
+    onPlaying={[Function]}
+    onResume={[Function]}
+    onStop={[Function]}
+    playStatus="STOPPED"
+    playbackRate={1}
+    url="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-10.mp3"
+    volume={100}
+  />
+</View>
+`;
+
+exports[`Snapshots should render Keypad for Multiplayer Playground screen: isLeader, gameStarted, not isPause 1`] = `
+<View
+  style={
+    Object {
+      "width": 400,
+    }
+  }
+>
+  <View
+    style={
+      Object {
+        "width": "100%",
+      }
+    }
+  >
+    <View
+      style={
+        Object {
+          "flexDirection": "row",
+          "justifyContent": "space-between",
+          "marginVertical": 20,
+        }
+      }
+    >
+      <RoundButton
+        color="#efcc19"
+        disabled={false}
+        label="Pause"
+        onPress={[Function]}
+        size={50}
+        text="||"
+      />
+      <RoundButton
+        color="white"
+        disabled={false}
+        label="Super speed"
+        onPress={[Function]}
+        size={50}
+        text="off"
+      />
+      <RoundButton
+        color="#efcc19"
+        disabled={false}
+        label="Reset"
+        onPress={[Function]}
+        size={50}
+      />
+      <RoundButton
+        color="white"
+        label="Sound"
+        onPress={[Function]}
+        size={50}
+        text="🤫"
+      />
+      <RoundButton
+        color="white"
+        label="Exit"
+        onPress={[Function]}
+        size={50}
+        style={
+          Object {
+            "margin": 0,
+          }
+        }
+        text="╳"
+      />
+    </View>
+    <View
+      style={
+        Object {
+          "alignItems": "center",
+          "flexDirection": "row",
+          "marginTop": 20,
+        }
+      }
+    >
+      <View
+        style={
+          Object {
+            "marginRight": 20,
+          }
+        }
+      >
+        <RoundButton
+          color="#5a65f1"
+          disabled={false}
+          label="Drop(Space)"
+          onPress={[Function]}
+          size={160}
+          style={
+            Object {
+              "marginTop": 20,
+            }
+          }
+        />
+      </View>
+      <View
+        style={
+          Object {
+            "marginLeft": 20,
+          }
+        }
+      >
+        <RoundButton
+          color="#5a65f1"
+          disabled={false}
+          onPress={[Function]}
+          size={70}
+          style={
+            Object {
+              "margin": 0,
+            }
+          }
+        />
+        <View
+          style={
+            Object {
+              "flexDirection": "row",
+            }
+          }
+        >
+          <RoundButton
+            color="#5a65f1"
+            disabled={false}
+            onPress={[Function]}
+            size={70}
+            style={
+              Object {
+                "margin": 0,
+                "marginRight": 60,
+              }
+            }
+          />
+          <RoundButton
+            color="#5a65f1"
+            disabled={false}
+            onPress={[Function]}
+            size={70}
+            style={
+              Object {
+                "margin": 0,
+              }
+            }
+          />
+        </View>
+        <RoundButton
+          color="#5a65f1"
+          disabled={false}
+          onPress={[Function]}
+          size={70}
+          style={
+            Object {
+              "margin": 0,
+            }
+          }
+        />
+      </View>
+    </View>
+  </View>
+  <Sound
+    autoLoad={true}
+    loop={true}
+    onBufferChange={[Function]}
+    onError={[Function]}
+    onFinishedPlaying={[Function]}
+    onLoad={[Function]}
+    onLoading={[Function]}
+    onPause={[Function]}
+    onPlaying={[Function]}
+    onResume={[Function]}
+    onStop={[Function]}
+    playStatus="STOPPED"
+    playbackRate={1}
+    url="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-10.mp3"
+    volume={100}
+  />
+</View>
+`;
+
+exports[`Snapshots should render Keypad for Multiplayer Playground screen: isLeader, not gameStarted, isPause 1`] = `
+<View
+  style={
+    Object {
+      "width": 400,
+    }
+  }
+>
+  <View
+    style={
+      Object {
+        "width": "100%",
+      }
+    }
+  >
+    <View
+      style={
+        Object {
+          "flexDirection": "row",
+          "justifyContent": "space-between",
+          "marginVertical": 20,
+        }
+      }
+    >
+      <RoundButton
+        color="#2dc421"
+        disabled={false}
+        label="Start"
+        onPress={[Function]}
+        size={50}
+        text="▶"
+      />
+      <RoundButton
+        color="white"
+        disabled={false}
+        label="Super speed"
+        onPress={[Function]}
+        size={50}
+        text="off"
+      />
+      <RoundButton
+        color="#efcc19"
+        disabled={false}
+        label="Reset"
+        onPress={[Function]}
+        size={50}
+      />
+      <RoundButton
+        color="white"
+        label="Sound"
+        onPress={[Function]}
+        size={50}
+        text="🤫"
+      />
+      <RoundButton
+        color="white"
+        label="Exit"
+        onPress={[Function]}
+        size={50}
+        style={
+          Object {
+            "margin": 0,
+          }
+        }
+        text="╳"
+      />
+    </View>
+    <View
+      style={
+        Object {
+          "alignItems": "center",
+          "flexDirection": "row",
+          "marginTop": 20,
+        }
+      }
+    >
+      <View
+        style={
+          Object {
+            "marginRight": 20,
+          }
+        }
+      >
+        <RoundButton
+          color="#5a65f1"
+          disabled={true}
+          label="Drop(Space)"
+          onPress={[Function]}
+          size={160}
+          style={
+            Object {
+              "marginTop": 20,
+            }
+          }
+        />
+      </View>
+      <View
+        style={
+          Object {
+            "marginLeft": 20,
+          }
+        }
+      >
+        <RoundButton
+          color="#5a65f1"
+          disabled={true}
+          onPress={[Function]}
+          size={70}
+          style={
+            Object {
+              "margin": 0,
+            }
+          }
+        />
+        <View
+          style={
+            Object {
+              "flexDirection": "row",
+            }
+          }
+        >
+          <RoundButton
+            color="#5a65f1"
+            disabled={true}
+            onPress={[Function]}
+            size={70}
+            style={
+              Object {
+                "margin": 0,
+                "marginRight": 60,
+              }
+            }
+          />
+          <RoundButton
+            color="#5a65f1"
+            disabled={true}
+            onPress={[Function]}
+            size={70}
+            style={
+              Object {
+                "margin": 0,
+              }
+            }
+          />
+        </View>
+        <RoundButton
+          color="#5a65f1"
+          disabled={true}
+          onPress={[Function]}
+          size={70}
+          style={
+            Object {
+              "margin": 0,
+            }
+          }
+        />
+      </View>
+    </View>
+  </View>
+  <Sound
+    autoLoad={true}
+    loop={true}
+    onBufferChange={[Function]}
+    onError={[Function]}
+    onFinishedPlaying={[Function]}
+    onLoad={[Function]}
+    onLoading={[Function]}
+    onPause={[Function]}
+    onPlaying={[Function]}
+    onResume={[Function]}
+    onStop={[Function]}
+    playStatus="STOPPED"
+    playbackRate={1}
+    url="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-10.mp3"
+    volume={100}
+  />
+</View>
+`;
+
+exports[`Snapshots should render Keypad for Multiplayer Playground screen: not isLeader, gameStarted, isPause, gameover 1`] = `
+<View
+  style={
+    Object {
+      "width": 400,
+    }
+  }
+>
+  <View
+    style={
+      Object {
+        "width": "100%",
+      }
+    }
+  >
+    <View
+      style={
+        Object {
+          "flexDirection": "row",
+          "justifyContent": "space-between",
+          "marginVertical": 20,
+        }
+      }
+    >
+      <RoundButton
+        color="#c0c0c0"
+        disabled={true}
+        label="Super speed"
+        onPress={[Function]}
+        size={50}
+        text="off"
+      />
+      <RoundButton
+        color="#c0c0c0"
+        disabled={true}
+        label="Reset"
+        onPress={[Function]}
+        size={50}
+      />
+      <RoundButton
+        color="white"
+        label="Sound"
+        onPress={[Function]}
+        size={50}
+        text="🤫"
+      />
+      <RoundButton
+        color="white"
+        label="Exit"
+        onPress={[Function]}
+        size={50}
+        style={
+          Object {
+            "margin": 0,
+          }
+        }
+        text="╳"
+      />
+    </View>
+    <View
+      style={
+        Object {
+          "alignItems": "center",
+          "flexDirection": "row",
+          "marginTop": 20,
+        }
+      }
+    >
+      <View
+        style={
+          Object {
+            "marginRight": 20,
+          }
+        }
+      >
+        <RoundButton
+          color="#c0c0c0"
+          disabled={true}
+          label="Drop(Space)"
+          onPress={[Function]}
+          size={160}
+          style={
+            Object {
+              "marginTop": 20,
+            }
+          }
+        />
+      </View>
+      <View
+        style={
+          Object {
+            "marginLeft": 20,
+          }
+        }
+      >
+        <RoundButton
+          color="#c0c0c0"
+          disabled={true}
+          onPress={[Function]}
+          size={70}
+          style={
+            Object {
+              "margin": 0,
+            }
+          }
+        />
+        <View
+          style={
+            Object {
+              "flexDirection": "row",
+            }
+          }
+        >
+          <RoundButton
+            color="#c0c0c0"
+            disabled={true}
+            onPress={[Function]}
+            size={70}
+            style={
+              Object {
+                "margin": 0,
+                "marginRight": 60,
+              }
+            }
+          />
+          <RoundButton
+            color="#c0c0c0"
+            disabled={true}
+            onPress={[Function]}
+            size={70}
+            style={
+              Object {
+                "margin": 0,
+              }
+            }
+          />
+        </View>
+        <RoundButton
+          color="#c0c0c0"
+          disabled={true}
+          onPress={[Function]}
+          size={70}
+          style={
+            Object {
+              "margin": 0,
+            }
+          }
+        />
+      </View>
+    </View>
+  </View>
+  <Sound
+    autoLoad={true}
+    loop={true}
+    onBufferChange={[Function]}
+    onError={[Function]}
+    onFinishedPlaying={[Function]}
+    onLoad={[Function]}
+    onLoading={[Function]}
+    onPause={[Function]}
+    onPlaying={[Function]}
+    onResume={[Function]}
+    onStop={[Function]}
+    playStatus="STOPPED"
+    playbackRate={1}
+    url="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-10.mp3"
+    volume={100}
+  />
+</View>
+`;
+
+exports[`Snapshots should render Keypad for Multiplayer Playground screen: not isLeader, gameStarted, not isPause 1`] = `
+<View
+  style={
+    Object {
+      "width": 400,
+    }
+  }
+>
+  <View
+    style={
+      Object {
+        "width": "100%",
+      }
+    }
+  >
+    <View
+      style={
+        Object {
+          "flexDirection": "row",
+          "justifyContent": "space-between",
+          "marginVertical": 20,
+        }
+      }
+    >
+      <RoundButton
+        color="white"
+        disabled={false}
+        label="Super speed"
+        onPress={[Function]}
+        size={50}
+        text="off"
+      />
+      <RoundButton
+        color="#efcc19"
+        disabled={false}
+        label="Reset"
+        onPress={[Function]}
+        size={50}
+      />
+      <RoundButton
+        color="white"
+        label="Sound"
+        onPress={[Function]}
+        size={50}
+        text="🤫"
+      />
+      <RoundButton
+        color="white"
+        label="Exit"
+        onPress={[Function]}
+        size={50}
+        style={
+          Object {
+            "margin": 0,
+          }
+        }
+        text="╳"
+      />
+    </View>
+    <View
+      style={
+        Object {
+          "alignItems": "center",
+          "flexDirection": "row",
+          "marginTop": 20,
+        }
+      }
+    >
+      <View
+        style={
+          Object {
+            "marginRight": 20,
+          }
+        }
+      >
+        <RoundButton
+          color="#5a65f1"
+          disabled={false}
+          label="Drop(Space)"
+          onPress={[Function]}
+          size={160}
+          style={
+            Object {
+              "marginTop": 20,
+            }
+          }
+        />
+      </View>
+      <View
+        style={
+          Object {
+            "marginLeft": 20,
+          }
+        }
+      >
+        <RoundButton
+          color="#5a65f1"
+          disabled={false}
+          onPress={[Function]}
+          size={70}
+          style={
+            Object {
+              "margin": 0,
+            }
+          }
+        />
+        <View
+          style={
+            Object {
+              "flexDirection": "row",
+            }
+          }
+        >
+          <RoundButton
+            color="#5a65f1"
+            disabled={false}
+            onPress={[Function]}
+            size={70}
+            style={
+              Object {
+                "margin": 0,
+                "marginRight": 60,
+              }
+            }
+          />
+          <RoundButton
+            color="#5a65f1"
+            disabled={false}
+            onPress={[Function]}
+            size={70}
+            style={
+              Object {
+                "margin": 0,
+              }
+            }
+          />
+        </View>
+        <RoundButton
+          color="#5a65f1"
+          disabled={false}
+          onPress={[Function]}
+          size={70}
+          style={
+            Object {
+              "margin": 0,
+            }
+          }
+        />
+      </View>
+    </View>
+  </View>
+  <Sound
+    autoLoad={true}
+    loop={true}
+    onBufferChange={[Function]}
+    onError={[Function]}
+    onFinishedPlaying={[Function]}
+    onLoad={[Function]}
+    onLoading={[Function]}
+    onPause={[Function]}
+    onPlaying={[Function]}
+    onResume={[Function]}
+    onStop={[Function]}
+    playStatus="STOPPED"
+    playbackRate={1}
+    url="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-10.mp3"
+    volume={100}
+  />
+</View>
+`;
+
+exports[`Snapshots should render Keypad for Multiplayer Playground screen: not isLeader, not gameStarted, isPause 1`] = `
+<View
+  style={
+    Object {
+      "width": 400,
+    }
+  }
+>
+  <View
+    style={
+      Object {
+        "width": "100%",
+      }
+    }
+  >
+    <View
+      style={
+        Object {
+          "flexDirection": "row",
+          "justifyContent": "space-between",
+          "marginVertical": 20,
+        }
+      }
+    >
+      <RoundButton
+        color="white"
+        disabled={false}
+        label="Super speed"
+        onPress={[Function]}
+        size={50}
+        text="off"
+      />
+      <RoundButton
+        color="#efcc19"
+        disabled={false}
+        label="Reset"
+        onPress={[Function]}
+        size={50}
+      />
+      <RoundButton
+        color="white"
+        label="Sound"
+        onPress={[Function]}
+        size={50}
+        text="🤫"
+      />
+      <RoundButton
+        color="white"
+        label="Exit"
+        onPress={[Function]}
+        size={50}
+        style={
+          Object {
+            "margin": 0,
+          }
+        }
+        text="╳"
+      />
+    </View>
+    <View
+      style={
+        Object {
+          "alignItems": "center",
+          "flexDirection": "row",
+          "marginTop": 20,
+        }
+      }
+    >
+      <View
+        style={
+          Object {
+            "marginRight": 20,
+          }
+        }
+      >
+        <RoundButton
+          color="#5a65f1"
+          disabled={true}
+          label="Drop(Space)"
+          onPress={[Function]}
+          size={160}
+          style={
+            Object {
+              "marginTop": 20,
+            }
+          }
+        />
+      </View>
+      <View
+        style={
+          Object {
+            "marginLeft": 20,
+          }
+        }
+      >
+        <RoundButton
+          color="#5a65f1"
+          disabled={true}
+          onPress={[Function]}
+          size={70}
+          style={
+            Object {
+              "margin": 0,
+            }
+          }
+        />
+        <View
+          style={
+            Object {
+              "flexDirection": "row",
+            }
+          }
+        >
+          <RoundButton
+            color="#5a65f1"
+            disabled={true}
+            onPress={[Function]}
+            size={70}
+            style={
+              Object {
+                "margin": 0,
+                "marginRight": 60,
+              }
+            }
+          />
+          <RoundButton
+            color="#5a65f1"
+            disabled={true}
+            onPress={[Function]}
+            size={70}
+            style={
+              Object {
+                "margin": 0,
+              }
+            }
+          />
+        </View>
+        <RoundButton
+          color="#5a65f1"
+          disabled={true}
+          onPress={[Function]}
+          size={70}
+          style={
+            Object {
+              "margin": 0,
+            }
+          }
+        />
+      </View>
+    </View>
+  </View>
+  <Sound
+    autoLoad={true}
+    loop={true}
+    onBufferChange={[Function]}
+    onError={[Function]}
+    onFinishedPlaying={[Function]}
+    onLoad={[Function]}
+    onLoading={[Function]}
+    onPause={[Function]}
+    onPlaying={[Function]}
+    onResume={[Function]}
+    onStop={[Function]}
+    playStatus="STOPPED"
+    playbackRate={1}
+    url="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-10.mp3"
+    volume={100}
+  />
+</View>
+`;
+
+exports[`Snapshots should render Keypad for Solo Playground screen: gameStarted, isPause 1`] = `
+<View
+  style={
+    Object {
+      "width": 400,
+    }
+  }
+>
+  <View
+    style={
+      Object {
+        "width": "100%",
+      }
+    }
+  >
+    <View
+      style={
+        Object {
+          "flexDirection": "row",
+          "justifyContent": "space-between",
+          "marginVertical": 20,
+        }
+      }
+    >
+      <RoundButton
+        color="#efcc19"
+        disabled={false}
+        label="Play"
+        onPress={[Function]}
+        size={50}
+        text="▶"
+      />
+      <RoundButton
+        color="white"
+        disabled={false}
+        label="Super speed"
+        onPress={[Function]}
+        size={50}
+        text="off"
+      />
+      <RoundButton
+        color="#efcc19"
+        disabled={false}
+        label="Reset"
+        onPress={[Function]}
+        size={50}
+      />
+      <RoundButton
+        color="white"
+        label="Sound"
+        onPress={[Function]}
+        size={50}
+        text="🤫"
+      />
+      <RoundButton
+        color="white"
+        label="Exit"
+        onPress={[Function]}
+        size={50}
+        style={
+          Object {
+            "margin": 0,
+          }
+        }
+        text="╳"
+      />
+    </View>
+    <View
+      style={
+        Object {
+          "alignItems": "center",
+          "flexDirection": "row",
+          "marginTop": 20,
+        }
+      }
+    >
+      <View
+        style={
+          Object {
+            "marginRight": 20,
+          }
+        }
+      >
+        <RoundButton
+          color="#5a65f1"
+          disabled={true}
+          label="Drop(Space)"
+          onPress={[Function]}
+          size={160}
+          style={
+            Object {
+              "marginTop": 20,
+            }
+          }
+        />
+      </View>
+      <View
+        style={
+          Object {
+            "marginLeft": 20,
+          }
+        }
+      >
+        <RoundButton
+          color="#5a65f1"
+          disabled={true}
+          onPress={[Function]}
+          size={70}
+          style={
+            Object {
+              "margin": 0,
+            }
+          }
+        />
+        <View
+          style={
+            Object {
+              "flexDirection": "row",
+            }
+          }
+        >
+          <RoundButton
+            color="#5a65f1"
+            disabled={true}
+            onPress={[Function]}
+            size={70}
+            style={
+              Object {
+                "margin": 0,
+                "marginRight": 60,
+              }
+            }
+          />
+          <RoundButton
+            color="#5a65f1"
+            disabled={true}
+            onPress={[Function]}
+            size={70}
+            style={
+              Object {
+                "margin": 0,
+              }
+            }
+          />
+        </View>
+        <RoundButton
+          color="#5a65f1"
+          disabled={true}
+          onPress={[Function]}
+          size={70}
+          style={
+            Object {
+              "margin": 0,
+            }
+          }
+        />
+      </View>
+    </View>
+  </View>
+  <Sound
+    autoLoad={true}
+    loop={true}
+    onBufferChange={[Function]}
+    onError={[Function]}
+    onFinishedPlaying={[Function]}
+    onLoad={[Function]}
+    onLoading={[Function]}
+    onPause={[Function]}
+    onPlaying={[Function]}
+    onResume={[Function]}
+    onStop={[Function]}
+    playStatus="STOPPED"
+    playbackRate={1}
+    url="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-10.mp3"
+    volume={100}
+  />
+</View>
+`;
+
+exports[`Snapshots should render Keypad for Solo Playground screen: gameStarted, not isPause 1`] = `
+<View
+  style={
+    Object {
+      "width": 400,
+    }
+  }
+>
+  <View
+    style={
+      Object {
+        "width": "100%",
+      }
+    }
+  >
+    <View
+      style={
+        Object {
+          "flexDirection": "row",
+          "justifyContent": "space-between",
+          "marginVertical": 20,
+        }
+      }
+    >
+      <RoundButton
+        color="#efcc19"
+        disabled={false}
+        label="Pause"
+        onPress={[Function]}
+        size={50}
+        text="||"
+      />
+      <RoundButton
+        color="white"
+        disabled={false}
+        label="Super speed"
+        onPress={[Function]}
+        size={50}
+        text="off"
+      />
+      <RoundButton
+        color="#efcc19"
+        disabled={false}
+        label="Reset"
+        onPress={[Function]}
+        size={50}
+      />
+      <RoundButton
+        color="white"
+        label="Sound"
+        onPress={[Function]}
+        size={50}
+        text="🤫"
+      />
+      <RoundButton
+        color="white"
+        label="Exit"
+        onPress={[Function]}
+        size={50}
+        style={
+          Object {
+            "margin": 0,
+          }
+        }
+        text="╳"
+      />
+    </View>
+    <View
+      style={
+        Object {
+          "alignItems": "center",
+          "flexDirection": "row",
+          "marginTop": 20,
+        }
+      }
+    >
+      <View
+        style={
+          Object {
+            "marginRight": 20,
+          }
+        }
+      >
+        <RoundButton
+          color="#5a65f1"
+          disabled={false}
+          label="Drop(Space)"
+          onPress={[Function]}
+          size={160}
+          style={
+            Object {
+              "marginTop": 20,
+            }
+          }
+        />
+      </View>
+      <View
+        style={
+          Object {
+            "marginLeft": 20,
+          }
+        }
+      >
+        <RoundButton
+          color="#5a65f1"
+          disabled={false}
+          onPress={[Function]}
+          size={70}
+          style={
+            Object {
+              "margin": 0,
+            }
+          }
+        />
+        <View
+          style={
+            Object {
+              "flexDirection": "row",
+            }
+          }
+        >
+          <RoundButton
+            color="#5a65f1"
+            disabled={false}
+            onPress={[Function]}
+            size={70}
+            style={
+              Object {
+                "margin": 0,
+                "marginRight": 60,
+              }
+            }
+          />
+          <RoundButton
+            color="#5a65f1"
+            disabled={false}
+            onPress={[Function]}
+            size={70}
+            style={
+              Object {
+                "margin": 0,
+              }
+            }
+          />
+        </View>
+        <RoundButton
+          color="#5a65f1"
+          disabled={false}
+          onPress={[Function]}
+          size={70}
+          style={
+            Object {
+              "margin": 0,
+            }
+          }
+        />
+      </View>
+    </View>
+  </View>
+  <Sound
+    autoLoad={true}
+    loop={true}
+    onBufferChange={[Function]}
+    onError={[Function]}
+    onFinishedPlaying={[Function]}
+    onLoad={[Function]}
+    onLoading={[Function]}
+    onPause={[Function]}
+    onPlaying={[Function]}
+    onResume={[Function]}
+    onStop={[Function]}
+    playStatus="STOPPED"
+    playbackRate={1}
+    url="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-10.mp3"
+    volume={100}
+  />
+</View>
+`;
+
+exports[`Snapshots should render Keypad for Solo Playground screen: not gameStarted, isPause 1`] = `
+<View
+  style={
+    Object {
+      "width": 400,
+    }
+  }
+>
+  <View
+    style={
+      Object {
+        "width": "100%",
+      }
+    }
+  >
+    <View
+      style={
+        Object {
+          "flexDirection": "row",
+          "justifyContent": "space-between",
+          "marginVertical": 20,
+        }
+      }
+    >
+      <RoundButton
+        color="#2dc421"
+        disabled={false}
+        label="Start"
+        onPress={[Function]}
+        size={50}
+        text="▶"
+      />
+      <RoundButton
+        color="white"
+        disabled={false}
+        label="Super speed"
+        onPress={[Function]}
+        size={50}
+        text="off"
+      />
+      <RoundButton
+        color="#efcc19"
+        disabled={false}
+        label="Reset"
+        onPress={[Function]}
+        size={50}
+      />
+      <RoundButton
+        color="white"
+        label="Sound"
+        onPress={[Function]}
+        size={50}
+        text="🤫"
+      />
+      <RoundButton
+        color="white"
+        label="Exit"
+        onPress={[Function]}
+        size={50}
+        style={
+          Object {
+            "margin": 0,
+          }
+        }
+        text="╳"
+      />
+    </View>
+    <View
+      style={
+        Object {
+          "alignItems": "center",
+          "flexDirection": "row",
+          "marginTop": 20,
+        }
+      }
+    >
+      <View
+        style={
+          Object {
+            "marginRight": 20,
+          }
+        }
+      >
+        <RoundButton
+          color="#5a65f1"
+          disabled={true}
+          label="Drop(Space)"
+          onPress={[Function]}
+          size={160}
+          style={
+            Object {
+              "marginTop": 20,
+            }
+          }
+        />
+      </View>
+      <View
+        style={
+          Object {
+            "marginLeft": 20,
+          }
+        }
+      >
+        <RoundButton
+          color="#5a65f1"
+          disabled={true}
+          onPress={[Function]}
+          size={70}
+          style={
+            Object {
+              "margin": 0,
+            }
+          }
+        />
+        <View
+          style={
+            Object {
+              "flexDirection": "row",
+            }
+          }
+        >
+          <RoundButton
+            color="#5a65f1"
+            disabled={true}
+            onPress={[Function]}
+            size={70}
+            style={
+              Object {
+                "margin": 0,
+                "marginRight": 60,
+              }
+            }
+          />
+          <RoundButton
+            color="#5a65f1"
+            disabled={true}
+            onPress={[Function]}
+            size={70}
+            style={
+              Object {
+                "margin": 0,
+              }
+            }
+          />
+        </View>
+        <RoundButton
+          color="#5a65f1"
+          disabled={true}
+          onPress={[Function]}
+          size={70}
+          style={
+            Object {
+              "margin": 0,
+            }
+          }
+        />
+      </View>
+    </View>
+  </View>
+  <Sound
+    autoLoad={true}
+    loop={true}
+    onBufferChange={[Function]}
+    onError={[Function]}
+    onFinishedPlaying={[Function]}
+    onLoad={[Function]}
+    onLoading={[Function]}
+    onPause={[Function]}
+    onPlaying={[Function]}
+    onResume={[Function]}
+    onStop={[Function]}
+    playStatus="STOPPED"
+    playbackRate={1}
+    url="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-10.mp3"
+    volume={100}
+  />
+</View>
+`;

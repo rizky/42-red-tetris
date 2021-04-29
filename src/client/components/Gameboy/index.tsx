@@ -34,8 +34,6 @@ export default function Gameboy(props: Props): JSX.Element {
     scale = w / 560;
   }
 
-  const isKeypadDisabled = gameover;
-
   return (
     <View style={styles.container}>
       <View style={[styles.gameboy, { transform: [{ scale }] }]}>
@@ -48,7 +46,7 @@ export default function Gameboy(props: Props): JSX.Element {
             </View>
             : null}
         </View>
-        <Keypad isPause={isPause} setIsPause={setIsPause} opponentsNumber={opponentsNumber} isLeader={isLeader} gameStarted={gameStarted} disabled={isKeypadDisabled} isSoloMode={isSoloMode} speedMode={speedMode}/>
+        <Keypad isPause={isPause} setIsPause={setIsPause} opponentsNumber={opponentsNumber} isLeader={isLeader} gameStarted={gameStarted} gameover={gameover} isSoloMode={isSoloMode} speedMode={speedMode}/>
       </View>
     </View>
   );

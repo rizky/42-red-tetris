@@ -1,4 +1,4 @@
-import { TouchableOpacity, View, Text, ViewStyle } from 'react-native';
+import { View } from 'react-native';
 import React, { useContext, Dispatch, SetStateAction, useState } from 'react';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useNavigation } from '@react-navigation/native';
@@ -8,39 +8,7 @@ import { keyboard } from '/client/constants/keyboard';
 import { SOCKETS } from '/config/constants';
 import SocketContext from '/client/context/SocketContext';
 import UserContext from '/client/context/UserContext';
-
-const RoundButton = ({
-  size, color, label, style, onPress, disabled, text,
-}: {
-  size: number, color: string, label?: string,
-  style?: ViewStyle, onPress?: () => void, disabled?: boolean, text?: string,
-}): JSX.Element => {
-  const button = React.useRef<TouchableOpacity>(null);
-
-  return (
-    <View style={[{ alignItems: 'center' }, style]}>
-      <TouchableOpacity
-        ref={button}
-        disabled={disabled}
-        onPress={() => { button?.current?.blur(); onPress?.();}}
-        style={{
-          backgroundColor: color,
-          borderRadius: size / 2,
-          height: size,
-          width: size,
-          shadowColor: 'rgba(0,0,0, .4)',
-          shadowOffset: { height: 1, width: 1 },
-          shadowOpacity: 20,
-          shadowRadius: 5,
-          justifyContent: 'center',
-          alignItems: 'center',
-        }} >
-        {text && <Text style={{ fontSize: 25 }}>{text}</Text>}
-      </TouchableOpacity>
-      {label && <Text style={{ marginTop: 10 }}>{label}</Text>}
-    </View>
-  );
-};
+import RoundButton from '/client/components/RoundButton';
 
 type Props = {
   isPause?: boolean,
@@ -48,20 +16,20 @@ type Props = {
   opponentsNumber: number,
   isLeader?: boolean,
   gameStarted?: boolean,
-  disabled?: boolean,
+  gameover?: boolean,
   isSoloMode?: boolean,
   speedMode?: boolean,
 }
 
 const Keypad = (props: Props): JSX.Element => {
-  const { isPause, setIsPause, opponentsNumber, isLeader, gameStarted, disabled, isSoloMode, speedMode } = props;
+  const { isPause, setIsPause, opponentsNumber, isLeader, gameStarted, gameover, isSoloMode, speedMode } = props;
   const socket = useContext(SocketContext);
   const [musicPlaying, setMusicPlaying] = useState(false);
   const { userContext, setUserContext } = useContext(UserContext);
   const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'Playground'>>();
   const showStartButton = isLeader && !gameStarted;
   const showPauseButton = (isLeader && gameStarted);
-  const isButtonDisabled = !isSoloMode && (disabled || opponentsNumber < 1);
+  const isButtonDisabled = !isSoloMode && (gameover || opponentsNumber < 1);
   const showSpeedModeButton = speedMode !== undefined ? true : false; // Condition is true on Playground screen
   const showSoundButton = showSpeedModeButton;
 
