@@ -1,7 +1,8 @@
 import { TouchableOpacity, View, Text, ViewStyle } from 'react-native';
-import React, { useContext, Dispatch, SetStateAction } from 'react';
+import React, { useContext, Dispatch, SetStateAction, useState } from 'react';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useNavigation } from '@react-navigation/native';
+import Sound from 'react-sound';
 
 import { keyboard } from '/client/constants/keyboard';
 import { SOCKETS } from '/config/constants';
@@ -55,12 +56,14 @@ type Props = {
 const Keypad = (props: Props): JSX.Element => {
   const { isPause, setIsPause, opponentsNumber, isLeader, gameStarted, disabled, isSoloMode, speedMode } = props;
   const socket = useContext(SocketContext);
+  const [musicPlaying, setMusicPlaying] = useState(false);
   const { userContext, setUserContext } = useContext(UserContext);
   const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'Playground'>>();
   const showStartButton = isLeader && !gameStarted;
   const showPauseButton = (isLeader && gameStarted);
   const isButtonDisabled = !isSoloMode && (disabled || opponentsNumber < 1);
-  const showSpeedModeButton = speedMode !== undefined ? true : false;
+  const showSpeedModeButton = speedMode !== undefined ? true : false; // Condition is true on Playground screen
+  const showSoundButton = showSpeedModeButton;
 
   const socketEmitStartGame = () => {
     if (!socket) throw Error('No socket');
@@ -79,6 +82,7 @@ const Keypad = (props: Props): JSX.Element => {
     if (!socket) throw Error('No socket');
     setUserContext({username: undefined, room: undefined});
     if (setIsPause) setIsPause(true);
+    setMusicPlaying(false);
     socket.emit(SOCKETS.PLAYER_LEFT, userContext.username);
     navigation.navigate('Root');
   };
@@ -108,22 +112,22 @@ const Keypad = (props: Props): JSX.Element => {
               color={isButtonDisabled ? '#c0c0c0' : '#efcc19'} size={50} label={isPause ? 'Play' : 'Pause'} text={isPause ? '▶' : '||' }
               onPress={() => socketEmitPlayPause()}
             />}
-          <RoundButton
-            disabled={isButtonDisabled}
-            color={isButtonDisabled ? '#c0c0c0' : '#2dc421'} size={50} label="Sound"
-            onPress={() => keyDown(keyboard.sound)}
-          />
           {showSpeedModeButton &&
-          <RoundButton
-            disabled={isButtonDisabled}
-            color={isButtonDisabled ? '#c0c0c0' : 'white'} size={50} label="Super speed" text={speedMode ? 'on' : 'off'}
-            onPress={() => socketEmitSpeedMode()}
-          />}
+            <RoundButton
+              disabled={isButtonDisabled}
+              color={isButtonDisabled ? '#c0c0c0' : 'white'} size={50} label="Super speed" text={speedMode ? 'on' : 'off'}
+              onPress={() => socketEmitSpeedMode()}
+            />}
           <RoundButton
             disabled={isButtonDisabled}
             color={isButtonDisabled ? '#c0c0c0' : '#efcc19'} size={50} label="Reset"
             onPress={() => keyDown(keyboard.reset)}
           />
+          {showSoundButton &&
+            <RoundButton
+              color={'white'} size={50} label="Sound" text={musicPlaying ? '🎶' : '🤫' }
+              onPress={() => setMusicPlaying(!musicPlaying)}
+            />}
           <RoundButton
             color="white" size={50} style={{ margin: 0 }} label='Exit' text='╳'
             onPress={() => socketExitPage()}
@@ -163,6 +167,12 @@ const Keypad = (props: Props): JSX.Element => {
           </View>
         </View>
       </View>
+      <Sound
+        url={'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-10.mp3'}
+        playStatus={musicPlaying ? 'PLAYING' : 'STOPPED'}
+        loop={true}
+        autoLoad={true}
+      />
     </View>
   );
 };
