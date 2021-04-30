@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Snapshots should render ChatWidget 1`] = `
+<View
+  handleNewUserMessage={[MockFunction]}
+  subtitle="Chat subtitle"
+  title="Chat title"
+/>
+`;

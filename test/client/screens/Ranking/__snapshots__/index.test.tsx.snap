@@ -1,0 +1,83 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Snapshots should render Ranking screen 1`] = `
+<Gameboy>
+  <View
+    style={
+      Object {
+        "justifyContent": "space-between",
+      }
+    }
+  >
+    <Text
+      style={
+        Object {
+          "alignSelf": "center",
+          "fontSize": 26,
+          "fontWeight": "bold",
+          "marginBottom": "10%",
+        }
+      }
+    >
+      Game report
+    </Text>
+    <Text
+      style={
+        Object {
+          "alignSelf": "center",
+          "fontSize": 24,
+          "marginBottom": "10%",
+        }
+      }
+    >
+       @ 
+    </Text>
+    <View
+      style={
+        Object {
+          "flexDirection": "row",
+          "justifyContent": "space-between",
+          "width": 300,
+        }
+      }
+    >
+      <View>
+        <Text
+          style={
+            Object {
+              "fontSize": 18,
+              "fontWeight": "bold",
+            }
+          }
+        >
+          Place
+        </Text>
+      </View>
+      <View>
+        <Text
+          style={
+            Object {
+              "fontSize": 18,
+              "fontWeight": "bold",
+            }
+          }
+        >
+          Name
+        </Text>
+      </View>
+      <View>
+        <Text
+          style={
+            Object {
+              "fontSize": 18,
+              "fontWeight": "bold",
+            }
+          }
+        >
+          Score
+        </Text>
+      </View>
+    </View>
+  </View>
+</Gameboy>
+`;

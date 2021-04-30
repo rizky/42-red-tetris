@@ -23,7 +23,10 @@ export default Matrix;
 
 const styles = StyleSheet.create({
   container: {
-    padding: 2, justifyContent: 'space-between', borderColor: 'black', borderWidth: 1, backgroundColor: '#9ead86',
+    padding: 2,
+    justifyContent: 'space-between',
+    borderColor: 'black', borderWidth: 1,
+    backgroundColor: '#9ead86',
   },
 });
    
