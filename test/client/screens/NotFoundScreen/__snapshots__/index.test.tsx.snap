@@ -1,0 +1,46 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Snapshots should render NotFoundScreen screen 1`] = `
+<View
+  style={
+    Object {
+      "alignItems": "center",
+      "backgroundColor": "#fff",
+      "flex": 1,
+      "justifyContent": "center",
+      "padding": 20,
+    }
+  }
+>
+  <Text
+    style={
+      Object {
+        "fontSize": 20,
+        "fontWeight": "bold",
+      }
+    }
+  >
+    This screen doesn't exist.
+  </Text>
+  <ForwardRef
+    onPress={[Function]}
+    style={
+      Object {
+        "marginTop": 15,
+        "paddingVertical": 15,
+      }
+    }
+  >
+    <Text
+      style={
+        Object {
+          "color": "#2e78b7",
+          "fontSize": 14,
+        }
+      }
+    >
+      Go to home screen!
+    </Text>
+  </ForwardRef>
+</View>
+`;

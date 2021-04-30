@@ -22,6 +22,7 @@ export default {
   // An array of glob patterns indicating a set of files for which coverage information should be collected
   collectCoverageFrom: [
     './src/**/*.{js,tsx,ts}',
+    // './src/client/components/Block/*.{js,tsx,ts}',
   ],
 
   // The directory where Jest should output its coverage files
@@ -30,7 +31,10 @@ export default {
   // An array of regexp pattern strings used to skip coverage collection
   coveragePathIgnorePatterns: [
     '/node_modules/',
-    // './src/client/screens/Playground/index.tsx',
+    '/src/client/components/Chat/',
+    '/src/client/context/',
+    '/src/client/hooks/',
+    '/src/client/navigation/',
   ],
 
   // Indicates which provider should be used to instrument code for coverage
