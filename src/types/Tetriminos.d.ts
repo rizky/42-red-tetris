@@ -6,14 +6,12 @@ type BlockType  = {
   pos: number[],
   shape: number[][],
   type: TetriminosType,
-  timeStamp: number,
 };
 
 type BlockOption = {
   pos?: number[],
   shape?: number[][],
   type: TetriminosType,
-  timeStamp?: number,
 };
 
 type CellStateType = 0 | 1 | 2; // FREE | OCCUPIED | BLOCKED

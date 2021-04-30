@@ -2,12 +2,11 @@ import _ from 'lodash';
 
 import { blockShape, initialPos, blankLine, cellState } from '/client/constants/tetriminos';
 
-const blockCreate = ({pos, shape, type, timeStamp}: BlockOption): BlockType => {
+const blockCreate = ({pos, shape, type}: BlockOption): BlockType => {
   return {
     pos: pos ?? initialPos[type],
     shape: shape ?? blockShape[type],
     type: type,
-    timeStamp: timeStamp ?? Date.now(),
   };
 };
 
@@ -19,7 +18,6 @@ const blockRotate = (block: BlockType): BlockType => {
     pos: block.pos,
     shape: result,
     type: block.type,
-    timeStamp: block.timeStamp,
   };
 };
 
@@ -28,7 +26,6 @@ const blockFall = (block: BlockType, n = 1): BlockType => {
     pos: [block.pos[0] + n, block.pos[1]],
     shape: block.shape,
     type: block.type,
-    timeStamp: block.timeStamp,
   };
 };
 
@@ -37,7 +34,6 @@ const blockRight = (block: BlockType): BlockType => {
     pos: [block.pos[0], block.pos[1] + 1],
     shape: block.shape,
     type: block.type,
-    timeStamp: block.timeStamp,
   };
 };
 
@@ -46,7 +42,6 @@ const blockLeft = (block: BlockType): BlockType => {
     pos: [block.pos[0], block.pos[1] - 1],
     shape: block.shape,
     type: block.type,
-    timeStamp: block.timeStamp,
   };
 };
 
@@ -111,7 +106,6 @@ const destroyBlock = (matrix: Matrix): { newMatrix: Matrix, deletedRows: number}
     // Row sum > 10 (row sum = 20) when there is a penalty row (because penalty row consists of cellState.BLOCKED = 2)
     if (_.sum(row) < 10 || _.sum(row) > 10) {
       bottomMatrix = _.cloneDeep([...bottomMatrix, row]);
-      // TODO: We can send SOCKETS.SPECTER_UPDATE here when bottomMatrix.length === 20
     } else {
       topMatrix = _.cloneDeep([...topMatrix, blankLine]);
     }
@@ -120,7 +114,7 @@ const destroyBlock = (matrix: Matrix): { newMatrix: Matrix, deletedRows: number}
   return ({ newMatrix: _.cloneDeep([...topMatrix, ...bottomMatrix]), deletedRows: topMatrix.length });
 };
 
-export { 
+export {
   blockCreate,
   blockRotate,
   blockFall,
