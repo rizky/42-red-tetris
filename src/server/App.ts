@@ -12,7 +12,7 @@ import connectSocketIO from './controllers/Socket';
 
 dotenv.config();
 
-const PORT = process.env.PORT_SERVER;
+const PORT = process.env.PORT || process.env.PORT_SERVER;
 
 export const app = express();
 const server = http.createServer(app);
