@@ -58,7 +58,7 @@ Just enjoy classic tetris on your own!
 **Functional VS Object-oriented programming.** The frontend of this app is done with functions and functional components thank to React hooks. Backend is using classes: Game, Room, Player, Piece. Because why not. No database is needed for this project.
 
 ## Launch the project
-Click the link on the right, on this page
+Click the link https://mrakhman.github.io/42-red-tetris
 
 **OR**
 
