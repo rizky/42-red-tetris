@@ -9,13 +9,6 @@ export class Game {
     this.name = name;
   }
 
-  get rooms(): Maybe<Room[]> {
-    return rooms;
-  }
-
-  // when leader leaves - assign another player as leader
-  // when only 1 player left - he is a winner
-
   static getWaitingRooms(): Maybe<Room[]> {
     return rooms.filter((room) => !room.gameStarted && !room.gameover && !_.includes(room.name, 'solo'));
   }
