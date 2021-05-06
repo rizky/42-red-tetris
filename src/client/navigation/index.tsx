@@ -35,7 +35,7 @@ function RootNavigator() {
     if (socket) {
       return socket;
     }
-    const newSocket = io(`${process.env.SERVER_URL}`);
+    const newSocket = io(`${process.env.EXPO_SERVER_URL}`);
     setSocket(newSocket);
     return newSocket;
   };
