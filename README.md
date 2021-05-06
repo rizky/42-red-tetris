@@ -15,6 +15,10 @@
 - Tests with Jest
 - Docker
 
+#### Deployment
+- Heroku for backend
+- Github pages for frontend
+
 ## How to play
 
 #### 🎮 Move around:
