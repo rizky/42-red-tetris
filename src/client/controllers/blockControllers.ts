@@ -110,7 +110,7 @@ const destroyBlock = (matrix: Matrix): { newMatrix: Matrix, deletedRows: number}
       topMatrix = _.cloneDeep([...topMatrix, blankLine]);
     }
   });
-  console.log('Destroy', _.cloneDeep([...topMatrix, ...bottomMatrix])); // TODO: rm
+  // console.log('Destroy', _.cloneDeep([...topMatrix, ...bottomMatrix])); // TODO: rm
   return ({ newMatrix: _.cloneDeep([...topMatrix, ...bottomMatrix]), deletedRows: topMatrix.length });
 };
 

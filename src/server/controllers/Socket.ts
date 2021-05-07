@@ -242,6 +242,7 @@ const connectSocketIO = (): void => {
           room.assignWinner();
           updateWaitingRooms();
         }
+        // TODO: assign another player as leader!!!!
         // send to everyone in the room
         io.to(roomName).emit(SOCKETS.GAMEOVER, { players: room.players, endGame });
       }
