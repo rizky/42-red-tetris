@@ -3,10 +3,13 @@
 exports[`Snapshots should render Playground 1`] = `
 <Fragment>
   <Gameboy
+    gameStarted={false}
     gameover={false}
     isPause={true}
-    isSoloMode={true}
+    isSoloMode={false}
     roomPlayers={Array []}
+    setIsPause={[Function]}
+    speedMode={false}
   >
     <View
       style={
@@ -26,23 +29,15 @@ exports[`Snapshots should render Playground 1`] = `
             ],
             "shape": Array [
               Array [
-                0,
-                0,
-                1,
-              ],
-              Array [
-                1,
                 1,
                 1,
               ],
               Array [
-                0,
-                0,
-                0,
+                1,
+                1,
               ],
             ],
-            "timeStamp": 1618306144971,
-            "type": "L",
+            "type": "O",
           }
         }
         matrix={
@@ -294,133 +289,107 @@ exports[`Snapshots should render Playground 1`] = `
         style={
           Object {
             "flex": 1,
-            "marginLeft": 20,
+            "justifyContent": "space-around",
+            "marginLeft": 10,
           }
         }
       >
-        <Text
+        <View
           style={
             Object {
-              "fontSize": 20,
+              "flexDirection": "row",
             }
           }
         >
-          Score
-        </Text>
-        <Digits
-          style={
-            Object {
-              "alignSelf": "flex-end",
-              "marginVertical": 10,
+          <Text
+            style={
+              Object {
+                "fontSize": 20,
+              }
             }
-          }
-        />
-        <Text
+          >
+            Score
+          </Text>
+          <Text
+            style={
+              Object {
+                "fontFamily": "Digital",
+                "fontSize": 30,
+                "marginLeft": 10,
+              }
+            }
+          >
+            0
+          </Text>
+        </View>
+        <View
           style={
             Object {
-              "fontSize": 20,
+              "flexDirection": "row",
             }
           }
         >
-          Start Line
-        </Text>
-        <Digits
-          style={
-            Object {
-              "alignSelf": "flex-end",
-              "marginVertical": 10,
+          <Text
+            style={
+              Object {
+                "fontSize": 20,
+              }
             }
-          }
-        />
-        <Text
-          style={
-            Object {
-              "fontSize": 20,
-            }
-          }
-        >
-          Level
-        </Text>
-        <Digits
-          style={
-            Object {
-              "alignSelf": "flex-end",
-              "marginVertical": 10,
-            }
-          }
-        />
-        <Text
-          style={
-            Object {
-              "fontSize": 20,
-            }
-          }
-        >
-          Next
-        </Text>
-        <Matrix
-          block={
-            Object {
-              "pos": Array [
-                0,
-                0,
-              ],
-              "shape": Array [
-                Array [
-                  0,
-                  0,
+          >
+            Next
+          </Text>
+          <Matrix
+            block={
+              Object {
+                "pos": Array [
                   0,
                   0,
                 ],
-                Array [
-                  1,
-                  1,
-                  1,
-                  1,
+                "shape": Array [
+                  Array [
+                    1,
+                    1,
+                  ],
+                  Array [
+                    1,
+                    1,
+                  ],
                 ],
-                Array [
-                  0,
-                  0,
-                  0,
-                  0,
-                ],
-                Array [
-                  0,
-                  0,
-                  0,
-                  0,
-                ],
-              ],
-              "timeStamp": 1618306146194,
-              "type": "I",
+                "type": "O",
+              }
             }
-          }
-          matrix={
-            Array [
+            matrix={
               Array [
-                0,
-                0,
-                0,
-                0,
-              ],
-              Array [
-                0,
-                0,
-                0,
-                0,
-              ],
-            ]
-          }
-          style={
-            Object {
-              "alignSelf": "flex-end",
-              "borderWidth": 0,
-              "marginVertical": 10,
+                Array [
+                  0,
+                  0,
+                  0,
+                  0,
+                ],
+                Array [
+                  0,
+                  0,
+                  0,
+                  0,
+                ],
+              ]
             }
-          }
-        />
+            style={
+              Object {
+                "borderWidth": 0,
+                "marginLeft": 10,
+                "marginVertical": 10,
+              }
+            }
+          />
+        </View>
       </View>
     </View>
   </Gameboy>
+  <View
+    handleNewUserMessage={[Function]}
+    subtitle="No players"
+    title="Leader: no leader"
+  />
 </Fragment>
 `;

@@ -4,8 +4,8 @@ import toJson from 'enzyme-to-json';
 
 import Playground from '/client/screens/Playground/index';
 
-describe.skip('Snapshots', () => {
-  it.skip('should render Playground', () => {
+describe('Snapshots', () => {
+  it('should render Playground', () => {
     const wrapper = shallow(<Playground />);
     expect(toJson(wrapper)).toMatchSnapshot();
   });
