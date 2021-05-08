@@ -32,9 +32,12 @@ export default {
   coveragePathIgnorePatterns: [
     '/node_modules/',
     '/src/client/components/Chat/',
+    '/src/client/components/Keypad/',
     '/src/client/context/',
     '/src/client/hooks/',
     '/src/client/navigation/',
+    '/src/client/screens/Playground/index.tsx',
+    '/src/client/screens/Playground/socketHandlers.ts',
     '/src/server/App.ts',
     '/src/types/',
     '/src/server/controllers/Socket.ts',

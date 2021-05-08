@@ -31,27 +31,8 @@ const convertMatrixToSpectrum = (matrix: Matrix): Matrix => {
   return result;
 };
 
-// const rowFillWithOccupied = (row: number[]): number[] => {
-//   const index = _.indexOf(row, cellState.OCCUPIED);
-//   if (index === -1) return row;
-//   return(_.fill(row, cellState.OCCUPIED, index));
-// };
+const filteredOpponents = (roomPlayers: PlayerType[], currentPlayerUsername: string): PlayerType[] => {
+  return _.filter(roomPlayers, (player) => player.username !== currentPlayerUsername);
+};
 
-// const transposeMatrix = (matrix: Matrix): Matrix => {
-//   const result = [];
-//   for (let i = 0; i < matrix[0].length; i++) {
-//     result.push([]);
-//     for (let j = 0; j < matrix.length; j++) {
-//       result[i].push(matrix[j][i]);
-//     }
-//   }
-//   return(result);
-// };
-
-// const fillSpectrum = (matrix: Matrix): Matrix => {
-//   const transposedMatrix = transposeMatrix(matrix);
-//   const transposedFilled = _.map(transposedMatrix, (array) => rowFillWithOccupied(array));
-//   return transposeMatrix(transposedFilled);
-// };
-
-export { formatChatSubtitle, formatChatTitle, roomPlayersNames, convertMatrixToSpectrum };
+export { formatChatSubtitle, formatChatTitle, roomPlayersNames, convertMatrixToSpectrum, filteredOpponents };
