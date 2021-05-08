@@ -1,4 +1,4 @@
-import { formatChatSubtitle, formatChatTitle, roomPlayersNames } from '/client/screens/Playground/utils';
+import { formatChatSubtitle, formatChatTitle, roomPlayersNames, convertMatrixToSpectrum, filteredOpponents } from '/client/screens/Playground/utils';
 
 describe('formatChatSubtitle', () => {
   const players = ['a', 'b', 'c'];
@@ -51,4 +51,90 @@ describe('roomPlayersNames', () => {
   it('should return empty array if players = undefined', () => {
     expect(roomPlayersNames(undefined)).toEqual([]);
   });
+});
+
+describe('convertMatrixToSpectrum', () => {
+  it('should take Matrix and return player Spectrum', () => {
+    const matrix = [
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 1, 1, 1, 1, 0, 0, 0],
+      [0, 0, 1, 1, 0, 0, 0, 0, 0, 0],
+      [0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 1, 0, 0, 0, 0, 0, 0, 0]];
+
+    expect(convertMatrixToSpectrum(matrix)).toEqual([
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 1, 1, 1, 1, 0, 0, 0],
+      [0, 0, 1, 1, 1, 1, 1, 0, 0, 0],
+      [0, 0, 1, 1, 1, 1, 1, 0, 0, 0],
+      [0, 0, 1, 1, 1, 1, 1, 0, 0, 0]]);
+  });
+});
+
+describe('filteredOpponents', () => {
+  const currentPlayerUsername = 'my-username';
+  const roomPlayers = [
+    {
+      id: 'wwf7DFQkHAHh2b7IAAAE',
+      username: 'my-username', 
+      room: '',
+      isLeader: true,
+      gameover: false,
+      score: 0,
+      spectrum: [[]],
+      isWinner: false,
+    },
+    {
+      id: 'wwf7DFQkHAHh2b7IAAdd',
+      username: 'another-username', 
+      room: '',
+      isLeader: false,
+      gameover: false,
+      score: 0,
+      spectrum: [[]],
+      isWinner: false,
+    },
+  ];
+  expect(filteredOpponents(roomPlayers, currentPlayerUsername)).toEqual([
+    {
+      id: 'wwf7DFQkHAHh2b7IAAdd',
+      username: 'another-username', 
+      room: '',
+      isLeader: false,
+      gameover: false,
+      score: 0,
+      spectrum: [[]],
+      isWinner: false,
+    },
+  ]);
 });
