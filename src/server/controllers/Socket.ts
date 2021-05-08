@@ -5,7 +5,6 @@ import { SOCKETS } from '../../config/constants';
 import { Player, players } from '../models/Player';
 import { Room } from '../models/Room';
 import { Game } from '../models/Game';
-import { app } from '../App';
 
 const formatMessage = (username: string, text: string): Message => {
   return {
@@ -17,25 +16,83 @@ const formatMessage = (username: string, text: string): Message => {
 
 const botName = 'Red Tetris';
 
-const connectSocketIO = (): void => {
-  // const io = app.settings.io;
-  const io = app.get('io');
+/*
+** Helper functions updateWaitingRooms, playerLeft:
+*/
 
+const updateWaitingRooms = (socket: SocketIO.Socket) => {
+  const roomNames = Game.getWaitingRoomNames();
+  socket.broadcast.emit(SOCKETS.UPDATE_WAITING_ROOMS, roomNames);
+};
+
+const playerLeft = ({ player, socket, io }: { player?: Player, socket: SocketIO.Socket, io: SocketIO.Server }) => {
+  if (!player) return;
+  const room = Room.getByName(player.room);
+  if (!room) { // if player left before room was created (from ChooseRoom screen)
+    player.deletePlayer(player.id);
+  } else { // if player left after room was created (from Playground screen)
+    socket.leave(room.name); // TODO: maybe uncomment
+    room.removePlayer(player.id);
+    console.log('On leave room: ', players, room.players);
+
+    if (room.players.length === 0) {
+      const gameStarted = room.gameStarted;
+      Game.removeRoom(room.name);
+      // We only need it if game has not been started and room was deleted.
+      // If started game was finished we don't care about waiting rooms -
+      // room with started game was deleted from waiting rooms on START_GAME
+      if (!gameStarted) {
+        updateWaitingRooms(socket);
+      }
+    }
+
+    // If there is only one active player left in the room - endGame and assign him as winner
+    const endGame = room.isRoomGameover();
+    if (endGame) {
+      room.assignWinner();
+      updateWaitingRooms(socket);
+      // send to everyone in the room
+      return io.to(room.name).emit(SOCKETS.GAMEOVER, { players: room.players, endGame });
+    }
+
+    // If current player was room leader - assign another player as leader
+    if (player.isLeader) {
+      room.assignAnotherLeader(player.id);
+    }
+
+    io.to(room.name).emit(
+      SOCKETS.CHAT_MESSAGE,
+      formatMessage(botName, `${player.username} has left the game`),
+    );
+    // Send players and room info when player leaves
+    io.to(room.name).emit(SOCKETS.UPDATE_ROOM_PLAYERS, {
+      room: room.name,
+      players: room.players,
+    });
+  }
+};
+
+
+const connectSocketIO = (io: SocketIO.Server): void => {
   io.on('connection', (socket: SocketIO.Socket) => {
+    /*
+    ** SOCKETS.CREATE_USER
+    ** On Login screen ChooseUsername player created new Player with username
+    */
     socket.on(SOCKETS.CREATE_USER, (username: string) => {
       new Player({ id: socket.id, username });
     });
-    const updateWaitingRooms = () => {
-      const roomNames = Game.getWaitingRoomNames();
-      socket.broadcast.emit(SOCKETS.UPDATE_WAITING_ROOMS, roomNames);
-    };
 
+    /*
+    ** SOCKETS.CHOOSE_ROOM
+    ** On Login screen ChooseRoom player created or joined the room
+    */
     socket.on(SOCKETS.CHOOSE_ROOM, ({ username, roomName }: { username: string, roomName: string }) => {
       // Fetch room if it exists or create if it doesn't exist
       let room = Room.getByName(roomName);
       if (!room) {
         room = new Room(roomName);
-        updateWaitingRooms();
+        updateWaitingRooms(socket);
       }
 
       // Add player to current room
@@ -51,6 +108,10 @@ const connectSocketIO = (): void => {
     // Before, when we created room on Playground load, we created empty room when in solo mode: [ Room { players: [], name: undefined, gameStarted: false } ]
     // Now it's fixed. Delete comment if clear @rizky
 
+    /*
+    ** SOCKETS.ENTER_ROOM
+    ** Player entered Playground screen
+    */
 
     /*
     ** TODO: tmp SOCKETS.ENTER_ROOM by url params, del after debugging
@@ -60,7 +121,7 @@ const connectSocketIO = (): void => {
       let room = Room.getByName(roomName);
       if (!room) {
         room = new Room(roomName); // TODO: this is to create room by URL
-        updateWaitingRooms();
+        updateWaitingRooms(socket);
       }
 
       // Fetch or create player and add player to current room
@@ -97,6 +158,10 @@ const connectSocketIO = (): void => {
     });
 
     /*
+    ** SOCKETS.ENTER_ROOM
+    ** Player entered Playground screen
+    */
+    /*
     ** TODO: uncomment when tmp SOCKETS.ENTER_ROOM by url params is deleted
     */
     // socket.on(SOCKETS.ENTER_ROOM, ({ username, roomName }: { username: string, roomName: string }) => {
@@ -129,6 +194,10 @@ const connectSocketIO = (): void => {
     //   }
     // });
 
+    /*
+    ** SOCKETS.START_GAME
+    ** Leader asked to start the game
+    */
     socket.on(SOCKETS.START_GAME, ({ username, roomName }: { username: string, roomName: string }) => {
       const player = Player.getByUsername(username);
       const room = Room.getByName(roomName);
@@ -136,11 +205,15 @@ const connectSocketIO = (): void => {
       if (!player || !room) return;
       if (player.isLeader) {
         const tileStack = room.startGame();
-        updateWaitingRooms();
+        updateWaitingRooms(socket);
         io.to(room.name).emit(SOCKETS.START_GAME, tileStack);
       }
     });
-
+    
+    /*
+    ** SOCKETS.PAUSE_GAME
+    ** Leader asked to pause the game
+    */
     socket.on(SOCKETS.PAUSE_GAME, ({ username, roomName }: { username: string, roomName: string }) => {
       const player = Player.getByUsername(username);
       const room = Room.getByName(roomName);
@@ -150,6 +223,10 @@ const connectSocketIO = (): void => {
       }
     });
 
+    /*
+    ** SOCKETS.MORE_TETRIS_TILES
+    ** Clent asked to send more tetris tiles to the Playground room
+    */
     socket.on(SOCKETS.MORE_TETRIS_TILES, ({ username, roomName }: { username: string, roomName: string }) => {
       const player = Player.getByUsername(username);
       const room = Room.getByName(roomName);
@@ -161,74 +238,41 @@ const connectSocketIO = (): void => {
       }
     });
 
-    // Listen to chat message and send it to the room
+    /*
+    ** SOCKETS.CHAT_MESSAGE
+    ** Listen to chat message and send it to the room
+    */
     socket.on(SOCKETS.CHAT_MESSAGE, ({ username, message, roomName }: { username: string, message: string, roomName: string }) => {
       // Send to everyone in the room except sender
       socket.broadcast.to(roomName).emit(SOCKETS.CHAT_MESSAGE, formatMessage(username, message));
     });
 
-    // Fetch all waiting rooms to Login screen
+    /*
+    ** SOCKETS.FETCH_WAITING_ROOMS
+    ** Fetch all waiting rooms to Login screen
+    */
     socket.on(SOCKETS.FETCH_WAITING_ROOMS, () => {
       const roomNames = Game.getWaitingRoomNames();
       socket.emit(SOCKETS.FETCH_WAITING_ROOMS, roomNames);
     });
 
-    // Add penalty rows to opponents
+    /*
+    ** SOCKETS.PENALTY_ROWS
+    ** Add penalty rows to opponents
+    */
     socket.on(SOCKETS.PENALTY_ROWS, ({ roomName, rowsNumber }: { roomName: string, rowsNumber: number }) => {
       // Send to everyone in the room except sender
       socket.broadcast.to(roomName).emit(SOCKETS.PENALTY_ROWS, rowsNumber);
     });
 
-    const playerLeft = (player?: Player) => {
-      if (!player) return;
-      const room = Room.getByName(player.room);
-      if (!room) { // if player left before room was created (from ChooseRoom screen)
-        player.deletePlayer(player.id);
-      } else { // if player left after room was created (from Playground screen)
-        socket.leave(room.name); // TODO: maybe uncomment
-        room.removePlayer(player.id);
-        console.log('On leave room: ', players, room.players);
-    
-        if (room.players.length === 0) {
-          const gameStarted = room.gameStarted;
-          Game.removeRoom(room.name);
-          // We only need it if game has not been started and room was deleted.
-          // If started game was finished we don't care about waiting rooms -
-          // room with started game was deleted from waiting rooms on START_GAME
-          if (!gameStarted) {
-            updateWaitingRooms();
-          }
-        }
 
-        // If there is only one active player left in the room - endGame and assign him as winner
-        const endGame = room.isRoomGameover();
-        if (endGame) {
-          room.assignWinner();
-          updateWaitingRooms();
-          // send to everyone in the room
-          return io.to(room.name).emit(SOCKETS.GAMEOVER, { players: room.players, endGame });
-        }
-
-        // If current player was room leader - assign another player as leader
-        if (player.isLeader) {
-          room.assignAnotherLeader(player.id);
-        }
-    
-        io.to(room.name).emit(
-          SOCKETS.CHAT_MESSAGE,
-          formatMessage(botName, `${player.username} has left the game`),
-        );
-        // Send players and room info when player leaves
-        io.to(room.name).emit(SOCKETS.UPDATE_ROOM_PLAYERS, {
-          room: room.name,
-          players: room.players,
-        });
-      }
-    };
-
+    /*
+    ** SOCKETS.PLAYER_LEFT
+    ** Player clicked exit button on Keypad
+    */
     socket.on(SOCKETS.PLAYER_LEFT, (username: string) => {
       const player = Player.getByUsername(username);
-      playerLeft(player);
+      playerLeft({ player, socket, io });
     });
 
     socket.on(SOCKETS.GAMEOVER, ({ username, roomName }: { username: string, roomName: string }) => {
@@ -240,7 +284,7 @@ const connectSocketIO = (): void => {
         const endGame = room.isRoomGameover();
         if (endGame) {
           room.assignWinner();
-          updateWaitingRooms();
+          updateWaitingRooms(socket);
         }
         // TODO: assign another player as leader!!!!
         // send to everyone in the room
@@ -248,6 +292,10 @@ const connectSocketIO = (): void => {
       }
     });
 
+    /*
+    ** SOCKETS.UPDATE_SPECTRUM
+    ** On Playground screen player places tetrimino piece on the Matrix bottom and mini map Spectrums of opponents need to be updated
+    */
     socket.on(SOCKETS.UPDATE_SPECTRUM, ({ username, roomName, spectrum }: { username: string, roomName: string, spectrum: Matrix }) => {
       const room = Room.getByName(roomName);
       const player = Player.getByUsername(username);
@@ -259,6 +307,11 @@ const connectSocketIO = (): void => {
       }
     });
 
+    /*
+    ** SOCKETS.UPDATE_SCORE
+    ** When Player is gameover, he emits update score socket event, backend receives score.
+    ** If he is the last player on the Playground, we can redirect all players to the Ranking screen
+    */
     socket.on(SOCKETS.UPDATE_SCORE, ({ username, roomName, score, isSoloMode }: { username: string, roomName: string, score: number, isSoloMode: boolean | undefined }) => {
       const room = Room.getByName(roomName);
       const player = Player.getByUsername(username);
@@ -270,6 +323,10 @@ const connectSocketIO = (): void => {
       }
     });
 
+    /*
+    ** SOCKETS.FETCH_ROOM_RANKING
+    ** When on ranking screen, send sorted ranked players of this room
+    */
     socket.on(SOCKETS.FETCH_ROOM_RANKING, ({ username, roomName, gameMode }: { username: string, roomName: string, gameMode: string }) => {
       const room = Room.getByName(roomName);
       const player = Player.getByUsername(username);
@@ -287,6 +344,10 @@ const connectSocketIO = (): void => {
       // }
     });
 
+    /*
+    ** SOCKETS.SPEED_MODE
+    ** Change speed mode of falling tetriminos to superspeed for all room players
+    */
     socket.on(SOCKETS.SPEED_MODE, ({ username, roomName }: { username: string, roomName: string }) => {
       const room = Room.getByName(roomName);
       const player = Player.getByUsername(username);
@@ -297,10 +358,13 @@ const connectSocketIO = (): void => {
       }
     });
 
-    // Runs when socket disconnects
+    /*
+    ** 'disconnect'
+    ** Runs when socket disconnects (when window is closed)
+    */
     socket.on('disconnect', () => {
       const player = Player.getById(socket.id);
-      playerLeft(player);
+      playerLeft({ player, socket, io });
     });
   });
 };

@@ -24,7 +24,7 @@ const io = socketio(server, {
 app.set('io', io); // anywhere in routes we should be able to get socket with `let io = app.get('io');`
 
 // Init socket script
-connectSocketIO();
+connectSocketIO(io);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));

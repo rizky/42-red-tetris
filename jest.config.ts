@@ -35,6 +35,11 @@ export default {
     '/src/client/context/',
     '/src/client/hooks/',
     '/src/client/navigation/',
+    '/src/server/App.ts',
+    '/src/types/',
+    '/src/server/controllers/Socket.ts',
+
+    // '/src/client/screens/Playground',
   ],
 
   // Indicates which provider should be used to instrument code for coverage
@@ -186,7 +191,7 @@ export default {
   // A map from regular expressions to paths to transformers
   transform: {
     // '^.+\\.(ts)$': 'ts-jest',
-    '^.+\\.(tsx|js)$': './node_modules/react-native/jest/preprocessor.js',
+    '^.+\\.(tsx)$': './node_modules/react-native/jest/preprocessor.js',
   },
 
   // An array of regexp pattern strings that are matched against all source file paths, matched files will skip transformation
