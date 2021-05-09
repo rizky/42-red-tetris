@@ -52,7 +52,7 @@ const Keypad = (props: Props): JSX.Element => {
     if (setIsPause) setIsPause(true);
     setMusicPlaying(false);
     socket.emit(SOCKETS.PLAYER_LEFT, userContext.username);
-    navigation.navigate('Root');
+    navigation.replace('Root');
   };
 
   const socketEmitSpeedMode = () => {

@@ -265,7 +265,6 @@ const connectSocketIO = (io: SocketIO.Server): void => {
       socket.broadcast.to(roomName).emit(SOCKETS.PENALTY_ROWS, rowsNumber);
     });
 
-
     /*
     ** SOCKETS.PLAYER_LEFT
     ** Player clicked exit button on Keypad
@@ -274,7 +273,26 @@ const connectSocketIO = (io: SocketIO.Server): void => {
       const player = Player.getByUsername(username);
       playerLeft({ player, socket, io });
     });
-
+    
+    /*
+    ** SOCKETS.UPDATE_SPECTRUM
+    ** On Playground screen player places tetrimino piece on the Matrix bottom and mini map Spectrums of opponents need to be updated
+    */
+    socket.on(SOCKETS.UPDATE_SPECTRUM, ({ username, roomName, spectrum }: { username: string, roomName: string, spectrum: Matrix }) => {
+      const room = Room.getByName(roomName);
+      const player = Player.getByUsername(username);
+ 
+      if (room && player) {
+        const roomPlayers = room.updatePlayerSpectrum(player.id, spectrum);
+        // Send to everyone in the room except sender
+        socket.broadcast.to(roomName).emit(SOCKETS.UPDATE_SPECTRUM, roomPlayers);
+      }
+    });
+  
+    /*
+    ** SOCKETS.GAMEOVER
+    ** Player lost the game
+    */
     socket.on(SOCKETS.GAMEOVER, ({ username, roomName }: { username: string, roomName: string }) => {
       const room = Room.getByName(roomName);
       const player = Player.getByUsername(username);
@@ -289,21 +307,6 @@ const connectSocketIO = (io: SocketIO.Server): void => {
         // TODO: assign another player as leader!!!!
         // send to everyone in the room
         io.to(roomName).emit(SOCKETS.GAMEOVER, { players: room.players, endGame });
-      }
-    });
-
-    /*
-    ** SOCKETS.UPDATE_SPECTRUM
-    ** On Playground screen player places tetrimino piece on the Matrix bottom and mini map Spectrums of opponents need to be updated
-    */
-    socket.on(SOCKETS.UPDATE_SPECTRUM, ({ username, roomName, spectrum }: { username: string, roomName: string, spectrum: Matrix }) => {
-      const room = Room.getByName(roomName);
-      const player = Player.getByUsername(username);
-
-      if (room && player) {
-        const roomPlayers = room.updatePlayerSpectrum(player.id, spectrum);
-        // Send to everyone in the room except sender
-        socket.broadcast.to(roomName).emit(SOCKETS.UPDATE_SPECTRUM, roomPlayers);
       }
     });
 

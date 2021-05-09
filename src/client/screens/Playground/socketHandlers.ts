@@ -161,7 +161,7 @@ const socketReceiveRedirectToRanking = ({ username, room, navigation }: {
   room: string | undefined,
   navigation: StackNavigationProp<RootStackParamList, 'Root'>,
 }): void => {
-  navigation.replace('Ranking', { username, room });
+  navigation.navigate('Ranking', { username, room });
 };
 
 /* SOCKETS.GAMEOVER */

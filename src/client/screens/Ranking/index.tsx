@@ -24,7 +24,7 @@ const Ranking = (): JSX.Element => {
     console.log('aaaaaaaaaaaa forbidden');
   };
 
-  const socketFetchRoomRanking = (players: PlayerType[]) => {
+  const socketReceiveRoomRanking = (players: PlayerType[]) => {
     setRoomPlayers(players);
   };
 
@@ -33,13 +33,13 @@ const Ranking = (): JSX.Element => {
     if (!socket) throw Error('No socket');
     // TODO: Here I tested how I can forbid access to pages that I entered fom URL but sis not create. Uncomment it at the end of development
     // socket.emit(SOCKETS.FETCH_ROOM_RANKING, {username, roomName: room, gameMode: 'not solo'});
-    socket.emit(SOCKETS.FETCH_ROOM_RANKING, {username, roomName: room, gameMode: 'not solo'});
+    socket.emit(SOCKETS.FETCH_ROOM_RANKING, { username, roomName: room, gameMode: 'not solo' });
     socket.on(SOCKETS.FORBIDDEN, socketAccessForbidden);
-    socket.on(SOCKETS.FETCH_ROOM_RANKING, socketFetchRoomRanking);
+    socket.on(SOCKETS.FETCH_ROOM_RANKING, socketReceiveRoomRanking);
 
     return () => {
       socket.removeListener(SOCKETS.FORBIDDEN, socketAccessForbidden);
-      socket.removeListener(SOCKETS.FETCH_ROOM_RANKING, socketFetchRoomRanking);
+      socket.removeListener(SOCKETS.FETCH_ROOM_RANKING, socketReceiveRoomRanking);
     };
   }, []);
 
