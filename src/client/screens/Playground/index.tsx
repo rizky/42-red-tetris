@@ -119,6 +119,8 @@ export default function Playground(): JSX.Element {
       socket.removeListener(SOCKETS.PENALTY_ROWS, socketReceivePenaltyRows);
       socket.removeListener(SOCKETS.GAMEOVER, socketReceiveGameover);
       socket.removeListener(SOCKETS.UPDATE_SPECTRUM, socketReceiveUpdateSpectrum);
+      socket.removeListener(SOCKETS.MORE_TETRIS_TILES, socketReceiveMoreTetrisTiles);
+      socket.removeListener(SOCKETS.SPEED_MODE, socketReceiveSpeedMode);
       socket.removeListener(SOCKETS.REDIRECT_TO_RANKING, socketReceiveRedirectToRanking);
       dropMessages();
     };
