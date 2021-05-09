@@ -25,13 +25,6 @@ exports[`Snapshots should render Keypad for Login and Ranking screens 1`] = `
       }
     >
       <RoundButton
-        color="#c0c0c0"
-        disabled={true}
-        label="Reset"
-        onPress={[Function]}
-        size={50}
-      />
-      <RoundButton
         color="white"
         label="Exit"
         onPress={[Function]}
@@ -195,13 +188,6 @@ exports[`Snapshots should render Keypad for Multiplayer Playground screen: isLea
         onPress={[Function]}
         size={50}
         text="off"
-      />
-      <RoundButton
-        color="#efcc19"
-        disabled={false}
-        label="Reset"
-        onPress={[Function]}
-        size={50}
       />
       <RoundButton
         color="white"
@@ -376,13 +362,6 @@ exports[`Snapshots should render Keypad for Multiplayer Playground screen: isLea
         text="off"
       />
       <RoundButton
-        color="#efcc19"
-        disabled={false}
-        label="Reset"
-        onPress={[Function]}
-        size={50}
-      />
-      <RoundButton
         color="white"
         label="Sound"
         onPress={[Function]}
@@ -545,13 +524,6 @@ exports[`Snapshots should render Keypad for Multiplayer Playground screen: not i
         onPress={[Function]}
         size={50}
         text="off"
-      />
-      <RoundButton
-        color="#c0c0c0"
-        disabled={true}
-        label="Reset"
-        onPress={[Function]}
-        size={50}
       />
       <RoundButton
         color="white"
@@ -718,13 +690,6 @@ exports[`Snapshots should render Keypad for Multiplayer Playground screen: not i
         text="off"
       />
       <RoundButton
-        color="#efcc19"
-        disabled={false}
-        label="Reset"
-        onPress={[Function]}
-        size={50}
-      />
-      <RoundButton
         color="white"
         label="Sound"
         onPress={[Function]}
@@ -887,13 +852,6 @@ exports[`Snapshots should render Keypad for Multiplayer Playground screen: not i
         onPress={[Function]}
         size={50}
         text="off"
-      />
-      <RoundButton
-        color="#efcc19"
-        disabled={false}
-        label="Reset"
-        onPress={[Function]}
-        size={50}
       />
       <RoundButton
         color="white"
@@ -1068,13 +1026,6 @@ exports[`Snapshots should render Keypad for Solo Playground screen: gameStarted,
         text="off"
       />
       <RoundButton
-        color="#efcc19"
-        disabled={false}
-        label="Reset"
-        onPress={[Function]}
-        size={50}
-      />
-      <RoundButton
         color="white"
         label="Sound"
         onPress={[Function]}
@@ -1247,13 +1198,6 @@ exports[`Snapshots should render Keypad for Solo Playground screen: gameStarted,
         text="off"
       />
       <RoundButton
-        color="#efcc19"
-        disabled={false}
-        label="Reset"
-        onPress={[Function]}
-        size={50}
-      />
-      <RoundButton
         color="white"
         label="Sound"
         onPress={[Function]}
@@ -1424,13 +1368,6 @@ exports[`Snapshots should render Keypad for Solo Playground screen: not gameStar
         onPress={[Function]}
         size={50}
         text="off"
-      />
-      <RoundButton
-        color="#efcc19"
-        disabled={false}
-        label="Reset"
-        onPress={[Function]}
-        size={50}
       />
       <RoundButton
         color="white"

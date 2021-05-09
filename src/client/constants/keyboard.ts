@@ -5,6 +5,6 @@ export const keyboard = {
   'down': 40,
   'space': 32,
   // 'sound': 83,
-  'reset': 82,
+  // 'reset': 82,
   // 'pause': 80,
 };

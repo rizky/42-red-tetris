@@ -24,11 +24,6 @@ export const useKeyEvent = ({ setIsPause, setMatrix, setBlock }
   useKey((_key: number, { keyCode }: { keyCode: number }) => {
     // When Chat widget is opened, key press should not affect movement on Matrix Playground
     if (isWidgetOpened()) return;
-    if (keyCode === keyboard.reset) {
-      setBlock(blockCreate({ type: 'T' }));
-      setMatrix(blankMatrix);
-      setIsPause(true);
-    }
     setIsPause((prevIsPause) => {
       setMatrix((prevMatrix) => {
         if (!prevIsPause) {

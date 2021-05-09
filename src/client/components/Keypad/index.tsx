@@ -86,11 +86,6 @@ const Keypad = (props: Props): JSX.Element => {
               color={isButtonDisabled ? '#c0c0c0' : 'white'} size={50} label="Super speed" text={speedMode ? 'on' : 'off'}
               onPress={() => socketEmitSpeedMode()}
             />}
-          <RoundButton
-            disabled={isButtonDisabled}
-            color={isButtonDisabled ? '#c0c0c0' : '#efcc19'} size={50} label="Reset"
-            onPress={() => keyDown(keyboard.reset)}
-          />
           {showSoundButton &&
             <RoundButton
               color={'white'} size={50} label="Sound" text={musicPlaying ? '🎶' : '🤫' }
