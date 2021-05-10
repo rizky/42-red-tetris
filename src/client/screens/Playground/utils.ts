@@ -19,6 +19,10 @@ const roomPlayersNames = (players?: PlayerType[]): string[] => {
 
 const convertMatrixToSpectrum = (matrix: Matrix): Matrix => {
   const result = _.cloneDeep(matrix);
+
+  // In Spectrum change all cellState.BLOCKED to cellState.OCCUPIED on spectrum for better looking
+  _.map(result, (row) => _.map(row, (cell) => cell === cellState.BLOCKED ? cell = cellState.OCCUPIED : cell));
+
   for (let j = 0; j < matrix[0].length; j++) {
     let flag = false;
     for (let i = 0; i < matrix.length; i++) {

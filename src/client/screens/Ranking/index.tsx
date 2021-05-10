@@ -38,6 +38,8 @@ const Ranking = (): JSX.Element => {
     socket.on(SOCKETS.FETCH_ROOM_RANKING, socketReceiveRoomRanking);
 
     return () => {
+      socket.emit(SOCKETS.PLAYER_LEFT, username);
+
       socket.removeListener(SOCKETS.FORBIDDEN, socketAccessForbidden);
       socket.removeListener(SOCKETS.FETCH_ROOM_RANKING, socketReceiveRoomRanking);
     };

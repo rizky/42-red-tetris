@@ -109,7 +109,8 @@ export default function Playground(): JSX.Element {
     }
     
     return () => {
-      socket.emit(SOCKETS.PLAYER_LEFT, username);
+      // socket.emit(SOCKETS.PLAYER_LEFT, username);
+
 
       socket.removeListener(SOCKETS.CHAT_MESSAGE, socketReceiveChatMessage);
       socket.removeListener(SOCKETS.FETCH_CURRENT_PLAYER, socketReceiveCurrentPlayer);
@@ -123,25 +124,36 @@ export default function Playground(): JSX.Element {
       socket.removeListener(SOCKETS.SPEED_MODE, socketReceiveSpeedMode);
       socket.removeListener(SOCKETS.REDIRECT_TO_RANKING, socketReceiveRedirectToRanking);
       dropMessages();
+
+      socket.removeListener(SOCKETS.FETCH_WAITING_ROOMS);
+      socket.removeListener(SOCKETS.UPDATE_WAITING_ROOMS);
     };
   }, []);
+
+  const callGameoverFunctions = (): void => {
+    setMatrix(blankMatrix);
+    setIsPause(true);
+    setGameover(true);
+    socketEmitGameover({ isSoloMode, setCurrentPlayer, userContext, socket });
+  };
+
+  const countIntervalDelay = (speedMode: boolean, isPause: boolean) => {
+    if (isPause) return null;
+    if (speedMode) return 200;
+    return 500;
+  };
 
   useInterval(() => {
     if (isPause) return;
     if (_.includes(matrix[0], 1)) {
-      setMatrix(blankMatrix);
-      setIsPause(true);
-      setGameover(true);
-      socketEmitGameover({ isSoloMode, setCurrentPlayer, userContext, socket });
+      callGameoverFunctions();
     } else {
       setBlock((currentBlock) => {
         if (!isBlockValid(blockFall(currentBlock), matrix)) {
           const { newMatrix, deletedRows } = destroyBlock(printBlock(block, matrix));
           setMatrix(newMatrix);
-          // if (deletedRows > 1)
-          if (deletedRows > 0) // TODO: del after debugging
-          //   socketEmitPenaltyRows(deletedRows - 1);
-            socketEmitPenaltyRows({ rowsNumber: deletedRows, username, roomName: room, socket }); // TODO: del after debugging
+          if (deletedRows > 1)
+            socketEmitPenaltyRows({ rowsNumber: deletedRows - 1, username, roomName: room, socket });
 
           socketEmitUpdateSpectrum({ spectrum: convertMatrixToSpectrum(newMatrix),  userContext, socket });
 
@@ -166,7 +178,7 @@ export default function Playground(): JSX.Element {
         }
       });
     }
-  }, speedMode ? 200 : 500);
+  }, countIntervalDelay(speedMode, isPause));
 
   return (
     <>
