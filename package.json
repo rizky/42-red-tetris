@@ -15,9 +15,6 @@
     "deploy": "gh-pages -d web-build",
     "test": "jest --watchAll --maxWorkers=1"
   },
-  "engines": {
-    "yarn": "1.22.10"
-  },
   "dependencies": {
     "@react-native-community/masked-view": "0.1.10",
     "@react-navigation/native": "^5.7.3",

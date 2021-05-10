@@ -98,7 +98,7 @@ const printBlock = (block: BlockType, matrix: Matrix): Matrix => {
   return newMatrix;
 };
 
-const destroyBlock = (matrix: Matrix): { newMatrix: Matrix, deletedRows: number} => {
+const destroyBlock = (matrix: Matrix): { newMatrix: Matrix, deletedRows: number } => {
   let bottomMatrix: Matrix = [];
   let topMatrix: Matrix = [];
   _.map(matrix, (row) => {
