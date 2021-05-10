@@ -74,14 +74,18 @@ Clone the repo and make sure you have Yarn installed. Go to the cloned repo, ope
 
 `yarn api` in the second terminal
 
+Backend will run on http://localhost:3001/
+
+Frontend will automatically open Expo on http://localhost:19002/. On this page wait a little and do nothing or click "Run in web browser". Either way the app will open on http://localhost:19006/
+
 **OR**
 
-Clone the repo and make sure you have Docker installed. Go to the pero and run:
+Clone the repo and make sure you have Docker installed and running. Go to the repo and run:
 
 `docker compose up`
 
+It will take about 5 minutes to build everything. 
+
+Go to http://localhost/ to use the app
+
 Backend will run on http://localhost:3001/
-
-Frontend will open Expo on http://localhost:19002/
-
-After clicking "Run in web browser" app will open on http://localhost:19006/
