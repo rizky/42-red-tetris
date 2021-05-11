@@ -2,27 +2,21 @@ import  React, { useState, useEffect, useContext } from 'react';
 import _ from 'lodash';
 import { StyleSheet, View, Text } from 'react-native';
 import { useRoute, RouteProp } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { useNavigation } from '@react-navigation/native';
 
 import Gameboy from '/client/components/Gameboy';
 import { SOCKETS } from '/config/constants';
 import SocketContext from '/client/context/SocketContext';
-import UserContext from '/client/context/UserContext';
 
 const Ranking = (): JSX.Element => {
-  const socket = useContext(SocketContext);
-  const { userContext, setUserContext } = useContext(UserContext);
+  const { socketContext: socket } = useContext(SocketContext);
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'Playground'>>();
 
   const route = useRoute<RouteProp<RootStackParamList, 'Ranking'>>();
   const { params } = route;
-  // const { room, username } = userContext;
   const { room, username } = params ?? {};
   const [rankedRoomPlayers, setRoomPlayers] = useState<PlayerType[]>([]);
-
-  console.log('roomPlayers:', rankedRoomPlayers);
-
-  const socketAccessForbidden = () => {
-    console.log('aaaaaaaaaaaa forbidden');
-  };
 
   const socketReceiveRoomRanking = (players: PlayerType[]) => {
     setRoomPlayers(players);
@@ -30,17 +24,12 @@ const Ranking = (): JSX.Element => {
 
 
   useEffect(() => {
-    if (!socket) throw Error('No socket');
-    // TODO: Here I tested how I can forbid access to pages that I entered fom URL but sis not create. Uncomment it at the end of development
-    // socket.emit(SOCKETS.FETCH_ROOM_RANKING, {username, roomName: room, gameMode: 'not solo'});
-    socket.emit(SOCKETS.FETCH_ROOM_RANKING, { username, roomName: room, gameMode: 'not solo' });
-    socket.on(SOCKETS.FORBIDDEN, socketAccessForbidden);
+    if (!socket) return navigation.replace('Home');
+    socket.emit(SOCKETS.FETCH_ROOM_RANKING, { username, roomName: room });
     socket.on(SOCKETS.FETCH_ROOM_RANKING, socketReceiveRoomRanking);
 
     return () => {
       socket.emit(SOCKETS.PLAYER_LEFT, username);
-
-      socket.removeListener(SOCKETS.FORBIDDEN, socketAccessForbidden);
       socket.removeListener(SOCKETS.FETCH_ROOM_RANKING, socketReceiveRoomRanking);
     };
   }, []);

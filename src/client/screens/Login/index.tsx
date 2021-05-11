@@ -1,12 +1,20 @@
-import  React, { useState } from 'react';
+import  React, { useState, useContext, useEffect } from 'react';
 import { View, StyleSheet } from 'react-native';
+import io from 'socket.io-client';
 
 import ChooseUsername from '/client/screens/Login/ChooseUsername';
 import ChooseRoom from '/client/screens/Login/ChooseRoom';
 import Gameboy from '/client/components/Gameboy';
+import SocketContext from '/client/context/SocketContext';
 
 export default function Login(): JSX.Element {
   const [screenNumber, setScreenNumber] = useState<1 | 2>(1);
+
+  const { setSocketContext } = useContext(SocketContext);
+
+  useEffect(() => {
+    setSocketContext(io(`${process.env.EXPO_SERVER_URL}`));
+  }, []);
 
   return (
     <Gameboy>

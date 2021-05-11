@@ -15,7 +15,7 @@ export default function ChooseUsername(props: Props): JSX.Element {
   const {setScreenNumber} = props;
   const { userContext, setUserContext } = useContext(UserContext);
   const { username } = userContext;
-  const socket = useContext(SocketContext);
+  const { socketContext: socket } = useContext(SocketContext);
   const [ussernameError, setUsernameError] = useState<string>('');
 
   const validateUsername = () => {

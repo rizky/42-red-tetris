@@ -51,10 +51,10 @@ const blockDrop = (block: BlockType, matrix: Matrix): BlockType => {
   while (isBlockValid(blockFall(newState), matrix)) { 
     newState = blockFall(newState);
   }
-  return newState;  
+  return newState;
 };
 
-const blockGetBlockPos = (block: BlockType): number[][] => {
+const getBlockCellsPosition = (block: BlockType): number[][] => {
   const positions: number[][] = [];
   _.map(block.shape, (row, rowIndex) =>
     _.map(row, (val, colIndex) => { 
@@ -64,8 +64,8 @@ const blockGetBlockPos = (block: BlockType): number[][] => {
 };
 
 const blockGetCorner = (block: BlockType): { left: number, top: number, right: number, bottom: number } => { 
-  const rows = _.map(blockGetBlockPos(block), ([row]) => row);
-  const cols = _.map(blockGetBlockPos(block), ([, col]) => col);
+  const rows = _.map(getBlockCellsPosition(block), ([row]) => row);
+  const cols = _.map(getBlockCellsPosition(block), ([, col]) => col);
   return {
     left: _.min(cols) ?? 0,
     top: _.min(rows) ?? 0,
@@ -75,21 +75,24 @@ const blockGetCorner = (block: BlockType): { left: number, top: number, right: n
 };
 
 const isBlock = (block: BlockType, pos: number[]): boolean => { 
-  return _.find(blockGetBlockPos(block), (shapePos) => _.isEqual(shapePos, pos)) !== undefined;
+  return _.find(getBlockCellsPosition(block), (shapePos) => _.isEqual(shapePos, pos)) !== undefined;
 };
 
-const isBlockValid = (block: BlockType, matrix: Matrix): boolean => { 
-  const hitBlock = _.find(blockGetBlockPos(block), ([row, col]) => matrix?.[row]?.[col] === cellState.BLOCKED || matrix?.[row]?.[col] === cellState.OCCUPIED);
+const isBlockValid = (block: BlockType, matrix: Matrix): boolean => {
+  const blockCellsCoordinates = getBlockCellsPosition(block);
+  const hitBlock = _.find(blockCellsCoordinates, ([row, col]) => {
+    return matrix?.[row]?.[col] === cellState.BLOCKED || matrix?.[row]?.[col] === cellState.OCCUPIED;
+  });
+
   const { left, right, bottom } = blockGetCorner(block);
-  return bottom < 20
-    && left >= 0
-    && right < 10
-    && !hitBlock;
+  if (bottom < 20 && left >= 0 && right < 10 && !hitBlock)
+    return true;
+  return false;
 };
 
 const printBlock = (block: BlockType, matrix: Matrix): Matrix => { 
   const newMatrix = _.cloneDeep(matrix);
-  _.map(blockGetBlockPos(block), (pos) => {
+  _.map(getBlockCellsPosition(block), (pos) => {
     if (pos[0] >= 0 && pos[0] < _.size(newMatrix)
       && pos[1] >= 0 && pos[1] < _.size(newMatrix[0])) {
       newMatrix[pos[0]][pos[1]] = cellState.OCCUPIED;
@@ -122,7 +125,7 @@ export {
   blockRight,
   blockLeft,
   blockDrop,
-  blockGetBlockPos,
+  getBlockCellsPosition,
   blockGetCorner,
   isBlock,
   isBlockValid,
