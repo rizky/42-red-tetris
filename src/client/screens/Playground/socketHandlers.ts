@@ -25,7 +25,7 @@ const socketEmitNewUserMessage = ({ message, socket, username, roomName }: {
   socket?: SocketIOClient.Socket,
   username?: string, roomName?: string,
 }): void => {
-  if (!socket) throw Error('No socket');
+  if (!socket) return;
   socket.emit(SOCKETS.CHAT_MESSAGE, { username, message, roomName });
 };
 
@@ -36,7 +36,7 @@ const socketEmitPenaltyRows = ({ rowsNumber, username, roomName, socket }: {
   roomName?: string,
   socket?: SocketIOClient.Socket,
 }): void => {
-  if (!socket) throw Error('No socket');
+  if (!socket) return;
   console.log('PENALTY_ROWS emit, rowsNumber:', rowsNumber);
   socket.emit(SOCKETS.PENALTY_ROWS, { username, roomName, rowsNumber });
 };
@@ -47,7 +47,7 @@ const socketEmitUpdatePlayerScore = ({setCurrentPlayer, socket, isSoloMode }: {
   isSoloMode: boolean,
   socket?: SocketIOClient.Socket,
 }): void => {
-  if (!socket) throw Error('No socket');
+  if (!socket) return;
   setCurrentPlayer((prevCurrentPlayer) => {
     if (!prevCurrentPlayer) return;
     socket.emit(SOCKETS.UPDATE_SCORE, { username: prevCurrentPlayer.username, roomName: prevCurrentPlayer.room, score: prevCurrentPlayer.score, isSoloMode });
@@ -65,7 +65,7 @@ const socketEmitGameover = ({ isSoloMode, setCurrentPlayer, userContext, socket 
   if (isSoloMode) {
     return socketEmitUpdatePlayerScore({ setCurrentPlayer, isSoloMode, socket });
   } else {
-    if (!socket) throw Error('No socket');
+    if (!socket) return;
     socket.emit(SOCKETS.GAMEOVER, { username: userContext.username, roomName: userContext.room });
   }
 };
@@ -76,13 +76,13 @@ const socketEmitUpdateSpectrum = ({ spectrum, userContext, socket }: {
   userContext: UserContextType,
   socket?: SocketIOClient.Socket,
 }): void => {
-  if (!socket) throw Error('No socket');
+  if (!socket) return;
   socket.emit(SOCKETS.UPDATE_SPECTRUM, { username: userContext.username, roomName: userContext.room, spectrum });
 };
 
 /* SOCKETS.MORE_TETRIS_TILES */
 const socketEmitMoreTetrisTiles = (userContext: UserContextType, socket?: SocketIOClient.Socket): void => {
-  if (!socket) throw Error('No socket');
+  if (!socket) return;
   socket.emit(SOCKETS.MORE_TETRIS_TILES, { username: userContext.username, roomName: userContext.room });
 };
 
@@ -159,7 +159,7 @@ const socketReceivePenaltyRows = ({ setMatrix, rowsNumber }:
 const socketReceiveRedirectToRanking = ({ username, room, navigation }: {
   username: string | undefined,
   room: string | undefined,
-  navigation: StackNavigationProp<RootStackParamList, 'Root'>,
+  navigation: StackNavigationProp<RootStackParamList, 'Playground'>,
 }): void => {
   navigation.replace('Ranking', { username, room });
 };
@@ -174,6 +174,7 @@ const socketReceiveGameover = ({ setCurrentPlayer, setIsPause, setMatrix, setGam
   socket?: SocketIOClient.Socket,
   data: { players: PlayerType[], endGame: boolean },
 }): void => {
+  if (!socket) return;
   const roomWinner = _.find(data.players, (player) => player.isWinner);
 
   setCurrentPlayer((prevCurrentPlayer) => {

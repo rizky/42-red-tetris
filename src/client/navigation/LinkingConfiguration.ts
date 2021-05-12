@@ -14,7 +14,7 @@ export default {
   prefixes: [githubPublicUrl ? Linking.makeUrl(process.env.PUBLIC_URL) : Linking.makeUrl('/')],
   config: {
     screens: {
-      Root: makeGitPagesURL('/'),
+      Home: makeGitPagesURL('/'),
       Playground: makeGitPagesURL('/play'),
       Ranking: makeGitPagesURL('/ranking'),
       NotFound: '*',

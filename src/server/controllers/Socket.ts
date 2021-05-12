@@ -103,18 +103,9 @@ const connectSocketIO = (io: SocketIO.Server): void => {
       }
     });
 
-    // TODO: separate CHOOSE_ROOM and ENTER_ROOM to different `socket.on` events
-    // On front move socket that creates room from Playground component to ChooseRoom component (on Play button click)
-    // Before, when we created room on Playground load, we created empty room when in solo mode: [ Room { players: [], name: undefined, gameStarted: false } ]
-    // Now it's fixed. Delete comment if clear @rizky
-
     /*
     ** SOCKETS.ENTER_ROOM
     ** Player entered Playground screen
-    */
-
-    /*
-    ** TODO: tmp SOCKETS.ENTER_ROOM by url params, del after debugging
     */
     socket.on(SOCKETS.ENTER_ROOM, ({ username, roomName }: { username: string, roomName: string }) => {
       // Fetch room if it exists or create if it doesn't exist
@@ -158,11 +149,12 @@ const connectSocketIO = (io: SocketIO.Server): void => {
     });
 
     /*
-    ** SOCKETS.ENTER_ROOM
-    ** Player entered Playground screen
+    ** SOCKETS.ENTER_ROOM 2
     */
     /*
-    ** TODO: uncomment when tmp SOCKETS.ENTER_ROOM by url params is deleted
+    ** TODO: uncomment when tmp SOCKETS.ENTER_ROOM by url params is deleted (and probably debug)
+    ** Now not necessary cause now I redirect from any screen to home screen if there is no socket
+    ** and socket is created when entering home screen (Login CreateUsername)
     */
     // socket.on(SOCKETS.ENTER_ROOM, ({ username, roomName }: { username: string, roomName: string }) => {
     //   const player = Player.getByUsername(username);
@@ -330,7 +322,7 @@ const connectSocketIO = (io: SocketIO.Server): void => {
     ** SOCKETS.FETCH_ROOM_RANKING
     ** When on ranking screen, send sorted ranked players of this room
     */
-    socket.on(SOCKETS.FETCH_ROOM_RANKING, ({ username, roomName, gameMode }: { username: string, roomName: string, gameMode: string }) => {
+    socket.on(SOCKETS.FETCH_ROOM_RANKING, ({ username, roomName }: { username: string, roomName: string }) => {
       const room = Room.getByName(roomName);
       const player = Player.getByUsername(username);
 
@@ -339,12 +331,6 @@ const connectSocketIO = (io: SocketIO.Server): void => {
         // send to this user only
         socket.emit(SOCKETS.FETCH_ROOM_RANKING, rankedPlayers);
       }
-
-      // TODO: Here I tested how I can forbid access to pages that I entered fom URL but sis not create. Uncomment it at the end of development
-      // if (gameMode !== 'solo' && !(room || player)) {
-      //   console.log('why? ', room, player);
-      //   return (socket.emit(SOCKETS.FORBIDDEN));
-      // }
     });
 
     /*

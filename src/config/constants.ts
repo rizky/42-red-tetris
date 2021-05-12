@@ -25,9 +25,6 @@ export const SOCKETS = {
   
   /* ---- Chat ---- */
   CHAT_MESSAGE: 'chat message',
-
-  /* ---- Error ---- */
-  FORBIDDEN: 'access forbidden',
 };
 
 export const SCORING = {

@@ -36,13 +36,16 @@ import {
 } from './socketHandlers';
 
 export default function Playground(): JSX.Element {
-  const socket = useContext(SocketContext);
-  const { userContext, setUserContext } = useContext(UserContext);
-  const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'Root'>>();
+  /* 
+  ** userContext.room === route.params.room as well as userContext.username === route.params.username
+  ** They are interchangeable
+  */
+  const { socketContext: socket } = useContext(SocketContext);
+  const { userContext } = useContext(UserContext);
 
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'Playground'>>();
   const route = useRoute<RouteProp<RootStackParamList, 'Playground'>>();
   const { params } = route;
-  // const { room, username } = userContext;
   const { room, username } = params ?? {};
   const [roomPlayers, setRoomPlayers] = useState<PlayerType[]>([]);
   const [tileStack, setTileStack] = useState<TetriminosType[]>(['O']);
@@ -60,17 +63,9 @@ export default function Playground(): JSX.Element {
 
   useEffect(() => {
     dropMessages();
-    /*
-    ** TODO: del next line when tmp SOCKETS.ENTER_ROOM by url params is deleted
-    */
-    if (!userContext.username || !userContext.room) setUserContext({ username, room }); // for components that use UserContext
     console.log('Playground, User context:', userContext);
-    if (!socket) throw Error('No socket');
+    if (!socket) return navigation.replace('Home');
 
-    /*
-    ** TODO: uncomment when tmp SOCKETS.ENTER_ROOM by url params is deleted
-    */
-    // if (userContext.username && userContext.room) // If not solo mode, enter room
     socket.emit(SOCKETS.ENTER_ROOM, { username, roomName: room });
 
     // Current player sent from server
@@ -109,24 +104,23 @@ export default function Playground(): JSX.Element {
     }
     
     return () => {
-      // socket.emit(SOCKETS.PLAYER_LEFT, username);
-
-
-      socket.removeListener(SOCKETS.CHAT_MESSAGE, socketReceiveChatMessage);
-      socket.removeListener(SOCKETS.FETCH_CURRENT_PLAYER, socketReceiveCurrentPlayer);
-      socket.removeListener(SOCKETS.UPDATE_ROOM_PLAYERS, socketReceiveUpdateRoomPlayers);
-      socket.removeListener(SOCKETS.START_GAME, socketReceiveStartGame);
-      socket.removeListener(SOCKETS.PAUSE_GAME, socketReceivePauseGame);
-      socket.removeListener(SOCKETS.PENALTY_ROWS, socketReceivePenaltyRows);
-      socket.removeListener(SOCKETS.GAMEOVER, socketReceiveGameover);
-      socket.removeListener(SOCKETS.UPDATE_SPECTRUM, socketReceiveUpdateSpectrum);
-      socket.removeListener(SOCKETS.MORE_TETRIS_TILES, socketReceiveMoreTetrisTiles);
-      socket.removeListener(SOCKETS.SPEED_MODE, socketReceiveSpeedMode);
-      socket.removeListener(SOCKETS.REDIRECT_TO_RANKING, socketReceiveRedirectToRanking);
+      socket.removeAllListeners();
       dropMessages();
+      // socket.emit(SOCKETS.PLAYER_LEFT, username);
+      // socket.removeListener(SOCKETS.CHAT_MESSAGE, socketReceiveChatMessage);
+      // socket.removeListener(SOCKETS.FETCH_CURRENT_PLAYER, socketReceiveCurrentPlayer);
+      // socket.removeListener(SOCKETS.UPDATE_ROOM_PLAYERS, socketReceiveUpdateRoomPlayers);
+      // socket.removeListener(SOCKETS.START_GAME, socketReceiveStartGame);
+      // socket.removeListener(SOCKETS.PAUSE_GAME, socketReceivePauseGame);
+      // socket.removeListener(SOCKETS.PENALTY_ROWS, socketReceivePenaltyRows);
+      // socket.removeListener(SOCKETS.GAMEOVER, socketReceiveGameover);
+      // socket.removeListener(SOCKETS.UPDATE_SPECTRUM, socketReceiveUpdateSpectrum);
+      // socket.removeListener(SOCKETS.MORE_TETRIS_TILES, socketReceiveMoreTetrisTiles);
+      // socket.removeListener(SOCKETS.SPEED_MODE, socketReceiveSpeedMode);
+      // socket.removeListener(SOCKETS.REDIRECT_TO_RANKING, socketReceiveRedirectToRanking);
 
-      socket.removeListener(SOCKETS.FETCH_WAITING_ROOMS);
-      socket.removeListener(SOCKETS.UPDATE_WAITING_ROOMS);
+      // socket.removeListener(SOCKETS.FETCH_WAITING_ROOMS);
+      // socket.removeListener(SOCKETS.UPDATE_WAITING_ROOMS);
     };
   }, []);
 
@@ -147,37 +141,36 @@ export default function Playground(): JSX.Element {
     if (isPause) return;
     if (_.includes(matrix[0], 1)) {
       callGameoverFunctions();
-    } else {
-      setBlock((currentBlock) => {
-        if (!isBlockValid(blockFall(currentBlock), matrix)) {
-          const { newMatrix, deletedRows } = destroyBlock(printBlock(block, matrix));
-          setMatrix(newMatrix);
-          if (deletedRows > 1)
-            socketEmitPenaltyRows({ rowsNumber: deletedRows - 1, username, roomName: room, socket });
-
-          socketEmitUpdateSpectrum({ spectrum: convertMatrixToSpectrum(newMatrix),  userContext, socket });
-
-          // Update player in state each time he gains score
-          setCurrentPlayer((prevCurrentPlayer) => {
-            if (!prevCurrentPlayer) return;
-            const playerWithUpdatedScore = { ...prevCurrentPlayer, score: prevCurrentPlayer.score + SCORING.PIECE_PLACED + SCORING.ROW_DESTROYED * deletedRows };
-            return playerWithUpdatedScore;
-          });
-
-          // Remove tileStack[0] that was just placed on the bottom
-          setTileStack((prevTileStack) => {
-            if (prevTileStack.length < 4) {
-              socketEmitMoreTetrisTiles(userContext, socket);
-            }
-            return _.drop(prevTileStack);
-          });
-
-          return blockCreate({ type: tileStack[0] });
-        } else {
-          return blockFall(currentBlock);
-        }
-      });
+      return;
     }
+    setBlock((currentBlock) => {
+      const nextBlockPosition = blockFall(currentBlock);
+      if (!isBlockValid(nextBlockPosition, matrix)) {
+        const { newMatrix, deletedRows } = destroyBlock(printBlock(block, matrix));
+        setMatrix(newMatrix);
+        if (deletedRows > 1)
+          socketEmitPenaltyRows({ rowsNumber: deletedRows - 1, username, roomName: room, socket });
+
+        socketEmitUpdateSpectrum({ spectrum: convertMatrixToSpectrum(newMatrix),  userContext, socket });
+
+        // Update player in state each time he gains score
+        setCurrentPlayer((prevCurrentPlayer) => {
+          if (!prevCurrentPlayer) return;
+          const playerWithUpdatedScore = { ...prevCurrentPlayer, score: prevCurrentPlayer.score + SCORING.PIECE_PLACED + SCORING.ROW_DESTROYED * deletedRows };
+          return playerWithUpdatedScore;
+        });
+
+        // Remove tileStack[0] that was just placed on the bottom
+        setTileStack((prevTileStack) => {
+          if (prevTileStack.length < 4) {
+            socketEmitMoreTetrisTiles(userContext, socket);
+          }
+          return _.drop(prevTileStack);
+        });
+        return blockCreate({ type: tileStack[0] });
+      }
+      return nextBlockPosition;
+    });
   }, countIntervalDelay(speedMode, isPause));
 
   return (

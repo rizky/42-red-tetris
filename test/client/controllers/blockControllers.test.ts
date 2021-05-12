@@ -5,7 +5,7 @@ import {
   blockRight,
   blockLeft,
   blockDrop,
-  blockGetBlockPos,
+  getBlockCellsPosition,
   blockGetCorner,
   isBlock,
   isBlockValid,
@@ -151,17 +151,17 @@ describe('blockDrop', () => {
   });
 });
 
-describe('blockGetBlockPos', () => {
+describe('getBlockCellsPosition', () => {
   it('should return coordinates of block cells with value 1', () => {
     const blockL = {
       pos: [2, 4],
       shape: [
         [0, 0, 1], // [0; 2] + [2; 4] = [2; 6]
-        [1, 1, 1],
+        [1, 1, 1], // [1; 0] + [2; 4] = [3; 4] && [1; 1] + [2; 4] = [3; 5] && [1; 2] + [2; 4] = [3; 6]
         [0, 0, 0]],
       type: blockTypes[1],
     };
-    expect(blockGetBlockPos(blockL)).toEqual([
+    expect(getBlockCellsPosition(blockL)).toEqual([
       [2, 6],
       [3, 4],
       [3, 5],

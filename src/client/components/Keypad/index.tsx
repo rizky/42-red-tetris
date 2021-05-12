@@ -23,7 +23,7 @@ type Props = {
 
 const Keypad = (props: Props): JSX.Element => {
   const { isPause, setIsPause, opponentsNumber, isLeader, gameStarted, gameover, isSoloMode, speedMode } = props;
-  const socket = useContext(SocketContext);
+  const { socketContext: socket } = useContext(SocketContext);
   const [musicPlaying, setMusicPlaying] = useState(false);
   const { userContext, setUserContext } = useContext(UserContext);
   const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'Playground'>>();
@@ -34,7 +34,7 @@ const Keypad = (props: Props): JSX.Element => {
   const showSoundButton = showSpeedModeButton;
 
   const socketEmitStartGame = () => {
-    if (!socket) throw Error('No socket');
+    if (!socket) return;
     socket.emit(SOCKETS.START_GAME, { username: userContext.username, roomName: userContext.room });
   };
 
@@ -42,22 +42,22 @@ const Keypad = (props: Props): JSX.Element => {
     if (isSoloMode) {
       if (setIsPause) setIsPause(prevState => !prevState);
     }
-    if (!socket) throw Error('No socket');
+    if (!socket) return;
     socket.emit(SOCKETS.PAUSE_GAME, { username: userContext.username, roomName: userContext.room });
   };
 
   const socketExitPage = () => {
-    if (!socket) throw Error('No socket');
+    if (!socket) return;
     setUserContext({username: undefined, room: undefined});
     if (setIsPause) setIsPause(true);
     setMusicPlaying(false);
     socket.emit(SOCKETS.PLAYER_LEFT, userContext.username);
-    navigation.replace('Root');
-    window.location.assign('/');
+    socket.disconnect();
+    navigation.replace('Home');
   };
 
   const socketEmitSpeedMode = () => {
-    if (!socket) throw Error('No socket');
+    if (!socket) return;
     socket.emit(SOCKETS.SPEED_MODE, { username: userContext.username, roomName: userContext.room });
   };
 

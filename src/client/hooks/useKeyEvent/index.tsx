@@ -2,10 +2,8 @@ import { Dispatch, SetStateAction } from 'react';
 import useKey from 'use-key-hook';
 import { isWidgetOpened } from '/client/components/Chat';
 
-import { blankMatrix } from '/client/constants/tetriminos';
 import { keyboard } from '/client/constants/keyboard';
 import {
-  blockCreate,
   blockRotate,
   blockFall,
   blockRight,

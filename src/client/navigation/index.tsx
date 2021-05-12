@@ -8,7 +8,6 @@ import Login from '/client/screens/Login';
 import Playground from '/client/screens/Playground';
 import Ranking from '/client/screens/Ranking';
 import LinkingConfiguration from '/client/navigation/LinkingConfiguration';
-import io from 'socket.io-client';
 import SocketContext from '/client/context/SocketContext';
 import UserContext from '/client/context/UserContext';
 
@@ -29,24 +28,24 @@ export default function Navigation({ colorScheme }: { colorScheme?: ColorSchemeN
 const Stack = createStackNavigator<RootStackParamList>();
 
 function RootNavigator() {
-  const [socket, setSocket] = useState<undefined | SocketIOClient.Socket>(undefined);
+  const [socketContext, setSocketContext] = useState<undefined | SocketIOClient.Socket>(undefined);
 
-  const getSocket = () => {
-    if (socket) {
-      return socket;
-    }
-    const newSocket = io(`${process.env.EXPO_SERVER_URL}`);
-    setSocket(newSocket);
-    return newSocket;
-  };
+  // const getSocket = (): SocketIOClient.Socket => {
+  //   if (socketContext) {
+  //     return socketContext;
+  //   }
+  //   const newSocket = io(`${process.env.EXPO_SERVER_URL}`);
+  //   setSocketContext(newSocket);
+  //   return newSocket;
+  // };
   
   const [userContext, setUserContext] = useState<UserContextType>({username: undefined, room: undefined});
 
   return (
-    <SocketContext.Provider value={getSocket()} >
-      <UserContext.Provider value={{userContext, setUserContext}} >
+    <SocketContext.Provider value={{ socketContext, setSocketContext }}>
+      <UserContext.Provider value={{ userContext, setUserContext }}>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="Root" component={Login} />
+          <Stack.Screen name="Home" component={Login} />
           <Stack.Screen name="Playground" component={Playground} />
           <Stack.Screen name="Ranking" component={Ranking} />
           <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />

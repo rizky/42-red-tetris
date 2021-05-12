@@ -17,8 +17,8 @@ export default function ChooseRoom(props: Props): JSX.Element {
   const {setScreenNumber} = props;
   const { userContext, setUserContext } = useContext(UserContext);
   const { username, room: roomName } = userContext;
-  const socket = useContext(SocketContext);
-  const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'Root'>>();
+  const { socketContext: socket } = useContext(SocketContext);
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'Home'>>();
   const [roomNameError, setRoomNameError] = useState<string>('');
   const [joinRoomError, setJoinRoomError] = useState<string>('');
   const [waitingRooms, setWaitingRooms] = useState<string[]>([]);
@@ -42,7 +42,7 @@ export default function ChooseRoom(props: Props): JSX.Element {
   };
 
   useEffect(() => {
-    if (!socket) throw Error('No socket');
+    if (!socket) return navigation.replace('Home');
     // If I remove [] from useEffect there is a flood of sockets, for some reason component rerenders several times a second.
     socket.emit(SOCKETS.FETCH_WAITING_ROOMS);
 
