@@ -11,15 +11,21 @@ import SocketContext from '/client/context/SocketContext';
 
 const Ranking = (): JSX.Element => {
   const { socketContext: socket } = useContext(SocketContext);
-  const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'Playground'>>();
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'Ranking'>>();
 
   const route = useRoute<RouteProp<RootStackParamList, 'Ranking'>>();
   const { params } = route;
   const { room, username } = params ?? {};
   const [rankedRoomPlayers, setRoomPlayers] = useState<PlayerType[]>([]);
+  const isNextGameLeader = rankedRoomPlayers[0]?.username === username; // game winner is next game leader
+  const isSoloMode = _.includes(room, 'solo');
 
   const socketReceiveRoomRanking = (players: PlayerType[]) => {
     setRoomPlayers(players);
+  };
+
+  const socketReceiveRestartGame = () => {
+    navigation.push('Playground', { username, room });
   };
 
 
@@ -27,6 +33,7 @@ const Ranking = (): JSX.Element => {
     if (!socket) return navigation.replace('Home');
     socket.emit(SOCKETS.FETCH_ROOM_RANKING, { username, roomName: room });
     socket.on(SOCKETS.FETCH_ROOM_RANKING, socketReceiveRoomRanking);
+    socket.on(SOCKETS.RESTART_GAME, socketReceiveRestartGame);
 
     return () => {
       socket.emit(SOCKETS.PLAYER_LEFT, username);
@@ -35,7 +42,7 @@ const Ranking = (): JSX.Element => {
   }, []);
 
   return (
-    <Gameboy>
+    <Gameboy roomPlayers={_.map(rankedRoomPlayers, (player) => player.username)} isLeader={isNextGameLeader} isSoloMode={isSoloMode}>
       <View style={{ justifyContent: 'space-between' }}>
         <Text style={styles.title}>Game report</Text>
         {username && rankedRoomPlayers.length > 1 && (username === rankedRoomPlayers[0].username)

@@ -27,11 +27,12 @@ const Keypad = (props: Props): JSX.Element => {
   const [musicPlaying, setMusicPlaying] = useState(false);
   const { userContext, setUserContext } = useContext(UserContext);
   const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'Playground'>>();
-  const showStartButton = isLeader && !gameStarted;
+  const showStartButton = isLeader && !gameStarted && (isPause !== undefined && gameover !== undefined); // isPause and gameover !undefined means that it is Playground screen
   const showPauseButton = (isLeader && gameStarted);
   const isButtonDisabled = !isSoloMode && (gameover || opponentsNumber < 1);
   const showSpeedModeButton = speedMode !== undefined ? true : false; // Condition is true on Playground screen
   const showSoundButton = showSpeedModeButton;
+  const showRestartButton = (opponentsNumber > 0 || isSoloMode) && isLeader && (isPause === undefined && gameover === undefined); // isPause and gameover undefined means that it is Ranking screen
 
   const socketEmitStartGame = () => {
     if (!socket) return;
@@ -61,6 +62,11 @@ const Keypad = (props: Props): JSX.Element => {
     socket.emit(SOCKETS.SPEED_MODE, { username: userContext.username, roomName: userContext.room });
   };
 
+  const socketEmitRestart = () => {
+    if (!socket) return;
+    socket.emit(SOCKETS.RESTART_GAME, { username: userContext.username, roomName: userContext.room });
+  };
+
   const keyDown = (key: number) => {
     // @ts-ignore https://github.com/microsoft/TSJS-lib-generator/pull/892
     document.dispatchEvent(new KeyboardEvent('keydown', { keyCode: key, which: key }));
@@ -68,7 +74,7 @@ const Keypad = (props: Props): JSX.Element => {
   return (
     <View style={{ width: 400 }}>
       <View style={{ width: '100%' }}>
-        <View style={{ flexDirection: 'row', marginVertical: 20, justifyContent: 'space-between'}}>
+        <View style={{ flexDirection: 'row', marginVertical: 20, justifyContent: 'space-between' }}>
           {showStartButton &&
           <RoundButton
             color={isButtonDisabled ? '#c0c0c0' : '#2dc421'} size={50} label='Start' text='▶'
@@ -91,6 +97,11 @@ const Keypad = (props: Props): JSX.Element => {
             <RoundButton
               color={'white'} size={50} label="Sound" text={musicPlaying ? '🎶' : '🤫' }
               onPress={() => setMusicPlaying(!musicPlaying)}
+            />}
+          {showRestartButton &&
+            <RoundButton
+              color="#efcc19" size={50} label="Restart" text="↺"
+              onPress={() => socketEmitRestart()}
             />}
           <RoundButton
             color="white" size={50} style={{ margin: 0 }} label='Exit' text='╳'

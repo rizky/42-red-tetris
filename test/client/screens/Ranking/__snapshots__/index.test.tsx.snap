@@ -1,7 +1,11 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Snapshots should render Ranking screen 1`] = `
-<Gameboy>
+<Gameboy
+  isLeader={true}
+  isSoloMode={false}
+  roomPlayers={Array []}
+>
   <View
     style={
       Object {

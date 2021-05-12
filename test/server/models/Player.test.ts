@@ -1,6 +1,5 @@
-import _ from 'lodash';
-
 import { Player } from '/server/models/Player';
+import { blankMatrix } from '/config/constants';
 
 describe('Player class', () => {
   const newPlayer = new Player({id: '123', username: 'test'});
@@ -13,7 +12,7 @@ describe('Player class', () => {
       isLeader: false,
       gameover: false,
       score: 0,
-      spectrum: _.map(Array(20), () => _.fill(Array(10), 0)),
+      spectrum: blankMatrix,
       isWinner: false,
     });
   });

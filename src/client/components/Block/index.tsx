@@ -1,7 +1,7 @@
 import { StyleSheet, View } from 'react-native';
 import * as React from 'react';
 
-import { cellState } from '/client/constants/tetriminos';
+import { cellState } from '/config/constants';
 
 const styles = StyleSheet.create({
   outer: {

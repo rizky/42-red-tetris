@@ -4,7 +4,8 @@ import { StackNavigationProp } from '@react-navigation/stack';
 
 import { SOCKETS, SCORING } from '/config/constants';
 import { addResponseMessage } from '/client/components/Chat';
-import { penaltyLine, blankMatrix } from '/client/constants/tetriminos';
+import { penaltyLine, blankMatrix } from '/config/constants';
+import { convertMatrixToSpectrum } from '/client/screens/Playground/utils';
 
 const addPenaltyRows = (matrix: Matrix, rowsNumber: number): Matrix => {
   // Create array of blank lines
@@ -146,11 +147,17 @@ const socketReceivePauseGame = (setIsPause: Dispatch<SetStateAction<boolean>>): 
 };
 
 /* SOCKETS.PENALTY_ROWS */
-const socketReceivePenaltyRows = ({ setMatrix, rowsNumber }:
-  { setMatrix: Dispatch<SetStateAction<Matrix>>, rowsNumber: number }): void => {
+const socketReceivePenaltyRows = ({ setMatrix, rowsNumber, userContext, socket }: {
+  setMatrix: Dispatch<SetStateAction<Matrix>>,
+  rowsNumber: number,
+  userContext: UserContextType,
+  socket?: SocketIOClient.Socket,
+}): void => {
+  if (!socket) return;
   setMatrix((prevMatrix) => {
     const newMatrix = addPenaltyRows(prevMatrix, rowsNumber);
     console.log('PENALTY_ROWS receive. rowsNumber, newMatrix:', rowsNumber, newMatrix);
+    if (newMatrix) socketEmitUpdateSpectrum({ spectrum: convertMatrixToSpectrum(newMatrix), userContext, socket });
     return newMatrix;
   });
 };

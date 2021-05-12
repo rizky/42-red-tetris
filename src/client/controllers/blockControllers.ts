@@ -1,6 +1,7 @@
 import _ from 'lodash';
 
-import { blockShape, initialPos, blankLine, cellState } from '/client/constants/tetriminos';
+import { blockShape, initialPos } from '/client/constants/tetriminos';
+import { blankLine, cellState } from '/config/constants';
 
 const blockCreate = ({pos, shape, type}: BlockOption): BlockType => {
   return {
