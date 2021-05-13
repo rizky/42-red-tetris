@@ -63,7 +63,7 @@ export default function Playground(): JSX.Element {
 
   useEffect(() => {
     dropMessages();
-    console.log('Playground, User context:', userContext);
+    // console.log('Playground, User context:', userContext);
     if (!socket) return navigation.replace('Home');
 
     socket.emit(SOCKETS.ENTER_ROOM, { username, roomName: room });

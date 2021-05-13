@@ -38,7 +38,7 @@ const socketEmitPenaltyRows = ({ rowsNumber, username, roomName, socket }: {
   socket?: SocketIOClient.Socket,
 }): void => {
   if (!socket) return;
-  console.log('PENALTY_ROWS emit, rowsNumber:', rowsNumber);
+  // console.log('PENALTY_ROWS emit, rowsNumber:', rowsNumber);
   socket.emit(SOCKETS.PENALTY_ROWS, { username, roomName, rowsNumber });
 };
 
@@ -104,7 +104,7 @@ const socketReceiveCurrentPlayer = ({player, setCurrentPlayer}: {
   setCurrentPlayer: Dispatch<SetStateAction<PlayerType | undefined>>,
 }): void => {
   setCurrentPlayer(player);
-  console.log('FETCH_CURRENT_PLAYER', player);
+  // console.log('FETCH_CURRENT_PLAYER', player);
 };
 
 /* SOCKETS.UPDATE_ROOM_PLAYERS */
@@ -135,7 +135,7 @@ const socketReceiveStartGame = ({ setTileStack, setGameStarted, setIsPause, tile
   tileStack: TetriminosType[],
 }): void => {
   // TODO: assign tile stack here
-  console.log('START_GAME', tileStack);
+  // console.log('START_GAME', tileStack);
   setTileStack(tileStack);
   setGameStarted(true);
   setIsPause(false);
@@ -156,7 +156,7 @@ const socketReceivePenaltyRows = ({ setMatrix, rowsNumber, userContext, socket }
   if (!socket) return;
   setMatrix((prevMatrix) => {
     const newMatrix = addPenaltyRows(prevMatrix, rowsNumber);
-    console.log('PENALTY_ROWS receive. rowsNumber, newMatrix:', rowsNumber, newMatrix);
+    // console.log('PENALTY_ROWS receive. rowsNumber, newMatrix:', rowsNumber, newMatrix);
     if (newMatrix) socketEmitUpdateSpectrum({ spectrum: convertMatrixToSpectrum(newMatrix), userContext, socket });
     return newMatrix;
   });
@@ -202,7 +202,7 @@ const socketReceiveGameover = ({ setCurrentPlayer, setIsPause, setMatrix, setGam
 
 /* SOCKET.UPDATE_SPECTRUM */
 const socketReceiveUpdateSpectrum = (roomPlayers: PlayerType[], setRoomPlayers: Dispatch<SetStateAction<PlayerType[] | []>>): void => {
-  console.log('SOCKET.UPDATE_SPECTRUM, roomPlayers', roomPlayers);
+  // console.log('SOCKET.UPDATE_SPECTRUM, roomPlayers', roomPlayers);
   setRoomPlayers(roomPlayers);
 };
 

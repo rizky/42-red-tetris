@@ -25,7 +25,7 @@ export default function ChooseRoom(props: Props): JSX.Element {
 
   if (!username) setScreenNumber(1);
 
-  console.log('Updates for waitingRooms:', waitingRooms);
+  // console.log('Updates for waitingRooms:', waitingRooms);
 
   const handleFetchWaitingRooms = (roomNames: string[]) => setWaitingRooms(roomNames);
 
