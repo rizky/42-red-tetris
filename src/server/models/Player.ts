@@ -52,12 +52,4 @@ export class Player {
     }
     return false;
   }
-
-  // Computed property - no need to recompute room leader for the moment
-  // get isLeader(): boolean {
-  //   const room = Room.getByName(this.room); // we already create room and add player to it by this time so it's always false
-  //   console.log(room);
-  //   if (!room) return true;
-  //   return room.players.length === 0 ? true : false;
-  // }
 }
