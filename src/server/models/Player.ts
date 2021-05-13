@@ -1,5 +1,5 @@
 import { Room } from './Room';
-import { blankMatrix } from '/config/constants';
+import { blankMatrix } from '../../config/constants';
 
 export const players: Player[] = [];
 

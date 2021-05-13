@@ -10,9 +10,10 @@ import SocketContext from '/client/context/SocketContext';
 export default function Login(): JSX.Element {
   const [screenNumber, setScreenNumber] = useState<1 | 2>(1);
 
-  const { setSocketContext } = useContext(SocketContext);
+  const { socketContext: socket, setSocketContext } = useContext(SocketContext);
 
   useEffect(() => {
+    if (socket) socket.disconnect();
     setSocketContext(io(`${process.env.EXPO_SERVER_URL}`));
   }, []);
 

@@ -25,29 +25,34 @@ export const useKeyEvent = ({ setIsPause, setMatrix, setBlock }
     setIsPause((prevIsPause) => {
       setMatrix((prevMatrix) => {
         if (!prevIsPause) {
-          if (keyCode === keyboard.rotate) {
+          /* Space key */
+          if (keyCode === keyboard.space) {
+            setBlock((currentBlock) => {
+              const nextBlock = blockDrop(currentBlock, prevMatrix);
+              setMatrix(printBlock(nextBlock, prevMatrix));
+              return nextBlock;
+            });
+          }
+          /* Arrow up key */
+          else if (keyCode === keyboard.rotate) {
             setBlock((currentBlock) => isBlockValid(blockRotate(currentBlock), prevMatrix) ? blockRotate(currentBlock) : currentBlock);
           }
-          if (keyCode === keyboard.left) {
+          /* Arrow left key */
+          else if (keyCode === keyboard.left) {
             setBlock((currentBlock) => isBlockValid(blockLeft(currentBlock), prevMatrix) ? blockLeft(currentBlock) : currentBlock);
           }
-          if (keyCode === keyboard.right) {
+          /* Arrow right key */
+          else if (keyCode === keyboard.right) {
             setBlock((currentBlock) => isBlockValid(blockRight(currentBlock), prevMatrix) ? blockRight(currentBlock) : currentBlock);
           }
-          if (keyCode === keyboard.down) {
+          /* Arrow down key */
+          else if (keyCode === keyboard.down) {
             setBlock((currentBlock) => {
               if (isBlockValid(blockFall(currentBlock), prevMatrix)) return blockFall(currentBlock);
               else {
                 setMatrix(printBlock(currentBlock, prevMatrix));
                 return currentBlock;
               }
-            });
-          }
-          if (keyCode === keyboard.space) {
-            setBlock((currentBlock) => {
-              const nextBlock = blockDrop(currentBlock, prevMatrix);
-              setMatrix(printBlock(nextBlock, prevMatrix));
-              return nextBlock;
             });
           }
         }

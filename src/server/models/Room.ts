@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { Player, players } from './Player';
 import { Piece } from './Piece';
-import { blankMatrix } from '/config/constants';
+import { blankMatrix } from '../../config/constants';
 
 export const rooms: Room[] = [];
 
