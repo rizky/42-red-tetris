@@ -1,7 +1,6 @@
-import _ from 'lodash';
-
 import { Player } from '/server/models/Player';
 import { Room } from '/server/models/Room';
+import { blankMatrix } from '/config/constants';
 
 describe('Room class', () => {
   const newRoom = new Room('room-1');
@@ -106,7 +105,7 @@ describe('Room class', () => {
   });
 
   it('should return players[] after updatePlayerSpectrum', () => {
-    const newSpectrum = _.map(Array(20), () => _.fill(Array(10), 0));
+    const newSpectrum = blankMatrix;
     const newRoom3 = new Room('room-3');
     const firstPlayer = new Player({id: '123', username: 'leader'});
     const secondPlayer = new Player({id: '321', username: 'not-leader'});
@@ -171,5 +170,77 @@ describe('Room class', () => {
     newRoom3.updatePlayerScore('123', 300);
 
     expect(firstPlayer.score).toEqual(300);
+  });
+
+  it('should restart the room and players for restartGame', () => {
+    const roomAfterGameover = new Room('room');
+    const firstPlayer = new Player({id: '123', username: 'first_player'});
+    firstPlayer.isWinner = false;
+    firstPlayer.gameover = true;
+    firstPlayer.score = 44;
+    firstPlayer.spectrum = [
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 1, 1, 0, 0, 0],
+      [0, 0, 0, 0, 1, 1, 1, 0, 0, 0],
+      [0, 0, 0, 0, 1, 1, 1, 0, 0, 0],
+      [0, 0, 0, 0, 1, 1, 1, 0, 0, 0],
+      [0, 0, 0, 0, 1, 1, 1, 0, 0, 0],
+      [0, 0, 0, 0, 1, 1, 1, 0, 0, 0],
+      [0, 0, 0, 0, 1, 1, 1, 0, 0, 0],
+      [0, 0, 0, 0, 1, 1, 1, 0, 0, 0],
+      [0, 0, 0, 0, 1, 1, 1, 0, 0, 0],
+      [0, 0, 0, 0, 1, 1, 1, 0, 0, 0],
+      [0, 0, 0, 0, 1, 1, 1, 0, 0, 0],
+      [0, 0, 0, 0, 1, 1, 1, 0, 0, 0],
+      [0, 0, 0, 0, 1, 1, 1, 0, 0, 0],
+      [0, 0, 0, 1, 1, 1, 1, 0, 0, 0],
+      [0, 0, 0, 1, 1, 1, 1, 0, 0, 0],
+      [0, 0, 0, 1, 1, 1, 1, 0, 0, 0],
+      [0, 0, 0, 1, 1, 1, 1, 0, 0, 0],
+      [2, 2, 2, 2, 2, 2, 2, 2, 2, 2]];
+
+    const secondPlayer = new Player({id: '321', username: 'second_player'});
+    secondPlayer.isWinner = true;
+    secondPlayer.gameover = true;
+    secondPlayer.score = 244;
+    secondPlayer.spectrum = [
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 1, 1, 0, 0, 0],
+      [0, 0, 0, 0, 1, 1, 1, 0, 0, 0],
+      [0, 0, 0, 0, 1, 1, 1, 0, 0, 0],
+      [0, 0, 0, 0, 1, 1, 1, 0, 0, 0],
+      [0, 0, 0, 0, 1, 1, 1, 0, 0, 0],
+      [0, 0, 0, 0, 1, 1, 1, 0, 0, 0],
+      [0, 0, 0, 0, 1, 1, 1, 0, 0, 0],
+      [0, 0, 0, 0, 1, 1, 1, 0, 0, 0],
+      [0, 0, 0, 0, 1, 1, 1, 0, 0, 0],
+      [0, 0, 0, 0, 1, 1, 1, 0, 0, 0],
+      [0, 0, 0, 0, 1, 1, 1, 0, 0, 0],
+      [0, 0, 0, 0, 1, 1, 1, 0, 0, 0],
+      [0, 0, 0, 0, 1, 1, 1, 0, 0, 0],
+      [0, 0, 0, 1, 1, 1, 1, 0, 0, 0],
+      [0, 0, 0, 1, 1, 1, 1, 0, 0, 0],
+      [0, 0, 0, 1, 1, 1, 1, 0, 0, 0],
+      [0, 0, 0, 1, 1, 1, 1, 0, 0, 0],
+      [0, 0, 0, 1, 1, 1, 1, 0, 0, 0]];
+
+    roomAfterGameover.addPlayer(firstPlayer);
+    roomAfterGameover.addPlayer(secondPlayer);
+    roomAfterGameover.players[0].isLeader = false;
+
+    // Tested function
+    roomAfterGameover.restartGame();
+
+    expect(roomAfterGameover.players[0].isWinner).toEqual(false);
+    expect(roomAfterGameover.players[0].gameover).toEqual(false);
+    expect(roomAfterGameover.players[0].spectrum).toEqual(blankMatrix);
+    expect(roomAfterGameover.players[0].isLeader).toEqual(false);
+
+    expect(roomAfterGameover.players[1].isWinner).toEqual(false);
+    expect(roomAfterGameover.players[1].gameover).toEqual(false);
+    expect(roomAfterGameover.players[1].spectrum).toEqual(blankMatrix);
+    expect(roomAfterGameover.players[1].isLeader).toEqual(true);
   });
 });

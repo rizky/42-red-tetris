@@ -33,7 +33,7 @@ const playerLeft = ({ player, socket, io }: { player?: Player, socket: SocketIO.
   } else { // if player left after room was created (from Playground screen)
     socket.leave(room.name); // TODO: maybe uncomment
     room.removePlayer(player.id);
-    console.log('On leave room: ', players, room.players);
+    console.log('On leave room: ', room.players);
 
     if (room.players.length === 0) {
       const gameStarted = room.gameStarted;
@@ -344,6 +344,21 @@ const connectSocketIO = (io: SocketIO.Server): void => {
       if (room && player) {
         // send to everyone in the room
         io.to(roomName).emit(SOCKETS.SPEED_MODE);
+      }
+    });
+
+    /*
+    ** SOCKETS.RESTART_GAME
+    ** Room winner can restart the game on Ranking screen
+    */
+    socket.on(SOCKETS.RESTART_GAME, ({ username, roomName }: { username: string, roomName: string }) => {
+      const room = Room.getByName(roomName);
+      const player = Player.getByUsername(username);
+
+      if (room && player) {
+        room.restartGame();
+        // send to everyone in the room
+        io.to(roomName).emit(SOCKETS.RESTART_GAME);
       }
     });
 

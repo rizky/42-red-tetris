@@ -12,7 +12,8 @@ import {
   printBlock,
   destroyBlock,
 } from '/client/controllers/blockControllers';
-import { blockTypes, initialPos, blockShape, blankMatrix } from '/client/constants/tetriminos';
+import { blockTypes, initialPos, blockShape } from '/client/constants/tetriminos';
+import { blankMatrix } from '/config/constants';
 
 describe('blockCreate', () => {
   it('should return default block of BlockType with just nesessary params', () => {

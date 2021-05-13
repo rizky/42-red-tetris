@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-import { cellState } from '/client/constants/tetriminos';
+import { cellState } from '/config/constants';
 
 const formatChatTitle = (leader: string): string => {
   return `Leader: ${leader}`;
@@ -18,15 +18,16 @@ const roomPlayersNames = (players?: PlayerType[]): string[] => {
 };
 
 const convertMatrixToSpectrum = (matrix: Matrix): Matrix => {
-  const result = _.cloneDeep(matrix);
+  let result = _.cloneDeep(matrix);
 
-  // In Spectrum change all cellState.BLOCKED to cellState.OCCUPIED on spectrum for better looking
-  _.map(result, (row) => _.map(row, (cell) => cell === cellState.BLOCKED ? cell = cellState.OCCUPIED : cell));
+  // In Spectrum change all cellState.BLOCKED to cellState.OCCUPIED for better looking
+  if (_.includes(matrix[0], cellState.BLOCKED))
+    result = _.map(result, (row) => _.map(row, (cell) => cell === cellState.BLOCKED ? cellState.OCCUPIED : cell));
 
   for (let j = 0; j < matrix[0].length; j++) {
     let flag = false;
     for (let i = 0; i < matrix.length; i++) {
-      if (matrix[i][j] === cellState.OCCUPIED)
+      if (matrix[i][j] === cellState.OCCUPIED || matrix[i][j] === cellState.BLOCKED)
         flag = true;
       if (flag)
         result[i][j] = cellState.OCCUPIED;

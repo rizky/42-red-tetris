@@ -7,7 +7,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { useNavigation } from '@react-navigation/native';
 
 import { SOCKETS, SCORING } from '/config/constants';
-import { blankMatrix, blockMatrix } from '/client/constants/tetriminos';
+import { blankMatrix, blockMatrix } from '/config/constants';
 import { ChatWidget, dropMessages } from '/client/components/Chat';
 import { formatChatSubtitle, formatChatTitle, roomPlayersNames, convertMatrixToSpectrum, filteredOpponents } from '/client/screens/Playground/utils';
 import Gameboy from '/client/components/Gameboy';
@@ -94,7 +94,7 @@ export default function Playground(): JSX.Element {
       socket.on(SOCKETS.PAUSE_GAME, () => socketReceivePauseGame(setIsPause));
 
       // Receive penalty rows
-      socket.on(SOCKETS.PENALTY_ROWS, (rowsNumber: number) => socketReceivePenaltyRows({ setMatrix, rowsNumber }));
+      socket.on(SOCKETS.PENALTY_ROWS, (rowsNumber: number) => socketReceivePenaltyRows({ setMatrix, rowsNumber, userContext, socket }));
 
       // One of opponents has gameover
       socket.on(SOCKETS.GAMEOVER, (data: { players: PlayerType[], endGame: boolean }) => socketReceiveGameover({ setCurrentPlayer, setIsPause, setMatrix, setGameover, isSoloMode, socket, data }));

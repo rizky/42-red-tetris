@@ -3,7 +3,7 @@ import { shallow } from 'enzyme';
 import toJson from 'enzyme-to-json';
 
 import Matrix from '/client/components/Matrix';
-import { blankMatrix, blockMatrix } from '/client/constants/tetriminos';
+import { blankMatrix, blockMatrix } from '/config/constants';
 import { blockCreate } from '/client/controllers/blockControllers';
 
 

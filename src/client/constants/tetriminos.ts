@@ -1,5 +1,3 @@
-import _ from 'lodash';
-
 export const blockShape = {
   I: [
     [0, 0, 0, 0],
@@ -50,22 +48,22 @@ export const initialPos = {
 
 export const blockTypes: TetriminosType[] = ['I', 'L', 'J', 'Z', 'S', 'O', 'T'];
 
-export const speeds = [800, 650, 500, 370, 250, 160];
+// export const speeds = [800, 650, 500, 370, 250, 160];
 
-export const delays = [50, 60, 70, 80, 90, 100];
+// export const delays = [50, 60, 70, 80, 90, 100];
 
-export enum cellState {
-  FREE,
-  OCCUPIED,
-  BLOCKED,
-}
+// export enum cellState {
+//   FREE,
+//   OCCUPIED,
+//   BLOCKED,
+// }
 
-export const fillLine = _.fill(Array(10), cellState.OCCUPIED); // never used
+// export const fillLine = _.fill(Array(10), cellState.OCCUPIED); // never used
 
-export const blankLine = _.fill(Array(10), cellState.FREE);
+// export const blankLine = _.fill(Array(10), cellState.FREE);
 
-export const penaltyLine = _.fill(Array(10), cellState.BLOCKED);
+// export const penaltyLine = _.fill(Array(10), cellState.BLOCKED);
 
-export const blankMatrix: Matrix = _.map(Array(20), () => _.fill(Array(10), cellState.FREE));
+// export const blankMatrix: Matrix = _.map(Array(20), () => _.fill(Array(10), cellState.FREE));
 
-export const blockMatrix: Matrix = _.map(Array(2), () => _.fill(Array(4), cellState.FREE));
+// export const blockMatrix: Matrix = _.map(Array(2), () => _.fill(Array(4), cellState.FREE));

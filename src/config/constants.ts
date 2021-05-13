@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 export const SOCKETS = {
   /* ---- User ---- */
   CREATE_USER: 'create user',
@@ -14,7 +16,8 @@ export const SOCKETS = {
   UPDATE_SPECTRUM: 'update spectrum',
   MORE_TETRIS_TILES: 'load more tetris tiles',
   SPEED_MODE: 'increase tetris falling speed',
-  
+  RESTART_GAME: 'restart game',
+
   /* ---- Game ---- */
   FETCH_WAITING_ROOMS: 'fetch waiting rooms',
   UPDATE_WAITING_ROOMS: 'update waiting rooms',
@@ -34,4 +37,20 @@ export const SCORING = {
 };
 
 export const maxPlayersLimit = 4;
+
+/* ---- Tetriminos ---- */
+
+export enum cellState {
+  FREE,
+  OCCUPIED,
+  BLOCKED,
+}
+
+export const blankLine = _.fill(Array(10), cellState.FREE);
+
+export const penaltyLine = _.fill(Array(10), cellState.BLOCKED);
+
+export const blankMatrix: Matrix = _.map(Array(20), () => _.fill(Array(10), cellState.FREE));
+
+export const blockMatrix: Matrix = _.map(Array(2), () => _.fill(Array(4), cellState.FREE));
 

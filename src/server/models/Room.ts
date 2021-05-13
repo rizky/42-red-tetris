@@ -1,5 +1,7 @@
+import _ from 'lodash';
 import { Player, players } from './Player';
 import { Piece } from './Piece';
+import { blankMatrix } from '/config/constants';
 
 export const rooms: Room[] = [];
 
@@ -123,5 +125,24 @@ export class Room {
 
     this.players[index].score = score;
     players[index2].score = score;
+  }
+
+  restartGame(): void {
+    const rankedPlayers = _.reverse(_.sortBy(this.players, (player) => player.score));
+    const winner = rankedPlayers[0];
+
+    const restartPlayer = (player: Player) => {
+      player.isWinner = false;
+      player.gameover = false;
+      player.spectrum = blankMatrix;
+      if (player.username === winner.username) player.isLeader = true;
+    };
+
+    // room.players[]
+    this.players.map((player) => restartPlayer(player));
+
+    // const players[]
+    const thisRoomPlayers = _.filter(players, (player) => player.room === this.name);
+    thisRoomPlayers.map((player) => restartPlayer(player));
   }
 }

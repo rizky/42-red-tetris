@@ -1,5 +1,5 @@
 import { Room } from './Room';
-import _ from 'lodash';
+import { blankMatrix } from '/config/constants';
 
 export const players: Player[] = [];
 
@@ -20,7 +20,7 @@ export class Player {
     this.isLeader = false;
     this.gameover = false;
     this.score = 0;
-    this.spectrum = _.map(Array(20), () => _.fill(Array(10), 0));
+    this.spectrum = blankMatrix;
     this.isWinner = false;
     players.push(this);
   }
